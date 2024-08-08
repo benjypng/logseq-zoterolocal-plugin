@@ -31,8 +31,12 @@
   },
   "dependencies": {
     "@logseq/libs": "^0.0.17",
+    "axios": "^1.7.3",
+    "fuse.js": "^7.0.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.52.2",
+    "zotero-api-client": "^0.44.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
