@@ -1,17 +1,26 @@
 import {
+  ColumnDef,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
-export const ResultsTable = ({ data }) => {
-  const [sorting, setSorting] = useState([])
-  const [columnVisibility, setColumnVisibility] = useState({})
+import { ZotData } from '../features/main/interfaces'
+
+interface TableProps {
+  data: ZotData[]
+}
+
+export const ResultsTable = ({ data }: TableProps) => {
+  const [sorting, setSorting] = useState<any[]>([])
+  const [columnVisibility, setColumnVisibility] = useState<
+    Record<string, boolean>
+  >({})
   const [showColumnChooser, setShowColumnChooser] = useState(false)
 
-  const columns = React.useMemo(
+  const columns = useMemo<ColumnDef<ZotData>[]>(
     () => [
       {
         header: 'Key',
@@ -56,9 +65,9 @@ export const ResultsTable = ({ data }) => {
       {
         header: 'Creators',
         accessorKey: 'creators',
-        cell: ({ getValue }: { getValue: any }) => (
+        cell: ({ getValue }) => (
           <div>
-            {getValue().map((creator: any, index: any) => (
+            {getValue<ZotData['creators']>().map((creator, index) => (
               <div key={index}>
                 {creator.firstName} {creator.lastName} ({creator.creatorType})
               </div>
@@ -93,15 +102,7 @@ export const ResultsTable = ({ data }) => {
   })
 
   const ColumnVisibilityChooser = () => (
-    <div
-      style={{
-        position: 'absolute',
-        background: 'white',
-        border: '1px solid black',
-        padding: '10px',
-        zIndex: 1000,
-      }}
-    >
+    <div className="column-chooser">
       {table.getAllLeafColumns().map((column) => (
         <div key={column.id}>
           <label>
@@ -118,14 +119,17 @@ export const ResultsTable = ({ data }) => {
   )
 
   return (
-    <div>
+    <div className="zot-table-container">
       <div style={{ position: 'relative', marginBottom: '10px' }}>
-        <button onClick={() => setShowColumnChooser(!showColumnChooser)}>
+        <button
+          className="column-chooser-button"
+          onClick={() => setShowColumnChooser(!showColumnChooser)}
+        >
           Choose Columns
         </button>
         {showColumnChooser && <ColumnVisibilityChooser />}
       </div>
-      <table id="zot-table">
+      <table className="zot-table">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -141,7 +145,7 @@ export const ResultsTable = ({ data }) => {
                   {{
                     asc: ' 🔼',
                     desc: ' 🔽',
-                  }[header.column.getIsSorted()] ?? null}
+                  }[header.column.getIsSorted() as string] ?? null}
                 </th>
               ))}
             </tr>
