@@ -31,6 +31,8 @@
   },
   "dependencies": {
     "@logseq/libs": "^0.0.17",
+    "@tanstack/react-table": "^8.20.1",
+    "add": "^2.0.6",
     "axios": "^1.7.3",
     "fuse.js": "^7.0.0",
     "react": "^18.3.1",

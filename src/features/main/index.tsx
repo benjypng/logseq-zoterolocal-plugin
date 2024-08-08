@@ -3,6 +3,8 @@ import './index.css'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import { ResultsTable } from '../../components/ResultsTable'
+import { KEYS } from '../../constants'
 import { fuseHook } from '../../services/fuse-hook'
 import { ZotData } from './interfaces'
 
@@ -15,30 +17,33 @@ export const Zotero = ({ items }: ZoteroProps) => {
   const { register, watch } = useForm()
 
   const fuseOptions = {
-    keys: Object.keys(items[0]!),
+    keys: KEYS,
     threshold: 0.6,
     includeScore: true,
   }
 
   const searchInput = watch('search')
-
   useEffect(() => {
     if (!searchInput) return
 
     const results = fuseHook(items, fuseOptions, searchInput)
+    console.log(results)
     setLocalItems(results.map((result) => result.item))
   }, [searchInput])
 
   return (
-    <div id="zoterolocal-container">
+    <div id="zot-container">
       <h1>logseq-zoterolocal-plugin</h1>
 
-      <input autoFocus {...register('search')} type="text" />
+      <input
+        autoFocus
+        {...register('search')}
+        type="text"
+        placeholder="Start searching"
+      />
 
-      <div id="section-list-items">
-        {localItems.map((result, index) => {
-          return <div key={index}>{result.title}</div>
-        })}
+      <div id="zot-results-table">
+        <ResultsTable data={localItems} />
       </div>
     </div>
   )

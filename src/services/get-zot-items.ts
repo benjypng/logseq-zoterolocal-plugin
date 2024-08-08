@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { URL } from '..'
+import { URL } from '../constants'
 
 export const getZotItems = async () => {
   try {

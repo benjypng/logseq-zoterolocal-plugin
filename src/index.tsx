@@ -8,8 +8,6 @@ import { getZotItems } from './services/get-zot-items'
 import { mapAttachmentToParent } from './services/map-attachment-to-parent'
 import { handleSettings } from './settings'
 
-export const URL = 'http://127.0.0.1:23119/api/users/0/items'
-
 const main = async () => {
   console.log('logseq-zoterolocal-plugin loaded')
   // Used to handle any popups

@@ -10,11 +10,4 @@ export const handlePopup = () => {
     },
     false,
   )
-  // Click outside to close pop-up
-  document.addEventListener('click', (e) => {
-    if (!(e.target as HTMLElement).closest('body')) {
-      logseq.hideMainUI({ restoreEditingCursor: true })
-    }
-    e.stopPropagation()
-  })
 }
