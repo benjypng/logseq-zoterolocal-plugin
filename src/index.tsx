@@ -39,7 +39,7 @@ const main = async () => {
   })
 
   // Insert glossary as blocks for user to choose
-  logseq.Editor.registerSlashCommand('Insert Zotero glossary', async (e) => {
+  logseq.Editor.registerSlashCommand('Insert Zotero template', async (e) => {
     const glossaryObj: GlossaryObj = {
       accessDate: '<% accessDate %>',
       attachment: '<% attachment %>',
