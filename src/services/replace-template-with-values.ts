@@ -23,7 +23,11 @@ export const replaceTemplateWithValues = (
       // Remove the entire line if the value is empty
       result = result.replace(new RegExp(`^.*<% ${key} %>.*$\n?`, 'gm'), '')
     } else if (key === 'attachment') {
-      result = result.replace(placeholder, `![${value.title}](${value.href})`)
+      if (value.type === 'application/pdf') {
+        result = result.replace(placeholder, `![${value.title}](${value.href})`)
+      } else {
+        result = result.replace(placeholder, `[${value.title}](${value.href})`)
+      }
     } else if (key === 'creators') {
       const creatorStr = value
         .map((creator: CreatorItem) =>

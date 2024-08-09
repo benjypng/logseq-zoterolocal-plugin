@@ -1,8 +1,8 @@
 import { BlockEntity, IBatchBlock } from '@logseq/libs/dist/LSPlugin'
 
 import { ZotData } from '../features/main/interfaces'
-import { replaceTemplateWithValues } from './replace-template-with-values'
 import { handleContentBlocks } from './handle-content-blocks'
+import { replaceTemplateWithValues } from './replace-template-with-values'
 
 export const insertZotIntoGraph = async (zotItem: ZotData) => {
   const templateName = logseq.settings!.zotTemplate as string
