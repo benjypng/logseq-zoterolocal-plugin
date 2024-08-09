@@ -17,6 +17,8 @@ export const Zotero = ({ items }: ZoteroProps) => {
   const [localItems, setLocalItems] = useState(items)
   const { register, watch } = useForm()
 
+  console.log(items)
+
   const fuseOptions = {
     keys: FUSE_KEYS,
     threshold: 0.6,
@@ -28,7 +30,6 @@ export const Zotero = ({ items }: ZoteroProps) => {
     if (!searchInput) return
 
     const results = fuseHook(items, fuseOptions, searchInput)
-    console.log(results)
     setLocalItems(results.map((result) => result.item))
   }, [searchInput])
 

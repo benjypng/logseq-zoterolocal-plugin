@@ -50,7 +50,7 @@ export const columns: ColumnDef<ZotData>[] = [
       <div>
         {getValue<ZotData['creators']>().map((creator, index) => (
           <div key={index}>
-            {creator.firstName} {creator.lastName} ({creator.creatorType})
+            {creator.firstName} {creator.lastName} ({creator.creatorType}),{' '}
           </div>
         ))}
       </div>

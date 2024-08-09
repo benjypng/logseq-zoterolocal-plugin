@@ -11,6 +11,8 @@ export const mapAttachmentToParent = (data: ZotItem[]) => {
     }
   })
   for (const item of items) {
+    const citeKey = item.data.extra.replace('Citation Key: ', '')
+    item.data['citeKey'] = citeKey
     for (const attachment of attachments) {
       if (attachment.data.parentItem === item.key) {
         item.data['attachment'] = attachment

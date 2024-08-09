@@ -76,7 +76,9 @@ export interface ZotItem {
     dateAdded: string
     dateModified: string
     parentItem?: string
+    extra: string
     attachment?: ZotItem
+    citeKey: string
   }
 }
 
@@ -110,4 +112,5 @@ export interface ZotData {
   dateModified: string
   parentItem?: string
   attachment?: ZotItem
+  citeKey: string
 }
