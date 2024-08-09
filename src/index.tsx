@@ -16,7 +16,8 @@ const main = async () => {
   // Used to handle any popups
   handlePopup()
 
-  isValidSettings()
+  const validSettings = isValidSettings()
+  if (!validSettings) return
 
   const el = document.getElementById('app')
   if (!el) return

@@ -8,7 +8,7 @@ export const isValidSettings = () => {
       'Illegal page name template. Please check plugin settings',
       'error',
     )
-    return
+    return null
   }
 
   if (
@@ -20,6 +20,6 @@ export const isValidSettings = () => {
       'Illegal author template. Please check plugin settings',
       'error',
     )
-    return
+    return null
   }
 }
