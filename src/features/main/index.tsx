@@ -43,12 +43,15 @@ export const Zotero = ({ items }: ZoteroProps) => {
         <h1>logseq-zoterolocal-plugin</h1>
         <IconX onClick={handleClose} id="zot-close-button" />
       </div>
-      <input
-        autoFocus
-        {...register('search')}
-        type="text"
-        placeholder="Start searching"
-      />
+      <div id="zot-input-container">
+        <input
+          autoFocus
+          {...register('search')}
+          type="text"
+          placeholder="Start searching"
+        />
+        <p>Results: {localItems.length}</p>
+      </div>
 
       <div id="zot-results-table">
         <ResultsTable data={localItems} />

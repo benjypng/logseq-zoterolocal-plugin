@@ -28,7 +28,6 @@ const main = async () => {
         logseq.UI.showMsg(response.message, 'error')
         return
       }
-      console.log(response.data)
       const items = mapAttachmentToParent(response.data)
       if (!items[0]) return
 
