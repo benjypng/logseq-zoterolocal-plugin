@@ -2,11 +2,36 @@ import { ColumnDef } from '@tanstack/react-table'
 
 import { ZotData } from '../features/main/interfaces'
 
+const addToGraph = (pageName: string) => {
+  return (
+    <button
+      onClick={() => {
+        //TODO: Add other create graph stuff
+        logseq.App.pushState('page', {
+          name: pageName,
+        })
+        logseq.hideMainUI()
+      }}
+    >
+      Insert
+    </button>
+  )
+}
+
 export const columns: ColumnDef<ZotData>[] = [
   {
     header: 'In Graph?',
     accessorKey: 'inGraph',
-    cell: ({ getValue }) => <p>{getValue<ZotData['inGraph']>() ? 'y' : 'n'}</p>,
+    cell: ({ getValue, row }) => {
+      const pageName = logseq.settings!.useCiteKeyForTitle
+        ? row.original.citeKey
+        : row.original.title
+      return (
+        <div>
+          {getValue<ZotData['inGraph']>() ? '✅' : addToGraph(pageName)}
+        </div>
+      )
+    },
   },
   {
     header: 'Key',

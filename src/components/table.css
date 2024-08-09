@@ -14,6 +14,11 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.zot-table button {
+  font-size: 0.6rem;
+  background-color: teal;
+}
+
 .zot-table th,
 .zot-table td {
   padding: 12px 15px;
