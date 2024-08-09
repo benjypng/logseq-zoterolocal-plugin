@@ -5,6 +5,8 @@ import { handleContentBlocks } from './handle-content-blocks'
 import { replaceTemplateWithValues } from './replace-template-with-values'
 
 export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
+  const msgId = await logseq.UI.showMsg('Inserting into graph...', 'success')
+
   const templateName = logseq.settings!.zotTemplate as string
   if (!templateName && templateName.length === 0) {
     logseq.UI.showMsg(
@@ -33,9 +35,12 @@ export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
   }
 
   // template[0] will always be the block properties
-  const pageProps = replaceTemplateWithValues(template[0]!.content, zotItem)
+  const pageProps = await replaceTemplateWithValues(
+    template[0]!.content,
+    zotItem,
+  )
 
-  const pageName = replaceTemplateWithValues(
+  const pageName = await replaceTemplateWithValues(
     logseq.settings!.pagenameTemplate as string,
     zotItem,
   )
@@ -63,12 +68,13 @@ export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
     // Add content from template
     const contentBlockArr = template.slice(1) as BlockEntity[]
     const result: IBatchBlock[] = []
-    handleContentBlocks(contentBlockArr, zotItem, result)
+    await handleContentBlocks(contentBlockArr, zotItem, result)
     await logseq.Editor.insertBatchBlock(propsBlock!.uuid, result)
 
     // Insert page reference onto where the slash command came from
     await logseq.Editor.updateBlock(uuid, `[[${pageName}]]`)
   }
 
+  logseq.UI.closeMsg(msgId)
   logseq.hideMainUI()
 }

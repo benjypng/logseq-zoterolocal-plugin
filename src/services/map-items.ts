@@ -23,7 +23,7 @@ export const mapItems = async (data: ZotItem[]) => {
 
     // Map "if in graph"
     item.data['inGraph'] = await checkInGraph(
-      replaceTemplateWithValues(
+      await replaceTemplateWithValues(
         logseq.settings!.pagenameTemplate as string,
         item.data,
       ),
