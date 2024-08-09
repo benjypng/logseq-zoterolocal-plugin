@@ -65,49 +65,89 @@ export interface ZotItem {
     issue?: string
     journalAbbreviation?: string
     ISSN?: string
-    creators: {
-      firstName: string
-      lastName: string
-      creatorType: string
-    }[]
+    creators: CreatorItem[]
     tags: any[]
     collections: any[]
     relations: any
     dateAdded: string
     dateModified: string
     parentItem?: string
-    attachment?: ZotItem
+    extra: string
+    attachment?: AttachmentItem
+    citeKey: string
+    inGraph: boolean
   }
 }
 
-export interface ZotData {
-  key: string
-  version: number
-  itemType: string
+export interface AttachmentItem {
+  href: string
+  length: number
   title: string
-  date: string
-  language: string
-  shortTitle?: string
-  libraryCatalog: string
-  url: string
+  type: string
+}
+
+export interface CreatorItem {
+  firstName: string
+  lastName: string
+  creatorType: string
+}
+
+export interface ZotData {
   accessDate: string
-  volume?: string
-  pages?: string
-  publicationTitle: string
-  DOI: string
-  issue?: string
-  journalAbbreviation?: string
-  ISSN?: string
-  creators: {
-    firstName: string
-    lastName: string
-    creatorType: string
-  }[]
-  tags: any[]
+  attachment?: AttachmentItem
+  citeKey: string
   collections: any[]
-  relations: any
+  creators: CreatorItem[]
+  date: string
   dateAdded: string
   dateModified: string
+  DOI: string
+  inGraph: boolean
+  ISSN?: string
+  issue?: string
+  itemType: string
+  journalAbbreviation?: string
+  key: string
+  language: string
+  libraryCatalog: string
+  pages?: string
   parentItem?: string
-  attachment?: ZotItem
+  publicationTitle: string
+  relations: any
+  shortTitle?: string
+  tags: string[]
+  title: string
+  url: string
+  version: number
+  volume?: string
+}
+
+export interface GlossaryObj {
+  accessDate: string
+  attachment: string
+  citeKey: string
+  collections: string
+  authors: string
+  date: string
+  dateAdded: string
+  dateModified: string
+  DOI: string
+  inGraph: string
+  ISSN: string
+  issue: string
+  itemType: string
+  journalAbbreviation: string
+  key: string
+  language: string
+  libraryCatalog: string
+  pages: string
+  parentItem: string
+  publicationTitle: string
+  relations: string
+  shortTitle: string
+  tags: string
+  title: string
+  url: string
+  version: string
+  volume: string
 }

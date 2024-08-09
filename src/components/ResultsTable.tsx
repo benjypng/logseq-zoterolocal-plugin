@@ -1,91 +1,29 @@
+import './table.css'
+
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import React, { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import { ZotData } from '../features/main/interfaces'
+import { getColumns } from './columns'
 
 interface TableProps {
   data: ZotData[]
+  uuid: string
 }
 
-export const ResultsTable = ({ data }: TableProps) => {
+export const ResultsTable = ({ data, uuid }: TableProps) => {
   const [sorting, setSorting] = useState<any[]>([])
   const [columnVisibility, setColumnVisibility] = useState<
     Record<string, boolean>
-  >({})
+  >(logseq.settings!.columnVisibility as Record<string, boolean>)
   const [showColumnChooser, setShowColumnChooser] = useState(false)
 
-  const columns = useMemo<ColumnDef<ZotData>[]>(
-    () => [
-      {
-        header: 'Key',
-        accessorKey: 'key',
-      },
-      {
-        header: 'Version',
-        accessorKey: 'version',
-      },
-      {
-        header: 'Item Type',
-        accessorKey: 'itemType',
-      },
-      {
-        header: 'Title',
-        accessorKey: 'title',
-      },
-      {
-        header: 'Date',
-        accessorKey: 'date',
-      },
-      {
-        header: 'Language',
-        accessorKey: 'language',
-      },
-      {
-        header: 'Short Title',
-        accessorKey: 'shortTitle',
-      },
-      {
-        header: 'Library Catalog',
-        accessorKey: 'libraryCatalog',
-      },
-      {
-        header: 'URL',
-        accessorKey: 'url',
-      },
-      {
-        header: 'Access Date',
-        accessorKey: 'accessDate',
-      },
-      {
-        header: 'Creators',
-        accessorKey: 'creators',
-        cell: ({ getValue }) => (
-          <div>
-            {getValue<ZotData['creators']>().map((creator, index) => (
-              <div key={index}>
-                {creator.firstName} {creator.lastName} ({creator.creatorType})
-              </div>
-            ))}
-          </div>
-        ),
-      },
-      {
-        header: 'Date Added',
-        accessorKey: 'dateAdded',
-      },
-      {
-        header: 'Date Modified',
-        accessorKey: 'dateModified',
-      },
-    ],
-    [],
-  )
+  const columns = getColumns(uuid)
 
   const table = useReactTable({
     data,
@@ -117,6 +55,9 @@ export const ResultsTable = ({ data }: TableProps) => {
       ))}
     </div>
   )
+
+  // Save column visibility to settings for persistence
+  logseq.updateSettings({ columnVisibility })
 
   return (
     <div className="zot-table-container">

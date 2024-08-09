@@ -1,23 +1,25 @@
 import './index.css'
 
-import { useEffect, useState } from 'react'
+import { IconX } from '@tabler/icons-react'
+import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { ResultsTable } from '../../components/ResultsTable'
-import { KEYS } from '../../constants'
+import { FUSE_KEYS } from '../../constants'
 import { fuseHook } from '../../services/fuse-hook'
 import { ZotData } from './interfaces'
 
 interface ZoteroProps {
   items: ZotData[]
+  uuid: string
 }
 
-export const Zotero = ({ items }: ZoteroProps) => {
+export const Zotero = ({ items, uuid }: ZoteroProps) => {
   const [localItems, setLocalItems] = useState(items)
   const { register, watch } = useForm()
 
   const fuseOptions = {
-    keys: KEYS,
+    keys: FUSE_KEYS,
     threshold: 0.6,
     includeScore: true,
   }
@@ -27,23 +29,31 @@ export const Zotero = ({ items }: ZoteroProps) => {
     if (!searchInput) return
 
     const results = fuseHook(items, fuseOptions, searchInput)
-    console.log(results)
     setLocalItems(results.map((result) => result.item))
   }, [searchInput])
 
+  const handleClose = useCallback(() => {
+    logseq.hideMainUI()
+  }, [items])
+
   return (
     <div id="zot-container">
-      <h1>logseq-zoterolocal-plugin</h1>
-
-      <input
-        autoFocus
-        {...register('search')}
-        type="text"
-        placeholder="Start searching"
-      />
+      <div id="zot-header-container">
+        <h1>logseq-zoterolocal-plugin</h1>
+        <IconX onClick={handleClose} id="zot-close-button" />
+      </div>
+      <div id="zot-input-container">
+        <input
+          autoFocus
+          {...register('search')}
+          type="text"
+          placeholder="Start searching"
+        />
+        <p>Results: {localItems.length}</p>
+      </div>
 
       <div id="zot-results-table">
-        <ResultsTable data={localItems} />
+        <ResultsTable data={localItems} uuid={uuid} />
       </div>
     </div>
   )

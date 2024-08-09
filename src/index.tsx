@@ -3,9 +3,12 @@ import '@logseq/libs'
 import { createRoot } from 'react-dom/client'
 
 import { Zotero } from './features/main'
+import { GlossaryObj } from './features/main/interfaces'
 import { handlePopup } from './handle-popup'
-import { getZotItems } from './services/get-zot-items'
-import { mapAttachmentToParent } from './services/map-attachment-to-parent'
+import { isValidSettings } from './services/check-settings'
+import { createTemplateGlossary } from './services/create-template-glossary'
+import { getZotItems, testZotConnection } from './services/get-zot-items'
+import { mapItems } from './services/map-items'
 import { handleSettings } from './settings'
 
 const main = async () => {
@@ -13,32 +16,68 @@ const main = async () => {
   // Used to handle any popups
   handlePopup()
 
-  // Get initial items
-  const response = await getZotItems()
-
-  handleSettings(response.message, response.code)
+  const validSettings = isValidSettings()
+  if (!validSettings) return
 
   const el = document.getElementById('app')
   if (!el) return
   const root = createRoot(el)
 
-  logseq.provideModel({
-    async managePowerTags() {
-      const response = await getZotItems()
-      if (!response.code) {
-        logseq.UI.showMsg(response.message, 'error')
-        return
-      }
-      const items = mapAttachmentToParent(response.data)
-      if (!items[0]) return
+  // Get initial items
+  const response = await testZotConnection()
+  handleSettings(response.message, response.code)
 
-      root.render(<Zotero items={items} />)
-      logseq.showMainUI()
-    },
+  logseq.Editor.registerSlashCommand('Launch Zotero plugin', async (e) => {
+    const response = await getZotItems()
+    if (!response) return
+
+    const items = await mapItems(response)
+    if (!items[0]) return
+
+    root.render(<Zotero items={items} uuid={e.uuid} />)
+    logseq.showMainUI()
   })
-  logseq.App.registerUIItem('toolbar', {
-    key: 'logseq-zoterolocal-plugin',
-    template: `<a data-on-click="managePowerTags" class="button"><i class="ti ti-zzz"></i></a>`,
+
+  // Insert glossary as blocks for user to choose
+  logseq.Editor.registerSlashCommand('Insert Zotero glossary', async (e) => {
+    const glossaryObj: GlossaryObj = {
+      accessDate: '<% accessDate %>',
+      attachment: '<% attachment %>',
+      citeKey: '<% citeKey %>',
+      collections: '<% collections %>',
+      authors: '<% firstName %> <% lastName %> (<% creatorType %>)',
+      date: '<% date %>',
+      dateAdded: '<% dateAdded %>',
+      dateModified: '<% dateModified %>',
+      DOI: '<% DOI %>',
+      inGraph: '<% inGraph %>',
+      ISSN: '<% ISSN %>',
+      issue: '<% issue %>',
+      itemType: '<% itemType %>',
+      journalAbbreviation: '<% journalAbbreviation %>',
+      key: '<% key %>',
+      language: '<% language %>',
+      libraryCatalog: '<% libraryCatalog %>',
+      pages: '<% pages %>',
+      parentItem: '<% parentItem %>',
+      publicationTitle: '<% publicationTitle %>',
+      relations: '<% relations %>',
+      shortTitle: '<% shortTitle %>',
+      tags: '<% tags %>',
+      title: '<% title %>',
+      url: '<% url %>',
+      version: '<% version %>',
+      volume: '<% volume %>',
+    }
+
+    await logseq.Editor.updateBlock(
+      e.uuid,
+      `Zotero Template
+    template:: Zotero Template
+    template-including-parent:: false`,
+    )
+
+    await createTemplateGlossary(glossaryObj, e.uuid)
   })
 }
 
