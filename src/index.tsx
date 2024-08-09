@@ -48,11 +48,7 @@ const main = async () => {
       attachment: '<% attachment %>',
       citeKey: '<% citeKey %>',
       collections: '<% collections %>',
-      creators: {
-        firstName: '<% firstName %>',
-        lastName: '<% lastName %>',
-        creatorType: '<% creatorType %>',
-      },
+      authors: '<% firstName %> <% lastName %> (<% creatorType %>)',
       date: '<% date %>',
       dateAdded: '<% dateAdded %>',
       dateModified: '<% dateModified %>',

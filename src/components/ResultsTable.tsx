@@ -19,7 +19,7 @@ export const ResultsTable = ({ data }: TableProps) => {
   const [sorting, setSorting] = useState<any[]>([])
   const [columnVisibility, setColumnVisibility] = useState<
     Record<string, boolean>
-  >({})
+  >(logseq.settings!.columnVisibility as Record<string, boolean>)
   const [showColumnChooser, setShowColumnChooser] = useState(false)
 
   const table = useReactTable({
@@ -52,6 +52,8 @@ export const ResultsTable = ({ data }: TableProps) => {
       ))}
     </div>
   )
+
+  logseq.updateSettings({ columnVisibility })
 
   return (
     <div className="zot-table-container">
