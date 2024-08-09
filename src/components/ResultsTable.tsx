@@ -1,15 +1,15 @@
 import './table.css'
 
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import { ZotData } from '../features/main/interfaces'
+import { columns } from './columns'
 
 interface TableProps {
   data: ZotData[]
@@ -21,73 +21,6 @@ export const ResultsTable = ({ data }: TableProps) => {
     Record<string, boolean>
   >({})
   const [showColumnChooser, setShowColumnChooser] = useState(false)
-
-  const columns = useMemo<ColumnDef<ZotData>[]>(
-    () => [
-      {
-        header: 'Key',
-        accessorKey: 'key',
-      },
-      {
-        header: 'Version',
-        accessorKey: 'version',
-      },
-      {
-        header: 'Item Type',
-        accessorKey: 'itemType',
-      },
-      {
-        header: 'Title',
-        accessorKey: 'title',
-      },
-      {
-        header: 'Date',
-        accessorKey: 'date',
-      },
-      {
-        header: 'Language',
-        accessorKey: 'language',
-      },
-      {
-        header: 'Short Title',
-        accessorKey: 'shortTitle',
-      },
-      {
-        header: 'Library Catalog',
-        accessorKey: 'libraryCatalog',
-      },
-      {
-        header: 'URL',
-        accessorKey: 'url',
-      },
-      {
-        header: 'Access Date',
-        accessorKey: 'accessDate',
-      },
-      {
-        header: 'Creators',
-        accessorKey: 'creators',
-        cell: ({ getValue }) => (
-          <div>
-            {getValue<ZotData['creators']>().map((creator, index) => (
-              <div key={index}>
-                {creator.firstName} {creator.lastName} ({creator.creatorType})
-              </div>
-            ))}
-          </div>
-        ),
-      },
-      {
-        header: 'Date Added',
-        accessorKey: 'dateAdded',
-      },
-      {
-        header: 'Date Modified',
-        accessorKey: 'dateModified',
-      },
-    ],
-    [],
-  )
 
   const table = useReactTable({
     data,

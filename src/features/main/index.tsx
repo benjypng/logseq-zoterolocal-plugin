@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { ResultsTable } from '../../components/ResultsTable'
-import { KEYS } from '../../constants'
+import { FUSE_KEYS } from '../../constants'
 import { fuseHook } from '../../services/fuse-hook'
 import { ZotData } from './interfaces'
 
@@ -18,7 +18,7 @@ export const Zotero = ({ items }: ZoteroProps) => {
   const { register, watch } = useForm()
 
   const fuseOptions = {
-    keys: KEYS,
+    keys: FUSE_KEYS,
     threshold: 0.6,
     includeScore: true,
   }
