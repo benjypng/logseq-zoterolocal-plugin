@@ -29,6 +29,14 @@ export const handleSettings = async (
         'The template name that holds your template for a Zotero page. Ensure that include parent is set to false. ',
       default: '',
     },
+    {
+      key: 'authorTemplate',
+      type: 'string',
+      title: 'Author Template',
+      description:
+        'Specify how authors should be shown in the properties. Available placeholders: <% firstName %>, <% lastName %>, <% creatorType %>',
+      default: '<% firstName %> <% lastName %> (<% creatorType %>)',
+    },
   ]
 
   logseq.useSettingsSchema(settings)

@@ -1,6 +1,6 @@
 import { BlockEntity, IBatchBlock } from '@logseq/libs/dist/LSPlugin'
 
-import { ZotData } from '../features/main/interfaces'
+import { CreatorItem, ZotData } from '../features/main/interfaces'
 
 const insertPageContent = async (
   uuid: string,
@@ -28,7 +28,11 @@ const insertPageContent = async (
   }
 }
 
-const replaceTemplateWithValues = (template: string, data: ZotData) => {
+const replaceTemplateWithValues = (
+  template: string,
+  data: ZotData | CreatorItem,
+) => {
+  console.log('Data', data)
   const keys = Object.keys(data)
 
   let result = template
@@ -42,15 +46,27 @@ const replaceTemplateWithValues = (template: string, data: ZotData) => {
       value === undefined ||
       value === null ||
       value === '' ||
-      (Array.isArray(value) && value.length === 0)
+      (Array.isArray(value) && value.length === 0) || // Empty array
+      (typeof value === 'object' && Object.keys(value).length === 0)
     ) {
       // Remove the entire line if the value is empty
       result = result.replace(new RegExp(`^.*<% ${key} %>.*$\n?`, 'gm'), '')
     } else if (key === 'attachment') {
       result = result.replace(placeholder, `![${value.title}](${value.href})`)
+    } else if (key === 'creators') {
+      const creatorStr = value
+        .map((creator: CreatorItem) =>
+          replaceTemplateWithValues(
+            logseq.settings!.authorTemplate as string,
+            creator,
+          ),
+        )
+        .join(', ')
+
+      result = result.replace(placeholder, creatorStr)
     } else if (typeof value === 'object' && !Array.isArray(value)) {
       // Skip object values (except arrays)
-      console.log(key, value)
+      // TODO: Handle array and objects that are not attachments nor creators
       continue
     } else {
       result = result.replace(placeholder, value)
@@ -101,24 +117,23 @@ export const insertZotIntoGraph = async (zotItem: ZotData) => {
 
   const existingPage = await logseq.Editor.getPage(pageName)
   if (!existingPage) {
-    const page = await logseq.Editor.createPage(
-      pageName,
-      {},
-      {
-        redirect: true,
-        createFirstBlock: false,
-        journal: false,
-      },
-    )
-    const propsBlock = await logseq.Editor.appendBlockInPage(
-      pageName,
-      pageProps,
-    )
+    //const page = await logseq.Editor.createPage(
+    //  pageName,
+    //  {},
+    //  {
+    //    redirect: true,
+    //    createFirstBlock: false,
+    //    journal: false,
+    //  },
+    //)
+    //const propsBlock = await logseq.Editor.appendBlockInPage(
+    //  pageName,
+    //  pageProps,
+    //)
     //await logseq.Editor.insertBatchBlock(
     //  propsBlock!.uuid,
     //  template.slice(1) as unknown as IBatchBlock,
     //)
-
     //await insertPageContent(page!.uuid, template, zotItem)
   }
 

@@ -65,11 +65,7 @@ export interface ZotItem {
     issue?: string
     journalAbbreviation?: string
     ISSN?: string
-    creators: {
-      firstName: string
-      lastName: string
-      creatorType: string
-    }[]
+    creators: CreatorItem[]
     tags: any[]
     collections: any[]
     relations: any
@@ -90,16 +86,18 @@ export interface AttachmentItem {
   type: string
 }
 
+export interface CreatorItem {
+  firstName: string
+  lastName: string
+  creatorType: string
+}
+
 export interface ZotData {
   accessDate: string
   attachment?: AttachmentItem
   citeKey: string
   collections: any[]
-  creators: {
-    firstName: string
-    lastName: string
-    creatorType: string
-  }[]
+  creators: CreatorItem[]
   date: string
   dateAdded: string
   dateModified: string
