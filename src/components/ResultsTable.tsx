@@ -53,6 +53,7 @@ export const ResultsTable = ({ data }: TableProps) => {
     </div>
   )
 
+  // Save column visibility to settings for persistence
   logseq.updateSettings({ columnVisibility })
 
   return (

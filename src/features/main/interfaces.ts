@@ -110,9 +110,39 @@ export interface ZotData {
   publicationTitle: string
   relations: any
   shortTitle?: string
-  tags: any[]
+  tags: string[]
   title: string
   url: string
   version: number
   volume?: string
+}
+
+export interface GlossaryObj {
+  accessDate: string
+  attachment: string
+  citeKey: string
+  collections: string
+  authors: string
+  date: string
+  dateAdded: string
+  dateModified: string
+  DOI: string
+  inGraph: string
+  ISSN: string
+  issue: string
+  itemType: string
+  journalAbbreviation: string
+  key: string
+  language: string
+  libraryCatalog: string
+  pages: string
+  parentItem: string
+  publicationTitle: string
+  relations: string
+  shortTitle: string
+  tags: string
+  title: string
+  url: string
+  version: string
+  volume: string
 }

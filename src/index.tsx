@@ -3,11 +3,11 @@ import '@logseq/libs'
 import { createRoot } from 'react-dom/client'
 
 import { Zotero } from './features/main'
+import { GlossaryObj, ZotData } from './features/main/interfaces'
 import { handlePopup } from './handle-popup'
-import { getZotItems } from './services/get-zot-items'
+import { getZotItems, testZotConnection } from './services/get-zot-items'
 import { mapItems } from './services/map-items'
 import { handleSettings } from './settings'
-import { ZotData } from './features/main/interfaces'
 
 const main = async () => {
   console.log('logseq-zoterolocal-plugin loaded')
@@ -19,17 +19,15 @@ const main = async () => {
   const root = createRoot(el)
 
   // Get initial items
-  const response = await getZotItems()
+  const response = await testZotConnection()
   handleSettings(response.message, response.code)
 
   logseq.provideModel({
     async managePowerTags() {
       const response = await getZotItems()
-      if (!response.code) {
-        logseq.UI.showMsg(response.message, 'error')
-        return
-      }
-      const items = await mapItems(response.data)
+      if (!response) return
+
+      const items = await mapItems(response)
       if (!items[0]) return
 
       root.render(<Zotero items={items} />)
@@ -42,8 +40,8 @@ const main = async () => {
   })
 
   // Insert glossary as blocks for user to choose
-  logseq.Editor.registerSlashCommand('Insert Zotero glossary', (e) => {
-    const glossaryObj = {
+  logseq.Editor.registerSlashCommand('Insert Zotero glossary', async (e) => {
+    const glossaryObj: GlossaryObj = {
       accessDate: '<% accessDate %>',
       attachment: '<% attachment %>',
       citeKey: '<% citeKey %>',
@@ -72,6 +70,32 @@ const main = async () => {
       version: '<% version %>',
       volume: '<% volume %>',
     }
+
+    //    await logseq.Editor.updateBlock(
+    //      e.uuid,
+    //      `Zotero Template
+    //template:: Zotero Template
+    //template-including-parent:: false`,
+    //    )
+
+    let glossaryStr = logseq.settings!.useCiteKeyForTitle
+      ? glossaryObj.citeKey
+      : glossaryObj.title
+
+    Object.entries(glossaryObj).map(
+      ([key, value]) =>
+        (glossaryStr += `
+${key}:: ${value}`),
+    )
+
+    const templatRootBlk = await logseq.Editor.insertBlock(
+      e.uuid,
+      glossaryStr,
+      {
+        before: false,
+        sibling: false,
+      },
+    )
   })
 }
 
