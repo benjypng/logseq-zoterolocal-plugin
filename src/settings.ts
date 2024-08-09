@@ -18,7 +18,7 @@ export const handleSettings = async (
       key: 'useCiteKeyForTitle',
       type: 'boolean',
       title: 'Use Citation Key for Title',
-      description: `Use the item's citation key as it's title`,
+      description: `Use the item's citation key as it's title. If false, the short title will be used.`,
       default: true,
     },
     {

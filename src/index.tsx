@@ -3,8 +3,9 @@ import '@logseq/libs'
 import { createRoot } from 'react-dom/client'
 
 import { Zotero } from './features/main'
-import { GlossaryObj, ZotData } from './features/main/interfaces'
+import { GlossaryObj } from './features/main/interfaces'
 import { handlePopup } from './handle-popup'
+import { createTemplateGlossary } from './services/create-template-glossary'
 import { getZotItems, testZotConnection } from './services/get-zot-items'
 import { mapItems } from './services/map-items'
 import { handleSettings } from './settings'
@@ -26,6 +27,7 @@ const main = async () => {
     async managePowerTags() {
       const response = await getZotItems()
       if (!response) return
+      console.log(response)
 
       const items = await mapItems(response)
       if (!items[0]) return
@@ -71,31 +73,14 @@ const main = async () => {
       volume: '<% volume %>',
     }
 
-    //    await logseq.Editor.updateBlock(
-    //      e.uuid,
-    //      `Zotero Template
-    //template:: Zotero Template
-    //template-including-parent:: false`,
-    //    )
-
-    let glossaryStr = logseq.settings!.useCiteKeyForTitle
-      ? glossaryObj.citeKey
-      : glossaryObj.title
-
-    Object.entries(glossaryObj).map(
-      ([key, value]) =>
-        (glossaryStr += `
-${key}:: ${value}`),
-    )
-
-    const templatRootBlk = await logseq.Editor.insertBlock(
+    await logseq.Editor.updateBlock(
       e.uuid,
-      glossaryStr,
-      {
-        before: false,
-        sibling: false,
-      },
+      `Zotero Template
+    template:: Zotero Template
+    template-including-parent:: false`,
     )
+
+    await createTemplateGlossary(glossaryObj, e.uuid)
   })
 }
 

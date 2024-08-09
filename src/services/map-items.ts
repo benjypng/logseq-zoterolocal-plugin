@@ -22,7 +22,7 @@ export const mapItems = async (data: ZotItem[]) => {
 
     // Map "if in graph"
     item.data['inGraph'] = await checkInGraph(
-      (logseq.settings!.useCiteKeyForTitle as string) ?? item.data.title,
+      (logseq.settings!.useCiteKeyForTitle as string) ?? item.data.shortTitle,
     )
 
     // Map attachment

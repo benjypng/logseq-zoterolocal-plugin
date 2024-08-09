@@ -30,6 +30,11 @@ export const getZotItems = async (): Promise<ZotItem[] | void> => {
     const response = await axios({
       method: 'get',
       url: URL,
+      headers: {
+        'Content-Type': 'text/plain',
+        'x-zotero-connector-api-version': '3.0',
+        'zotero-allowed-request': 'true',
+      },
     })
     return response.data
   } catch (error) {
