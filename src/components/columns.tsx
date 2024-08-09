@@ -8,6 +8,10 @@ export const columns: ColumnDef<ZotData>[] = [
     accessorKey: 'key',
   },
   {
+    header: 'Citation Key',
+    accessorKey: 'citeKey',
+  },
+  {
     header: 'Version',
     accessorKey: 'version',
   },
