@@ -13,9 +13,10 @@ import { columns } from './columns'
 
 interface TableProps {
   data: ZotData[]
+  uuid: string
 }
 
-export const ResultsTable = ({ data }: TableProps) => {
+export const ResultsTable = ({ data, uuid }: TableProps) => {
   const [sorting, setSorting] = useState<any[]>([])
   const [columnVisibility, setColumnVisibility] = useState<
     Record<string, boolean>

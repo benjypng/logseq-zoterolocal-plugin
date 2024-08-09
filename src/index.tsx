@@ -27,21 +27,15 @@ const main = async () => {
   const response = await testZotConnection()
   handleSettings(response.message, response.code)
 
-  logseq.provideModel({
-    async managePowerTags() {
-      const response = await getZotItems()
-      if (!response) return
+  logseq.Editor.registerSlashCommand('Launch Zotero plugin', async (e) => {
+    const response = await getZotItems()
+    if (!response) return
 
-      const items = await mapItems(response)
-      if (!items[0]) return
+    const items = await mapItems(response)
+    if (!items[0]) return
 
-      root.render(<Zotero items={items} />)
-      logseq.showMainUI()
-    },
-  })
-  logseq.App.registerUIItem('toolbar', {
-    key: 'logseq-zoterolocal-plugin',
-    template: `<a data-on-click="managePowerTags" class="button"><i class="ti ti-zzz"></i></a>`,
+    root.render(<Zotero items={items} uuid={e.uuid} />)
+    logseq.showMainUI()
   })
 
   // Insert glossary as blocks for user to choose

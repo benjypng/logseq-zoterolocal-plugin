@@ -11,9 +11,10 @@ import { ZotData } from './interfaces'
 
 interface ZoteroProps {
   items: ZotData[]
+  uuid: string
 }
 
-export const Zotero = ({ items }: ZoteroProps) => {
+export const Zotero = ({ items, uuid }: ZoteroProps) => {
   const [localItems, setLocalItems] = useState(items)
   const { register, watch } = useForm()
 
@@ -52,7 +53,7 @@ export const Zotero = ({ items }: ZoteroProps) => {
       </div>
 
       <div id="zot-results-table">
-        <ResultsTable data={localItems} />
+        <ResultsTable data={localItems} uuid={uuid} />
       </div>
     </div>
   )

@@ -1,7 +1,7 @@
 export const isValidSettings = () => {
   if (
-    !['<% citeKey %>', '<% title %>', '<% shortTitle %>'].includes(
-      logseq.settings!.pagenameTemplate as string,
+    !['<% citeKey %>', '<% title %>', '<% shortTitle %>'].some((placeholder) =>
+      (logseq.settings!.pagenameTemplate as string).includes(placeholder),
     )
   ) {
     logseq.UI.showMsg(
@@ -12,8 +12,9 @@ export const isValidSettings = () => {
   }
 
   if (
-    !['<% firstName %>', '<% lastName %>', '<% creatorType %>'].includes(
-      logseq.settings!.authorTemplate as string,
+    !['<% firstName %>', '<% lastName %>', '<% creatorType %>'].some(
+      (placeholder) =>
+        (logseq.settings!.authorTemplate as string).includes(placeholder),
     )
   ) {
     logseq.UI.showMsg(
@@ -22,4 +23,6 @@ export const isValidSettings = () => {
     )
     return null
   }
+
+  return true
 }

@@ -4,7 +4,7 @@ import { ZotData } from '../features/main/interfaces'
 import { handleContentBlocks } from './handle-content-blocks'
 import { replaceTemplateWithValues } from './replace-template-with-values'
 
-export const insertZotIntoGraph = async (zotItem: ZotData) => {
+export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
   const templateName = logseq.settings!.zotTemplate as string
   if (!templateName && templateName.length === 0) {
     logseq.UI.showMsg(
@@ -45,7 +45,7 @@ export const insertZotIntoGraph = async (zotItem: ZotData) => {
       pageName,
       {},
       {
-        redirect: true,
+        redirect: false,
         createFirstBlock: false,
         journal: false,
       },
@@ -62,6 +62,10 @@ export const insertZotIntoGraph = async (zotItem: ZotData) => {
     const result: IBatchBlock[] = []
     handleContentBlocks(contentBlockArr, zotItem, result)
     await logseq.Editor.insertBatchBlock(propsBlock!.uuid, result)
+
+    // Insert page reference onto where the slash command came from
+    await logseq.Editor.updateBlock(uuid, `[[${pageName}]]`)
   }
+
   logseq.hideMainUI()
 }
