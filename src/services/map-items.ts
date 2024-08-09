@@ -17,8 +17,8 @@ export const mapItems = async (data: ZotItem[]) => {
   })
   for (const item of items) {
     // Map citeKey
-    const citeKey = item.data.extra.replace('Citation Key: ', '')
-    item.data['citeKey'] = citeKey
+    const citeKey = /Citation Key: ([^\s\n]+)/.exec(item.data.extra)
+    if (citeKey && citeKey[1]) item.data['citeKey'] = citeKey[1]
 
     // Map "if in graph"
     item.data['inGraph'] = await checkInGraph(

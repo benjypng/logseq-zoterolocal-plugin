@@ -1,4 +1,5 @@
 import { BlockEntity } from '@logseq/libs/dist/LSPlugin'
+
 import { ZotData } from '../features/main/interfaces'
 
 export const insertZotIntoGraph = async (zotItem: ZotData) => {
