@@ -4,9 +4,7 @@ export const createTemplateGlossary = async (
   glossaryObj: GlossaryObj,
   uuid: string,
 ) => {
-  let glossaryStr = logseq.settings!.useCiteKeyForTitle
-    ? glossaryObj.citeKey
-    : glossaryObj.shortTitle
+  let glossaryStr = ''
 
   Object.entries(glossaryObj).map(
     ([key, value]) =>
