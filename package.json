@@ -1,7 +1,7 @@
 {
   "name": "logseq-zoterolocal-plugin",
   "author": "benjypng",
-  "description": "Connect to Zotero locally using Zotero Beta 7 (and above).",
+  "description": "Connect to Zotero locally using Zotero Beta 7 (and above), import and keep track of your Zotero library.",
   "license": "MIT",
   "logseq": {
     "id": "logseq-zoterolocal-plugin",
