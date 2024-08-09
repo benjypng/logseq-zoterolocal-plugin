@@ -14,6 +14,13 @@ export const handleSettings = async (
       title: 'Connection Test',
       description: message,
     },
+    {
+      key: 'useCiteKeyForTitle',
+      type: 'boolean',
+      default: true,
+      title: 'Use Citation Key for Title',
+      description: `Use the item's citation key as it's title`,
+    },
   ]
 
   logseq.useSettingsSchema(settings)
