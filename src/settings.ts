@@ -15,19 +15,19 @@ export const handleSettings = async (
       default: '',
     },
     {
-      key: 'useCiteKeyForTitle',
-      type: 'boolean',
-      title: 'Use Citation Key for Title',
-      description: `Use the item's citation key as it's title. If false, the short title will be used.`,
-      default: true,
-    },
-    {
       key: 'zotTemplate',
       type: 'string',
       title: 'Template Name',
       description:
         'The template name that holds your template for a Zotero page. Ensure that include parent is set to false. ',
       default: '',
+    },
+    {
+      key: 'pagenameTemplate',
+      type: 'string',
+      title: 'Page Name Template',
+      description: `Specify the page name for each Zotero import. Available placeholders: <% citeKey %>, <% title %>, <% shortTitle %>`,
+      default: `R: <% citeKey %>`,
     },
     {
       key: 'authorTemplate',

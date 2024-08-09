@@ -35,9 +35,7 @@ export const insertZotIntoGraph = async (zotItem: ZotData) => {
   // template[0] will always be the block properties
   const pageProps = replaceTemplateWithValues(template[0]!.content, zotItem)
 
-  const pageName = logseq.settings!.useCiteKeyForTitle
-    ? zotItem.citeKey
-    : zotItem.shortTitle
+  const pageName = logseq.settings!.pagenameTemplate as string
   if (!pageName) throw new Error('Unable to derive page name')
 
   const existingPage = await logseq.Editor.getPage(pageName)

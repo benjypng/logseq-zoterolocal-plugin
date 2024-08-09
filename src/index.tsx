@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client'
 import { Zotero } from './features/main'
 import { GlossaryObj } from './features/main/interfaces'
 import { handlePopup } from './handle-popup'
+import { isValidSettings } from './services/check-settings'
 import { createTemplateGlossary } from './services/create-template-glossary'
 import { getZotItems, testZotConnection } from './services/get-zot-items'
 import { mapItems } from './services/map-items'
@@ -14,6 +15,8 @@ const main = async () => {
   console.log('logseq-zoterolocal-plugin loaded')
   // Used to handle any popups
   handlePopup()
+
+  isValidSettings()
 
   const el = document.getElementById('app')
   if (!el) return
