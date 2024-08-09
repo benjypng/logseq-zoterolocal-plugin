@@ -1,11 +1,36 @@
-import { BlockEntity } from '@logseq/libs/dist/LSPlugin'
+import { BlockEntity, IBatchBlock } from '@logseq/libs/dist/LSPlugin'
 
 import { ZotData } from '../features/main/interfaces'
 
+const insertPageContent = async (
+  uuid: string,
+  blockArr: BlockEntity[],
+  zotItem: ZotData,
+) => {
+  for (let i = 1; i < blockArr.length; i++) {
+    const block = await logseq.Editor.insertBlock(
+      uuid,
+      replaceTemplateWithValues(blockArr[i]!.content, zotItem),
+      {
+        sibling: false,
+        before: false,
+      },
+    )
+
+    if (!blockArr[i]!.children) continue
+
+    if (blockArr[i]!.children && blockArr[i]!.children!.length > 0)
+      await insertPageContent(
+        block!.uuid,
+        blockArr[i]!.children as BlockEntity[],
+        zotItem,
+      )
+  }
+}
+
 const replaceTemplateWithValues = (template: string, data: ZotData) => {
-  const keys = Object.keys(data).filter(
-    (key) => key !== 'authors' && key !== 'attachment' && key !== 'relations',
-  )
+  const keys = Object.keys(data)
+
   let result = template
 
   for (const key of keys) {
@@ -21,24 +46,16 @@ const replaceTemplateWithValues = (template: string, data: ZotData) => {
     ) {
       // Remove the entire line if the value is empty
       result = result.replace(new RegExp(`^.*<% ${key} %>.*$\n?`, 'gm'), '')
-    } else if (typeof value === 'object' && Array.isArray(value)) {
+    } else if (key === 'attachment') {
+      result = result.replace(placeholder, `![${value.title}](${value.href})`)
+    } else if (typeof value === 'object' && !Array.isArray(value)) {
       // Skip object values (except arrays)
+      console.log(key, value)
       continue
     } else {
       result = result.replace(placeholder, value)
     }
   }
-
-  result = result.replace(
-    /^.*<% (firstName|lastName|creatorType) %>.*$\n?/gm,
-    '',
-  )
-
-  result = result.replace(/^.*<% attachment %>.*$\n?/gm, '')
-
-  result = result.replace(/^.*<%.*%>.*$\n?/gm, '')
-
-  result = result.replace(/\n{2,}/g, '\n').trim()
 
   return result
 }
@@ -71,15 +88,20 @@ export const insertZotIntoGraph = async (zotItem: ZotData) => {
     return
   }
 
-  const templateStr = replaceTemplateWithValues(template[0].content, zotItem)
+  // template[0] will always be the block properties
+  // TODO: template[1] onwards will need to be gone through recursively.
+
+  const pageProps = replaceTemplateWithValues(template[0]!.content, zotItem)
+  console.log(pageProps)
 
   const pageName = logseq.settings!.useCiteKeyForTitle
     ? zotItem.citeKey
-    : zotItem.title
+    : zotItem.shortTitle
+  if (!pageName) throw new Error('Unable to derive page name')
 
-  const page = await logseq.Editor.getPage(pageName)
-  if (!page) {
-    await logseq.Editor.createPage(
+  const existingPage = await logseq.Editor.getPage(pageName)
+  if (!existingPage) {
+    const page = await logseq.Editor.createPage(
       pageName,
       {},
       {
@@ -88,10 +110,17 @@ export const insertZotIntoGraph = async (zotItem: ZotData) => {
         journal: false,
       },
     )
-    await logseq.Editor.appendBlockInPage(pageName, templateStr)
+    const propsBlock = await logseq.Editor.appendBlockInPage(
+      pageName,
+      pageProps,
+    )
+    //await logseq.Editor.insertBatchBlock(
+    //  propsBlock!.uuid,
+    //  template.slice(1) as unknown as IBatchBlock,
+    //)
+
+    //await insertPageContent(page!.uuid, template, zotItem)
   }
 
-  // Create page according to template
-
-  //logseq.hideMainUI()
+  logseq.hideMainUI()
 }

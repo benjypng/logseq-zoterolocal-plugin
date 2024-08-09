@@ -17,8 +17,6 @@ export const Zotero = ({ items }: ZoteroProps) => {
   const [localItems, setLocalItems] = useState(items)
   const { register, watch } = useForm()
 
-  console.log(items)
-
   const fuseOptions = {
     keys: FUSE_KEYS,
     threshold: 0.6,

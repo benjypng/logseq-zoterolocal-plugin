@@ -77,15 +77,22 @@ export interface ZotItem {
     dateModified: string
     parentItem?: string
     extra: string
-    attachment?: ZotItem
+    attachment?: AttachmentItem
     citeKey: string
     inGraph: boolean
   }
 }
 
+export interface AttachmentItem {
+  href: string
+  length: number
+  title: string
+  type: string
+}
+
 export interface ZotData {
   accessDate: string
-  attachment?: ZotItem
+  attachment?: AttachmentItem
   citeKey: string
   collections: any[]
   creators: {

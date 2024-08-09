@@ -27,7 +27,6 @@ const main = async () => {
     async managePowerTags() {
       const response = await getZotItems()
       if (!response) return
-      console.log(response)
 
       const items = await mapItems(response)
       if (!items[0]) return

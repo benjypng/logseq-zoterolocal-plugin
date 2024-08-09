@@ -28,7 +28,7 @@ export const mapItems = async (data: ZotItem[]) => {
     // Map attachment
     for (const attachment of attachments) {
       if (attachment.data.parentItem === item.key) {
-        item.data['attachment'] = attachment
+        item.data['attachment'] = attachment.links.enclosure
       }
     }
   }
