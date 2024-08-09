@@ -10,16 +10,24 @@ export const handleSettings = async (
     {
       key: 'testConnection',
       type: 'heading',
-      default: '',
       title: 'Connection Test',
       description: message,
+      default: '',
     },
     {
       key: 'useCiteKeyForTitle',
       type: 'boolean',
-      default: true,
       title: 'Use Citation Key for Title',
       description: `Use the item's citation key as it's title`,
+      default: true,
+    },
+    {
+      key: 'zotTemplate',
+      type: 'string',
+      title: 'Template Name',
+      description:
+        'The template name that holds your template for a Zotero page. Ensure that include parent is set to false. ',
+      default: '',
     },
   ]
 

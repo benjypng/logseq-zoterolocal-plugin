@@ -84,35 +84,35 @@ export interface ZotItem {
 }
 
 export interface ZotData {
-  key: string
-  version: number
-  itemType: string
-  title: string
-  date: string
-  language: string
-  shortTitle?: string
-  libraryCatalog: string
-  url: string
   accessDate: string
-  volume?: string
-  pages?: string
-  publicationTitle: string
-  DOI: string
-  issue?: string
-  journalAbbreviation?: string
-  ISSN?: string
+  attachment?: ZotItem
+  citeKey: string
+  collections: any[]
   creators: {
     firstName: string
     lastName: string
     creatorType: string
   }[]
-  tags: any[]
-  collections: any[]
-  relations: any
+  date: string
   dateAdded: string
   dateModified: string
-  parentItem?: string
-  attachment?: ZotItem
-  citeKey: string
+  DOI: string
   inGraph: boolean
+  ISSN?: string
+  issue?: string
+  itemType: string
+  journalAbbreviation?: string
+  key: string
+  language: string
+  libraryCatalog: string
+  pages?: string
+  parentItem?: string
+  publicationTitle: string
+  relations: any
+  shortTitle?: string
+  tags: any[]
+  title: string
+  url: string
+  version: number
+  volume?: string
 }

@@ -1,21 +1,10 @@
 import { ColumnDef } from '@tanstack/react-table'
 
 import { ZotData } from '../features/main/interfaces'
+import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
 
-const addToGraph = (pageName: string) => {
-  return (
-    <button
-      onClick={() => {
-        //TODO: Add other create graph stuff
-        logseq.App.pushState('page', {
-          name: pageName,
-        })
-        logseq.hideMainUI()
-      }}
-    >
-      Insert
-    </button>
-  )
+const addToGraph = (item: ZotData) => {
+  return <button onClick={() => insertZotIntoGraph(item)}>Insert</button>
 }
 
 export const columns: ColumnDef<ZotData>[] = [
@@ -23,12 +12,9 @@ export const columns: ColumnDef<ZotData>[] = [
     header: 'In Graph?',
     accessorKey: 'inGraph',
     cell: ({ getValue, row }) => {
-      const pageName = logseq.settings!.useCiteKeyForTitle
-        ? row.original.citeKey
-        : row.original.title
       return (
         <div>
-          {getValue<ZotData['inGraph']>() ? '✅' : addToGraph(pageName)}
+          {getValue<ZotData['inGraph']>() ? '✅' : addToGraph(row.original)}
         </div>
       )
     },
