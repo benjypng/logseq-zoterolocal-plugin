@@ -13,14 +13,13 @@ const main = async () => {
   // Used to handle any popups
   handlePopup()
 
-  // Get initial items
-  const response = await getZotItems()
-
-  handleSettings(response.message, response.code)
-
   const el = document.getElementById('app')
   if (!el) return
   const root = createRoot(el)
+
+  // Get initial items
+  const response = await getZotItems()
+  handleSettings(response.message, response.code)
 
   logseq.provideModel({
     async managePowerTags() {

@@ -1,6 +1,7 @@
 import './index.css'
 
-import { useEffect, useState } from 'react'
+import { IconX } from '@tabler/icons-react'
+import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { ResultsTable } from '../../components/ResultsTable'
@@ -31,10 +32,16 @@ export const Zotero = ({ items }: ZoteroProps) => {
     setLocalItems(results.map((result) => result.item))
   }, [searchInput])
 
+  const handleClose = useCallback(() => {
+    logseq.hideMainUI()
+  }, [items])
+
   return (
     <div id="zot-container">
-      <h1>logseq-zoterolocal-plugin</h1>
-
+      <div id="zot-header-container">
+        <h1>logseq-zoterolocal-plugin</h1>
+        <IconX onClick={handleClose} id="zot-close-button" />
+      </div>
       <input
         autoFocus
         {...register('search')}

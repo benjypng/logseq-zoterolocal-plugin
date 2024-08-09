@@ -1,3 +1,5 @@
+import './table.css'
+
 import {
   ColumnDef,
   flexRender,
@@ -5,7 +7,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { ZotData } from '../features/main/interfaces'
 
