@@ -4,6 +4,11 @@ import { ZotData } from '../features/main/interfaces'
 
 export const columns: ColumnDef<ZotData>[] = [
   {
+    header: 'In Graph?',
+    accessorKey: 'inGraph',
+    cell: ({ getValue }) => <p>{getValue<ZotData['inGraph']>() ? 'y' : 'n'}</p>,
+  },
+  {
     header: 'Key',
     accessorKey: 'key',
   },

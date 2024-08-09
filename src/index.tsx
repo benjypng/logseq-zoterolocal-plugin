@@ -5,7 +5,7 @@ import { createRoot } from 'react-dom/client'
 import { Zotero } from './features/main'
 import { handlePopup } from './handle-popup'
 import { getZotItems } from './services/get-zot-items'
-import { mapAttachmentToParent } from './services/map-attachment-to-parent'
+import { mapItems } from './services/map-items'
 import { handleSettings } from './settings'
 
 const main = async () => {
@@ -28,7 +28,7 @@ const main = async () => {
         logseq.UI.showMsg(response.message, 'error')
         return
       }
-      const items = mapAttachmentToParent(response.data)
+      const items = await mapItems(response.data)
       if (!items[0]) return
 
       root.render(<Zotero items={items} />)

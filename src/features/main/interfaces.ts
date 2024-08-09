@@ -79,6 +79,7 @@ export interface ZotItem {
     extra: string
     attachment?: ZotItem
     citeKey: string
+    inGraph: boolean
   }
 }
 
@@ -113,4 +114,5 @@ export interface ZotData {
   parentItem?: string
   attachment?: ZotItem
   citeKey: string
+  inGraph: boolean
 }
