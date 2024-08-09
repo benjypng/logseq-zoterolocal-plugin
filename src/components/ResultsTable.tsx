@@ -9,7 +9,7 @@ import {
 import { useState } from 'react'
 
 import { ZotData } from '../features/main/interfaces'
-import { columns } from './columns'
+import { getColumns } from './columns'
 
 interface TableProps {
   data: ZotData[]
@@ -22,6 +22,8 @@ export const ResultsTable = ({ data, uuid }: TableProps) => {
     Record<string, boolean>
   >(logseq.settings!.columnVisibility as Record<string, boolean>)
   const [showColumnChooser, setShowColumnChooser] = useState(false)
+
+  const columns = getColumns(uuid)
 
   const table = useReactTable({
     data,
