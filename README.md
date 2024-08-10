@@ -1,27 +1,64 @@
-[:gift_heart: Sponsor this project on Github](https://github.com/sponsors/hkgnp) or [:coffee: Get me a coffee](https://www.buymeacoffee.com/hkgnp.dev) if you like this plugin!
+![Logseq Badge](https://img.shields.io/badge/logseq-%2385C8C8?style=for-the-badge&logo=logseq&logoColor=black)
 
-# Overview ![Static Badge](https://img.shields.io/badge/logseq-%2385C8C8?style=for-the-badge&logo=logseq&logoColor=black)
+# Logseq Zotero Plugin
 
 Connect locally to Zotero 7 (and above) and pull your items into Logseq without needing to sync with Zotero Cloud.
 
-![](/screenshots/demo.gif)
+![Demo GIF](/screenshots/demo.gif)
 
-# Usage
+## Features
 
-1. Ensure that Zotero 7 is running.
-2. Open plugin settings and check that the `Connection to Zotero is working`.
+- Direct connection to Zotero 7+ without cloud sync
+- Customizable author and page name templates
+- Easy insertion of Zotero items into your Logseq graph
 
-![](/screenshots/plugin-settings.png)
+## Installation
 
-3. Complete the rest of the plugin settings. For Author and Page Name templates, ensure that you only use the stated placeholders.
-4. Go to any page that will hold your Zotero template and type `/Insert Zotero template`. A sample template will be generated. Make changes as per your requirements. Please ensure that if you change the template name, you need to reflect the same template name in the plugin settings.
+1. Recommended: Install from the Logseq marketplace.
+2. Alternative: Download a release and manually load it in Logseq.
 
-![](/screenshots/template.png)
+## Setup
 
-5. Lastly, trigger `/Launch Zotero plugin` from any page you want to hold the page reference to your journal article, and click `Insert` to insert it into your graph. A new page will be created and a reference to it inserted to where you triggered the slash command.
+1. Ensure Zotero 7 is running.
+2. Open plugin settings in Logseq.
+3. Verify that "Connection to Zotero is working" is checked.
+4. Complete the rest of the plugin settings.
 
-![](/screenshots/portal.png)
+![Plugin Settings](/screenshots/plugin-settings.png)
 
-# Installation
+## Usage
 
-Recommend to install from the marketplace. If not, download a release and manually load it in Logseq. 
+1. Create a Zotero template:
+   - Go to any page that will hold your Zotero template.
+   - Type `/Insert Zotero template`.
+   - A sample template will be generated. Customize as needed.
+   - If you change the template name, update it in the plugin settings.
+
+   ![Template Example](/screenshots/template.png)
+
+2. Insert Zotero items:
+   - Navigate to the page where you want to insert a Zotero item.
+   - Type `/Launch Zotero plugin`.
+   - Select the desired item and click "Insert".
+   - A new page will be created, and a reference to it will be inserted at your cursor position.
+
+   ![Zotero Portal](/screenshots/portal.png)
+
+## Configuration
+
+For Author and Page Name templates, use only the stated placeholders. Refer to the plugin settings for available options.
+
+## Support
+
+If you find this plugin useful, consider supporting the developer:
+
+- [:gift_heart: Sponsor this project on Github](https://github.com/sponsors/hkgnp)
+- [:coffee: Buy me a coffee](https://www.buymeacoffee.com/hkgnp.dev)
+
+## Issues and Contributions
+
+For bug reports, feature requests, or contributions, please visit the [GitHub repository](https://github.com/hkgnp/logseq-zotero-plugin).
+
+## License
+
+[MIT License](LICENSE)
