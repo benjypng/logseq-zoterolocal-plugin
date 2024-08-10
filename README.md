@@ -1,4 +1,6 @@
-# Overview
+[:gift_heart: Sponsor this project on Github](https://github.com/sponsors/hkgnp) or [:coffee: Get me a coffee](https://www.buymeacoffee.com/hkgnp.dev) if you like this plugin!
+
+# Overview ![Static Badge](https://img.shields.io/badge/logseq-%2385C8C8?style=for-the-badge&logo=logseq&logoColor=black)
 
 Connect locally to Zotero 7 (and above) and pull your items into Logseq without needing to sync with Zotero Cloud.
 
