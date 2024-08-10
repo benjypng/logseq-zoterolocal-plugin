@@ -2,7 +2,7 @@ import { ZotItem } from '../features/main/interfaces'
 import { replaceTemplateWithValues } from './replace-template-with-values'
 
 export const checkInGraph = async (query: string) => {
-  const page = await logseq.Editor.getPage(query)
+  const page = await logseq.Editor.getPage(query.toLowerCase())
   return page ? true : false
 }
 

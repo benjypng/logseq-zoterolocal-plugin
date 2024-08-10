@@ -26,6 +26,8 @@ export const replaceTemplateWithValues = async (
     ) {
       // Remove the entire line if the value is empty
       result = result.replace(new RegExp(`^.*<% ${key} %>.*$\n?`, 'gm'), '')
+    } else if (key === 'itemType') {
+      result = result.replace(placeholder, `[[${value}]]`)
     } else if (
       key === 'accessDate' ||
       key === 'date' ||

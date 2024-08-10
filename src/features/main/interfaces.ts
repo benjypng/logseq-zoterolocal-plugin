@@ -64,6 +64,7 @@ export interface ZotItem {
     DOI: string
     issue?: string
     journalAbbreviation?: string
+    ISBN?: string
     ISSN?: string
     creators: CreatorItem[]
     tags: any[]
@@ -104,6 +105,7 @@ export interface ZotData {
   DOI: string
   inGraph: boolean
   ISSN?: string
+  ISBN?: string
   issue?: string
   itemType: string
   journalAbbreviation?: string
@@ -134,6 +136,7 @@ export interface GlossaryObj {
   DOI: string
   inGraph: string
   ISSN: string
+  ISBN: string
   issue: string
   itemType: string
   journalAbbreviation: string
