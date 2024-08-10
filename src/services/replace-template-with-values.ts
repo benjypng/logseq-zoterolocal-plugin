@@ -72,10 +72,7 @@ export const replaceTemplateWithValues = async (
   }
 
   // Remove parentItem since it doesn't exist for non-attachments
-  result = result.replace(
-    new RegExp(`^.*<% ${'parentItem'} %>.*$\n?`, 'gm'),
-    '',
-  )
+  result = result.replace(/^.*<% .+? %>.*$\n?/gm, '')
 
   return result
 }

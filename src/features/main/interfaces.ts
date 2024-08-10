@@ -134,7 +134,6 @@ export interface GlossaryObj {
   dateAdded: string
   dateModified: string
   DOI: string
-  inGraph: string
   ISSN: string
   ISBN: string
   issue: string
