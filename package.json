@@ -24,7 +24,10 @@
         {
           "assets": [
             "logseq-zoterolocal-plugin.zip"
-          ]
+          ],
+          "options": {
+            "successComment": false
+          }
         }
       ]
     ]
