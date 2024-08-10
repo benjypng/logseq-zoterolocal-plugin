@@ -16,16 +16,16 @@ const main = async () => {
   // Used to handle any popups
   handlePopup()
 
+  // Get initial items
+  const response = await testZotConnection()
+  handleSettings(response.message, response.code)
+
   const validSettings = isValidSettings()
   if (!validSettings) return
 
   const el = document.getElementById('app')
   if (!el) return
   const root = createRoot(el)
-
-  // Get initial items
-  const response = await testZotConnection()
-  handleSettings(response.message, response.code)
 
   logseq.Editor.registerSlashCommand('Launch Zotero plugin', async (e) => {
     const response = await getZotItems()
