@@ -61,6 +61,8 @@ If you find this plugin useful, consider supporting the developer:
 
 For bug reports, feature requests, or contributions, please visit the [GitHub repository](https://github.com/hkgnp/logseq-zotero-plugin).
 
+*Note: This repository is currently not taking in any pull requests.*
+
 ## License
 
 [MIT License](LICENSE)
