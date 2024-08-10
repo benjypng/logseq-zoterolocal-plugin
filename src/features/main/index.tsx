@@ -15,8 +15,12 @@ interface ZoteroProps {
 }
 
 export const Zotero = ({ items, uuid }: ZoteroProps) => {
-  const [localItems, setLocalItems] = useState(items)
+  const [localItems, setLocalItems] = useState<ZotData[]>()
   const { register, watch } = useForm()
+
+  useEffect(() => {
+    setLocalItems(items)
+  }, [items])
 
   const fuseOptions = {
     keys: FUSE_KEYS,
@@ -49,11 +53,11 @@ export const Zotero = ({ items, uuid }: ZoteroProps) => {
           type="text"
           placeholder="Start searching"
         />
-        <p>Results: {localItems.length}</p>
+        {localItems && <p>Results: {localItems.length}</p>}
       </div>
 
       <div id="zot-results-table">
-        <ResultsTable data={localItems} uuid={uuid} />
+        {localItems && <ResultsTable data={localItems} uuid={uuid} />}
       </div>
     </div>
   )

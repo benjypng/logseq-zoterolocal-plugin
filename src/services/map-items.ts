@@ -2,8 +2,7 @@ import { ZotItem } from '../features/main/interfaces'
 import { replaceTemplateWithValues } from './replace-template-with-values'
 
 export const checkInGraph = async (query: string) => {
-  const page = await logseq.Editor.getPage(query.toLowerCase())
-  return page ? true : false
+  return (await logseq.Editor.getPage(query.toLowerCase())) ? true : false
 }
 
 export const mapItems = async (data: ZotItem[]) => {
@@ -22,12 +21,11 @@ export const mapItems = async (data: ZotItem[]) => {
     if (citeKey && citeKey[1]) item.data['citeKey'] = citeKey[1]
 
     // Map "if in graph"
-    item.data['inGraph'] = await checkInGraph(
-      await replaceTemplateWithValues(
-        logseq.settings!.pagenameTemplate as string,
-        item.data,
-      ),
+    const pageName = await replaceTemplateWithValues(
+      logseq.settings!.pagenameTemplate as string,
+      item.data,
     )
+    item.data['inGraph'] = await checkInGraph(pageName)
 
     // Map attachment
     for (const attachment of attachments) {

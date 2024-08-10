@@ -9,7 +9,7 @@ import {
 import { useState } from 'react'
 
 import { ZotData } from '../features/main/interfaces'
-import { getColumns } from './columns'
+import { getColumns } from './get-columns'
 
 interface TableProps {
   data: ZotData[]
