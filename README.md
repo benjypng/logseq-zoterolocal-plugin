@@ -8,9 +8,11 @@ Connect locally to Zotero 7 (and above) and pull your items into Logseq without 
 
 ## Features
 
-- Direct connection to Zotero 7+ without cloud sync
-- Customizable author and page name templates
-- Easy insertion of Zotero items into your Logseq graph
+- Direct connection to Zotero 7+ without needing to sync with Zotero Cloud
+- Customisable templates
+- Easy insertion of Zotero items into your graph
+- Track which items are already in your graph
+- Fuzzy search for the articles that you want to insert
 
 ## Installation
 
