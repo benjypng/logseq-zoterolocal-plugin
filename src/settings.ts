@@ -20,7 +20,7 @@ export const handleSettings = async (
       title: 'Template Name',
       description:
         'The template name that holds your template for a Zotero page. Ensure that include parent is set to false. ',
-      default: '',
+      default: 'Zotero Template',
     },
     {
       key: 'pagenameTemplate',
