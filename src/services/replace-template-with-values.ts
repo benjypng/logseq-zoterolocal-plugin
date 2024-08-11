@@ -46,12 +46,18 @@ export const replaceTemplateWithValues = async (
         console.log(`logseq-zoterolocal-plugin`, e, `Unable to parse ${value}`)
         result = result.replace(placeholder, value)
       }
-    } else if (key === 'attachment') {
-      if (value.type === 'application/pdf') {
-        result = result.replace(placeholder, `![${value.title}](${value.href})`)
-      } else {
-        result = result.replace(placeholder, `[${value.title}](${value.href})`)
+    } else if (key === 'attachments') {
+      const attachmentArr = []
+      for (const attachment of value) {
+        const str = await replaceTemplateWithValues(
+          attachment.type === 'application/pdf'
+            ? `![${attachment.title}](${attachment.href})`
+            : `[${attachment.title}](${attachment.href})`,
+          attachment,
+        )
+        attachmentArr.push(str)
       }
+      result = result.replace(placeholder, attachmentArr.join(', '))
     } else if (key === 'creators') {
       const creatorArr = []
       for (const creator of value) {

@@ -42,7 +42,7 @@ const main = async () => {
   logseq.Editor.registerSlashCommand('Insert Zotero template', async (e) => {
     const glossaryObj: GlossaryObj = {
       accessDate: '<% accessDate %>',
-      attachment: '<% attachment %>',
+      attachments: '<% attachments %>',
       citeKey: '<% citeKey %>',
       collections: '<% collections %>',
       authors: '<% creators %>',

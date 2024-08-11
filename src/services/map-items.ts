@@ -6,16 +6,19 @@ export const checkInGraph = async (query: string) => {
 }
 
 export const mapItems = async (data: ZotItem[]) => {
-  const items: ZotItem[] = []
+  const parentItems: ZotItem[] = []
   const attachments: ZotItem[] = []
+
   data.forEach((item: ZotItem) => {
-    if (item.data.itemType === 'attachment') {
-      attachments.push(item)
+    if (!item.data.parentItem) {
+      parentItems.push(item)
     } else {
-      items.push(item)
+      attachments.push(item)
     }
   })
-  for (const item of items) {
+
+  for (const item of parentItems) {
+    item.data.attachments = []
     // Map citeKey
     const citeKey = /Citation Key: ([^\s\n]+)/.exec(item.data.extra)
     if (citeKey && citeKey[1]) item.data['citeKey'] = citeKey[1]
@@ -29,10 +32,14 @@ export const mapItems = async (data: ZotItem[]) => {
 
     // Map attachment
     for (const attachment of attachments) {
-      if (attachment.data.parentItem === item.key) {
-        item.data['attachment'] = attachment.links.enclosure
+      if (
+        attachment.data.parentItem === item.key &&
+        attachment.links.enclosure
+      ) {
+        item.data.attachments.push(attachment.links.enclosure)
       }
     }
   }
-  return items.map((item) => item.data)
+
+  return parentItems.map((item) => item.data)
 }

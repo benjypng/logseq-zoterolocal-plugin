@@ -74,7 +74,7 @@ export interface ZotItem {
     dateModified: string
     parentItem?: string
     extra: string
-    attachment?: AttachmentItem
+    attachments?: AttachmentItem[]
     citeKey: string
     inGraph: boolean
   }
@@ -95,7 +95,7 @@ export interface CreatorItem {
 
 export interface ZotData {
   accessDate: string
-  attachment?: AttachmentItem
+  attachments?: AttachmentItem[]
   citeKey: string
   collections: any[]
   creators: CreatorItem[]
@@ -126,7 +126,7 @@ export interface ZotData {
 
 export interface GlossaryObj {
   accessDate: string
-  attachment: string
+  attachments: string
   citeKey: string
   collections: string
   authors: string
