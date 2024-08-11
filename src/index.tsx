@@ -13,6 +13,7 @@ import { handleSettings } from './settings'
 
 const main = async () => {
   console.log('logseq-zoterolocal-plugin loaded')
+
   // Used to handle any popups
   handlePopup()
 
