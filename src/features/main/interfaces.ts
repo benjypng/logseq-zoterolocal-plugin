@@ -138,7 +138,7 @@ export interface ZotData {
   archiveID?: string
   bookTitle?: string
   charset?: string
-  collections?: CollectionItem[]
+  collections?: CollectionItem[] | string[]
   contentType?: string
   creators?: CreatorItem[]
   date?: string
