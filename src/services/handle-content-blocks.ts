@@ -9,10 +9,16 @@ export const handleContentBlocks = async (
   result: IBatchBlock[],
 ) => {
   for (const block of blocks) {
+    let content = await replaceTemplateWithValues(block.content, data)
+    if (content.includes('||||||')) {
+      content = decodeURIComponent(content.replace('||||||', '\n'))
+    }
+
     const obj = {
-      content: await replaceTemplateWithValues(block.content, data),
+      content,
       children: [],
     }
+
     if (block.children) {
       await handleContentBlocks(
         block.children as BlockEntity[],
@@ -20,6 +26,7 @@ export const handleContentBlocks = async (
         obj.children,
       )
     }
+
     result.push(obj)
   }
 }

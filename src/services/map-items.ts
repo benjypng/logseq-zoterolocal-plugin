@@ -16,20 +16,24 @@ export const mapItems = async (data: ZotItem[]) => {
       attachments.push(item)
     }
   })
-  console.log(attachments)
 
   for (const item of parentItems) {
+    // Create self-created objects
     item.data.attachments = []
+    item.data.notes = []
+    item.data.citeKey = ''
+    item.data.inGraph = false
+
     // Map citeKey
     const citeKey = /Citation Key: ([^\s\n]+)/.exec(item.data.extra)
-    if (citeKey && citeKey[1]) item.data['citeKey'] = citeKey[1]
+    if (citeKey && citeKey[1]) item.data.citeKey = citeKey[1]
 
     // Map "if in graph"
     const pageName = await replaceTemplateWithValues(
       logseq.settings!.pagenameTemplate as string,
       item.data,
     )
-    item.data['inGraph'] = await checkInGraph(pageName)
+    item.data.inGraph = await checkInGraph(pageName)
 
     // Map attachment
     for (const attachment of attachments) {
@@ -42,8 +46,12 @@ export const mapItems = async (data: ZotItem[]) => {
       }
 
       // itemType: 'note'
-      if (attachment.data.itemType === 'note') {
-        console.log(attachment)
+      if (
+        attachment.data.parentItem === item.key &&
+        attachment.data.itemType === 'note' &&
+        attachment.data.note
+      ) {
+        item.data.notes.push({ note: attachment.data.note })
       }
     }
   }

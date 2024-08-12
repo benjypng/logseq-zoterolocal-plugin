@@ -74,8 +74,10 @@ export interface ZotItem {
     dateModified: string
     parentItem?: string
     extra: string
-    attachments?: AttachmentItem[]
-    notes?: NoteItem[]
+    note?: string
+    // Self add-items below
+    attachments: AttachmentItem[]
+    notes: NoteItem[]
     citeKey: string
     inGraph: boolean
   }

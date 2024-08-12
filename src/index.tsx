@@ -59,6 +59,7 @@ const main = async () => {
       key: '<% key %>',
       language: '<% language %>',
       libraryCatalog: '<% libraryCatalog %>',
+      notes: '<% notes %>',
       pages: '<% pages %>',
       parentItem: '<% parentItem %>',
       publicationTitle: '<% publicationTitle %>',

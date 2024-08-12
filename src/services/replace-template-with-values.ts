@@ -1,6 +1,6 @@
 import { format, parse, parseISO } from 'date-fns'
 
-import { CreatorItem, ZotData } from '../features/main/interfaces'
+import { CreatorItem, NoteItem, ZotData } from '../features/main/interfaces'
 
 export const replaceTemplateWithValues = async (
   template: string,
@@ -68,9 +68,14 @@ export const replaceTemplateWithValues = async (
         creatorArr.push(str)
       }
       result = result.replace(placeholder, creatorArr.join(', '))
+    } else if (key === 'notes') {
+      result = result.replace(
+        placeholder,
+        value.map((note: NoteItem) => note.note).join('||||||'),
+      )
     } else if (typeof value === 'object' && !Array.isArray(value)) {
       // Skip object values (except arrays)
-      // TODO: Handle array and objects that are not attachments nor creators
+      // TODO: Handle array and objects that are not attachments, notes,  creators
       continue
     } else {
       result = result.replace(placeholder, value)
