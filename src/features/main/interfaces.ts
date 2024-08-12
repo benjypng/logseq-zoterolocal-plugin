@@ -75,6 +75,7 @@ export interface ZotItem {
     parentItem?: string
     extra: string
     attachments?: AttachmentItem[]
+    notes?: NoteItem[]
     citeKey: string
     inGraph: boolean
   }
@@ -85,6 +86,10 @@ export interface AttachmentItem {
   length: number
   title: string
   type: string
+}
+
+export interface NoteItem {
+  note: string
 }
 
 export interface CreatorItem {
@@ -112,6 +117,7 @@ export interface ZotData {
   key: string
   language: string
   libraryCatalog: string
+  notes?: NoteItem[]
   pages?: string
   parentItem?: string
   publicationTitle: string
@@ -142,6 +148,7 @@ export interface GlossaryObj {
   key: string
   language: string
   libraryCatalog: string
+  notes: string
   pages: string
   parentItem: string
   publicationTitle: string
