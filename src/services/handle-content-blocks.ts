@@ -10,24 +10,32 @@ export const handleContentBlocks = async (
 ) => {
   for (const block of blocks) {
     const content = await replaceTemplateWithValues(block.content, data)
+
     if (content.includes('||||||')) {
-      // content = decodeURIComponent(content.replace('||||||', '\n'))
+      // Handle notes
 
       const contentArr = content.split('||||||')
       contentArr.forEach((content) => {
         result.push({
-          content,
+          content: decodeURIComponent(content.trim()),
           children: [],
         })
       })
+    } else if (/\[.*?\]\(.*?\)/.test(content)) {
+      // Handle attachments
 
-      // TODO: What if there are nested items under the template placeholder?
+      const attachmentArr = content.split(',')
+      attachmentArr.forEach((attachment) => {
+        result.push({
+          content: attachment.trim(),
+          children: [],
+        })
+      })
     } else {
       const obj = {
         content,
         children: [],
       }
-
       if (block.children) {
         await handleContentBlocks(
           block.children as BlockEntity[],
@@ -35,7 +43,6 @@ export const handleContentBlocks = async (
           obj.children,
         )
       }
-
       result.push(obj)
     }
   }
