@@ -1,4 +1,4 @@
-// DO NOT TOUCH THIS SECTION //
+// DO NOT TOUCH BELOW SECTION //
 export interface ZotItem {
   key: string
   version: number
@@ -130,7 +130,7 @@ export interface ZotCollection {
     relations: Record<string, never>
   }
 }
-// DO NOT TOUCH THIS SECTION //
+// DO NOT TOUCH ABOVE SECTION //
 
 export interface ZotData {
   abstractNote?: string
@@ -138,7 +138,7 @@ export interface ZotData {
   archiveID?: string
   bookTitle?: string
   charset?: string
-  collections?: string[]
+  collections?: CollectionItem[]
   contentType?: string
   creators?: CreatorItem[]
   date?: string

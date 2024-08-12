@@ -1,6 +1,7 @@
 import { format, parse, parseISO } from 'date-fns'
 
 import { CreatorItem, NoteItem, ZotData } from '../features/main/interfaces'
+import { getCollectionName } from './get-collection-name'
 
 export const replaceTemplateWithValues = async (
   template: string,
@@ -74,14 +75,17 @@ export const replaceTemplateWithValues = async (
         value.map((note: NoteItem) => note.note).join('||||||'),
       )
     } else if (key === 'tags') {
-      const tagsStr = []
+      const tagsArr = []
       for (const tag of value) {
         const str = `[[${tag.tag}]]`
-        tagsStr.push(str)
+        tagsArr.push(str)
       }
-      result = result.replace(placeholder, tagsStr.join(', '))
+      result = result.replace(placeholder, tagsArr.join(', '))
     } else if (key === 'collections') {
-      console.log('Collections', value)
+      const collectionArr = (await getCollectionName(value)).map(
+        (collection) => `[[${collection.name}]]`,
+      )
+      result = result.replace(placeholder, collectionArr.join(', '))
     } else if (typeof value === 'object' && !Array.isArray(value)) {
       // Skip object values (except arrays)
       // Handle array and objects that are not attachments, notes, creators

@@ -1,7 +1,11 @@
 import axios, { AxiosError } from 'axios'
 
 import { COLLECTIONS_URL, ITEM_URL } from '../constants'
-import { ZotItem } from '../features/main/interfaces'
+import {
+  CollectionItem,
+  ZotCollection,
+  ZotItem,
+} from '../features/main/interfaces'
 
 export const testZotConnection = async () => {
   try {
@@ -47,7 +51,7 @@ ${(error as AxiosError).message}`,
   }
 }
 
-export const getZotCollections = async (): Promise<ZotItem[] | void> => {
+export const getZotCollections = async (): Promise<ZotCollection[] | void> => {
   try {
     const response = await axios({
       method: 'get',
