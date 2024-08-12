@@ -1,3 +1,4 @@
+// DO NOT TOUCH THIS SECTION //
 export interface ZotItem {
   key: string
   version: number
@@ -25,15 +26,15 @@ export interface ZotItem {
       href: string
       type: string
     }
+    up?: {
+      href: string
+      type: string
+    }
     attachment?: {
       href: string
       type: string
       attachmentType: string
       attachmentSize: number
-    }
-    up?: {
-      href: string
-      type: string
     }
     enclosure?: {
       href: string
@@ -43,44 +44,138 @@ export interface ZotItem {
     }
   }
   meta: {
-    creatorSummary: string
-    parsedDate: string
     numChildren: number
+    creatorSummary?: string
+    parsedDate?: string
   }
   data: {
     key: string
     version: number
     itemType: string
     title: string
-    date: string
-    language: string
+    parentItem?: string
+    abstractNote?: string
+    date?: string
+    language?: string
     shortTitle?: string
-    libraryCatalog: string
-    url: string
-    accessDate: string
-    volume?: string
-    pages?: string
-    publicationTitle: string
-    DOI: string
-    issue?: string
-    journalAbbreviation?: string
-    ISBN?: string
-    ISSN?: string
-    creators: CreatorItem[]
+    libraryCatalog?: string
+    url?: string
+    accessDate?: string
+    extra?: string
+    note?: string
+    linkMode?: string
+    contentType?: string
+    charset?: string
+    filename?: string
+    mtime?: number
+    md5?: string
     tags: TagItem[]
-    collections: string[]
-    relations: any
+    collections?: string[]
+    relations: Record<string, never>
     dateAdded: string
     dateModified: string
-    parentItem?: string
-    extra: string
-    note?: string
-    // Self add-items below
-    attachments: AttachmentItem[]
-    notes: NoteItem[]
-    citeKey: string
-    inGraph: boolean
+    creators?: CreatorItem[]
+    publisher?: string
+    ISBN?: string
+    pages?: string
+    bookTitle?: string
+    volume?: string
+    publicationTitle?: string
+    DOI?: string
+    issue?: string
+    journalAbbreviation?: string
+    ISSN?: string
+    repository?: string
+    archiveID?: string
   }
+}
+
+export interface ZotCollection {
+  key: string
+  version: number
+  library: {
+    type: string
+    id: number
+    name: string
+    links: {
+      self: {
+        href: string
+        type: string
+      }
+      alternate: {
+        href: string
+        type: string
+      }
+    }
+  }
+  links: {
+    self: {
+      href: string
+      type: string
+    }
+    alternate: {
+      href: string
+      type: string
+    }
+  }
+  meta: {
+    numCollections: number
+    numItems: number
+  }
+  data: {
+    key: string
+    version: number
+    name: string
+    parentCollection: boolean
+    relations: Record<string, never>
+  }
+}
+// DO NOT TOUCH THIS SECTION //
+
+export interface ZotData {
+  abstractNote?: string
+  accessDate?: string
+  archiveID?: string
+  bookTitle?: string
+  charset?: string
+  collections?: string[]
+  contentType?: string
+  creators?: CreatorItem[]
+  date?: string
+  dateAdded: string
+  dateModified: string
+  DOI?: string
+  extra?: string
+  filename?: string
+  ISBN?: string
+  ISSN?: string
+  issue?: string
+  itemType: string
+  journalAbbreviation?: string
+  key: string
+  language?: string
+  libraryCatalog?: string
+  linkMode?: string
+  md5?: string
+  mtime?: number
+  note?: string
+  pages?: string
+  parentItem?: string
+  publicationTitle?: string
+  publisher?: string
+  relations: Record<string, never>
+  repository?: string
+  shortTitle?: string
+  tags: TagItem[]
+  title: string
+  url?: string
+  version: number
+  volume?: string
+  // Self created items
+  attachments: AttachmentItem[]
+  citeKey: string
+  inGraph: boolean
+  notes: NoteItem[]
 }
 
 export interface AttachmentItem {
@@ -90,8 +185,9 @@ export interface AttachmentItem {
   type: string
 }
 
-export interface NoteItem {
-  note: string
+export interface CollectionItem {
+  key: string
+  name: string
 }
 
 export interface CreatorItem {
@@ -100,40 +196,12 @@ export interface CreatorItem {
   creatorType: string
 }
 
-export interface TagItem {
-  tag: string
+export interface NoteItem {
+  note: string
 }
 
-export interface ZotData {
-  accessDate: string
-  attachments?: AttachmentItem[]
-  citeKey: string
-  collections: string[]
-  creators: CreatorItem[]
-  date: string
-  dateAdded: string
-  dateModified: string
-  DOI: string
-  inGraph: boolean
-  ISSN?: string
-  ISBN?: string
-  issue?: string
-  itemType: string
-  journalAbbreviation?: string
-  key: string
-  language: string
-  libraryCatalog: string
-  notes?: NoteItem[]
-  pages?: string
-  parentItem?: string
-  publicationTitle: string
-  relations: any
-  shortTitle?: string
-  tags: TagItem[]
-  title: string
-  url: string
-  version: number
-  volume?: string
+export interface TagItem {
+  tag: string
 }
 
 export interface GlossaryObj {

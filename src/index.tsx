@@ -3,7 +3,7 @@ import '@logseq/libs'
 import { createRoot } from 'react-dom/client'
 
 import { Zotero } from './features/main'
-import { GlossaryObj } from './features/main/interfaces'
+import { GlossaryObj, ZotData } from './features/main/interfaces'
 import { handlePopup } from './handle-popup'
 import { isValidSettings } from './services/check-settings'
 import { createTemplateGlossary } from './services/create-template-glossary'
@@ -31,7 +31,6 @@ const main = async () => {
   logseq.Editor.registerSlashCommand('Launch Zotero plugin', async (e) => {
     const response = await getZotItems()
     if (!response) return
-    console.log(response)
 
     const items = await mapItems(response)
     if (!items[0]) return
