@@ -1,7 +1,7 @@
 import { GlossaryObj } from '../features/main/interfaces'
 
 export const createTemplateGlossary = async (
-  glossaryObj: GlossaryObj,
+  glossaryObj: Partial<GlossaryObj>,
   uuid: string,
 ) => {
   let glossaryStr = ''
@@ -20,12 +20,23 @@ ${key}:: ${value}`),
 
   const attachmentsBlk = await logseq.Editor.insertBlock(
     templateRootBlk.uuid,
-    '[[Attachments]]',
+    'Attachments',
     { sibling: true },
   )
   if (!attachmentsBlk) return
 
-  await logseq.Editor.insertBlock(attachmentsBlk.uuid, '<% attachment %>', {
+  await logseq.Editor.insertBlock(attachmentsBlk.uuid, '<% attachments %>', {
+    sibling: false,
+  })
+
+  const notesBlk = await logseq.Editor.insertBlock(
+    attachmentsBlk.uuid,
+    'Notes',
+    { sibling: true },
+  )
+  if (!notesBlk) return
+
+  await logseq.Editor.insertBlock(notesBlk.uuid, '<% notes %>', {
     sibling: false,
   })
 }

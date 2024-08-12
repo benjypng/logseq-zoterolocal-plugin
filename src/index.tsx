@@ -41,7 +41,8 @@ const main = async () => {
 
   // Insert glossary as blocks for user to choose
   logseq.Editor.registerSlashCommand('Insert Zotero template', async (e) => {
-    const glossaryObj: GlossaryObj = {
+    const glossaryObj: Partial<GlossaryObj> = {
+      // <% notes %> is not inside because they should belong in the blocks, not properties
       accessDate: '<% accessDate %>',
       attachments: '<% attachments %>',
       citeKey: '<% citeKey %>',
@@ -59,7 +60,6 @@ const main = async () => {
       key: '<% key %>',
       language: '<% language %>',
       libraryCatalog: '<% libraryCatalog %>',
-      notes: '<% notes %>',
       pages: '<% pages %>',
       parentItem: '<% parentItem %>',
       publicationTitle: '<% publicationTitle %>',

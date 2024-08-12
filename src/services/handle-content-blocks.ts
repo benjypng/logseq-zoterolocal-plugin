@@ -11,6 +11,7 @@ export const handleContentBlocks = async (
   for (const block of blocks) {
     const content = await replaceTemplateWithValues(block.content, data)
 
+    // Below approach assumes that the attachments and notes have no child blocks below the actual template placeholder, which is a fair assumption.
     if (content.includes('||||||')) {
       // Handle notes
 
