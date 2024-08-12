@@ -19,6 +19,7 @@ export const mapItems = async (data: ZotItem[]): Promise<ZotData[]> => {
 
   const parentZotData: ZotData[] = parentItems.map((item) => ({
     ...item.data,
+    collections: [],
     attachments: [],
     citeKey: '',
     inGraph: false,

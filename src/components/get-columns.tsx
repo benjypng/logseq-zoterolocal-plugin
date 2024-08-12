@@ -69,15 +69,21 @@ export const getColumns = (uuid: string): ColumnDef<ZotData>[] => {
     {
       header: 'Creators',
       accessorKey: 'creators',
-      cell: ({ getValue }) => (
-        <div>
-          {getValue<ZotData['creators']>().map((creator, index) => (
-            <div key={index}>
-              {creator.firstName} {creator.lastName} ({creator.creatorType}),{' '}
+      cell: ({ getValue }) => {
+        const creators = getValue<ZotData['creators']>()
+        return (
+          creators && (
+            <div>
+              {creators.map((creator, index) => (
+                <div key={index}>
+                  {creator.firstName} {creator.lastName} ({creator.creatorType}
+                  ),{' '}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      ),
+          )
+        )
+      },
     },
     {
       header: 'Date Added',
