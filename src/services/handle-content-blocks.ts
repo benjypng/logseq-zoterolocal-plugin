@@ -9,24 +9,34 @@ export const handleContentBlocks = async (
   result: IBatchBlock[],
 ) => {
   for (const block of blocks) {
-    let content = await replaceTemplateWithValues(block.content, data)
+    const content = await replaceTemplateWithValues(block.content, data)
     if (content.includes('||||||')) {
-      content = decodeURIComponent(content.replace('||||||', '\n'))
-    }
+      // content = decodeURIComponent(content.replace('||||||', '\n'))
 
-    const obj = {
-      content,
-      children: [],
-    }
+      const contentArr = content.split('||||||')
+      contentArr.forEach((content) => {
+        result.push({
+          content,
+          children: [],
+        })
+      })
 
-    if (block.children) {
-      await handleContentBlocks(
-        block.children as BlockEntity[],
-        data,
-        obj.children,
-      )
-    }
+      // TODO: What if there are nested items under the template placeholder?
+    } else {
+      const obj = {
+        content,
+        children: [],
+      }
 
-    result.push(obj)
+      if (block.children) {
+        await handleContentBlocks(
+          block.children as BlockEntity[],
+          data,
+          obj.children,
+        )
+      }
+
+      result.push(obj)
+    }
   }
 }
