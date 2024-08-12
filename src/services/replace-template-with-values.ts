@@ -73,9 +73,18 @@ export const replaceTemplateWithValues = async (
         placeholder,
         value.map((note: NoteItem) => note.note).join('||||||'),
       )
+    } else if (key === 'tags') {
+      const tagsStr = []
+      for (const tag of value) {
+        const str = `[[${tag.tag}]]`
+        tagsStr.push(str)
+      }
+      result = result.replace(placeholder, tagsStr.join(', '))
+    } else if (key === 'collections') {
+      console.log('Collections', value)
     } else if (typeof value === 'object' && !Array.isArray(value)) {
       // Skip object values (except arrays)
-      // TODO: Handle array and objects that are not attachments, notes,  creators
+      // Handle array and objects that are not attachments, notes, creators
       continue
     } else {
       result = result.replace(placeholder, value)

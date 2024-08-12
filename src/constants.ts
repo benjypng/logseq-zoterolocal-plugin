@@ -1,4 +1,5 @@
-export const URL = 'http://127.0.0.1:23119/api/users/0/items'
+export const ITEM_URL = 'http://127.0.0.1:23119/api/users/0/items'
+export const COLLECTIONS_URL = 'http://127.0.0.1:23119/api/users/0/items'
 
 export const FUSE_KEYS = [
   'abstractNote',

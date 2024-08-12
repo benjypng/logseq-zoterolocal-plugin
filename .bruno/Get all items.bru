@@ -1,0 +1,16 @@
+meta {
+  name: Get all items
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:23119/api/users/0/items?limit=10&sort=dateAdded
+  body: none
+  auth: none
+}
+
+query {
+  limit: 10
+  sort: dateAdded
+}

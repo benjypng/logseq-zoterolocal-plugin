@@ -67,8 +67,8 @@ export interface ZotItem {
     ISBN?: string
     ISSN?: string
     creators: CreatorItem[]
-    tags: any[]
-    collections: any[]
+    tags: TagItem[]
+    collections: string[]
     relations: any
     dateAdded: string
     dateModified: string
@@ -100,11 +100,15 @@ export interface CreatorItem {
   creatorType: string
 }
 
+export interface TagItem {
+  tag: string
+}
+
 export interface ZotData {
   accessDate: string
   attachments?: AttachmentItem[]
   citeKey: string
-  collections: any[]
+  collections: string[]
   creators: CreatorItem[]
   date: string
   dateAdded: string
@@ -125,7 +129,7 @@ export interface ZotData {
   publicationTitle: string
   relations: any
   shortTitle?: string
-  tags: string[]
+  tags: TagItem[]
   title: string
   url: string
   version: number

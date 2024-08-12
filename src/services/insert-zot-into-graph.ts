@@ -39,6 +39,7 @@ export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
     template[0]!.content,
     zotItem,
   )
+  console.log(pageProps)
 
   const pageName = await replaceTemplateWithValues(
     logseq.settings!.pagenameTemplate as string,
@@ -49,31 +50,28 @@ export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
   const existingPage = await logseq.Editor.getPage(pageName)
   if (!existingPage) {
     // Create page
-    await logseq.Editor.createPage(
-      pageName,
-      {},
-      {
-        redirect: false,
-        createFirstBlock: false,
-        journal: false,
-      },
-    )
-
-    // Create properties block
-    const propsBlock = await logseq.Editor.appendBlockInPage(
-      pageName,
-      pageProps,
-    )
-
-    // Add content from template
-    // First block is the properties, which has already been inserted
-    const contentBlockArr = template.slice(1) as BlockEntity[]
-    const result: IBatchBlock[] = []
-    await handleContentBlocks(contentBlockArr, zotItem, result)
-    await logseq.Editor.insertBatchBlock(propsBlock!.uuid, result)
-
-    // Insert page reference onto where the slash command came from
-    await logseq.Editor.updateBlock(uuid, `[[${pageName}]]`)
+    //await logseq.Editor.createPage(
+    //  pageName,
+    //  {},
+    //  {
+    //    redirect: false,
+    //    createFirstBlock: false,
+    //    journal: false,
+    //  },
+    //)
+    //// Create properties block
+    //const propsBlock = await logseq.Editor.appendBlockInPage(
+    //  pageName,
+    //  pageProps,
+    //)
+    //// Add content from template
+    //// First block is the properties, which has already been inserted
+    //const contentBlockArr = template.slice(1) as BlockEntity[]
+    //const result: IBatchBlock[] = []
+    //await handleContentBlocks(contentBlockArr, zotItem, result)
+    //await logseq.Editor.insertBatchBlock(propsBlock!.uuid, result)
+    //// Insert page reference onto where the slash command came from
+    //await logseq.Editor.updateBlock(uuid, `[[${pageName}]]`)
   }
 
   logseq.UI.closeMsg(msgId)

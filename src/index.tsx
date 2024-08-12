@@ -31,6 +31,7 @@ const main = async () => {
   logseq.Editor.registerSlashCommand('Launch Zotero plugin', async (e) => {
     const response = await getZotItems()
     if (!response) return
+    console.log(response)
 
     const items = await mapItems(response)
     if (!items[0]) return
