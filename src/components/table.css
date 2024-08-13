@@ -13,6 +13,12 @@
   gap: 0.5rem;
 }
 
+.zot-loading-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .zot-table {
   width: 100%;
   border-collapse: separate;

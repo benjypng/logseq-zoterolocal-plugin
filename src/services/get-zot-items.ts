@@ -25,7 +25,7 @@ export const testZotConnection = async () => {
   }
 }
 
-export const getZotItems = async (): Promise<ZotItem[] | void> => {
+export const getZotItems = async (): Promise<ZotItem[]> => {
   try {
     const response = await axios({
       method: 'get',
@@ -43,7 +43,7 @@ export const getZotItems = async (): Promise<ZotItem[] | void> => {
 ${(error as AxiosError).message}`,
       'error',
     )
-    throw new Error((error as AxiosError).message)
+    return []
   }
 }
 

@@ -14,3 +14,5 @@ export const FUSE_KEYS = [
   'title',
   'url',
 ]
+
+export const FUSE_THRESHOLD = 0.6

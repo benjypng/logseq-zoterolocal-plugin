@@ -2,14 +2,13 @@ import '@logseq/libs'
 
 import { createRoot } from 'react-dom/client'
 
-import { Zotero } from './features/main'
 import { GlossaryObj } from './features/main/interfaces'
 import { handlePopup } from './handle-popup'
 import { isValidSettings } from './services/check-settings'
 import { createTemplateGlossary } from './services/create-template-glossary'
-import { getZotItems, testZotConnection } from './services/get-zot-items'
-import { mapItems } from './services/map-items'
+import { testZotConnection } from './services/get-zot-items'
 import { handleSettings } from './settings'
+import ZotContainer from './ZotContainer'
 
 const main = async () => {
   console.log('logseq-zoterolocal-plugin loaded')
@@ -29,13 +28,7 @@ const main = async () => {
   const root = createRoot(el)
 
   logseq.Editor.registerSlashCommand('Launch Zotero plugin', async (e) => {
-    const response = await getZotItems()
-    if (!response) return
-
-    const items = await mapItems(response)
-    if (!items[0]) return
-
-    root.render(<Zotero items={items} uuid={e.uuid} />)
+    root.render(<ZotContainer uuid={e.uuid} />)
     logseq.showMainUI()
   })
 
