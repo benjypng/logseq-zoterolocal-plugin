@@ -8,11 +8,12 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { ArrowUpAZ, ArrowUpZA } from 'lucide-react'
-import { memo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 
 import { ZotData } from '../features/main/interfaces'
+import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
 import { ButtonContainer } from './ButtonContainer'
-import { getColumns } from './get-columns'
+import { createColumns } from './create-columns'
 
 interface TableProps {
   data: ZotData[]
@@ -25,7 +26,14 @@ export const ResultsTable = memo(({ data, uuid }: TableProps) => {
     Record<string, boolean>
   >(logseq.settings!.columnVisibility as Record<string, boolean>)
 
-  const columns = getColumns(uuid)
+  const handleInsert = useCallback(
+    (row: ZotData) => {
+      insertZotIntoGraph(row, uuid)
+    },
+    [uuid],
+  )
+
+  const columns = useMemo(() => createColumns(handleInsert), [handleInsert])
 
   const table = useReactTable({
     data,

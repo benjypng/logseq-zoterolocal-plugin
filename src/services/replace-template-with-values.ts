@@ -1,11 +1,17 @@
 import { format, parse, parseISO } from 'date-fns'
 
-import { CreatorItem, NoteItem, ZotData } from '../features/main/interfaces'
-import { getCollectionName } from './get-collection-name'
+import {
+  CollectionItem,
+  CreatorItem,
+  NoteItem,
+  ZotData,
+} from '../features/main/interfaces'
+import { getCollectionNames } from './get-collection-names'
 
 export const replaceTemplateWithValues = async (
   template: string,
   data: ZotData | CreatorItem,
+  collections?: CollectionItem[],
 ) => {
   const keys = Object.keys(data)
 
@@ -81,10 +87,8 @@ export const replaceTemplateWithValues = async (
         tagsArr.push(str)
       }
       result = result.replace(placeholder, tagsArr.join(', '))
-    } else if (key === 'collections') {
-      const collectionArr = (await getCollectionName(value)).map(
-        (collection) => `[[${collection.name}]]`,
-      )
+    } else if (key === 'collections' && collections) {
+      const collectionArr = getCollectionNames(value, collections)
       result = result.replace(placeholder, collectionArr.join(', '))
     } else if (typeof value === 'object' && !Array.isArray(value)) {
       // Skip object values (except arrays)

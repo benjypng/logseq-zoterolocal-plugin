@@ -1,13 +1,18 @@
 import axios, { AxiosError } from 'axios'
 
 import { COLLECTIONS_URL, ITEM_URL } from '../constants'
-import { ZotCollection, ZotItem } from '../features/main/interfaces'
+import {
+  CollectionItem,
+  ZotCollection,
+  ZotData,
+} from '../features/main/interfaces'
+import { mapItems } from './map-items'
 
 export const testZotConnection = async () => {
   try {
     const response = await axios.head(ITEM_URL, {
       headers: {
-        'Content-Type': 'text/plain',
+        'Content-Type': 'application/json',
         'x-zotero-connector-api-version': '3.0',
         'zotero-allowed-request': 'true',
       },
@@ -25,18 +30,18 @@ export const testZotConnection = async () => {
   }
 }
 
-export const getZotItems = async (): Promise<ZotItem[]> => {
+export const getZotItems = async (): Promise<ZotData[]> => {
   try {
     const response = await axios({
       method: 'get',
       url: ITEM_URL,
       headers: {
-        'Content-Type': 'text/plain',
+        'Content-Type': 'application/json',
         'x-zotero-connector-api-version': '3.0',
         'zotero-allowed-request': 'true',
       },
     })
-    return response.data
+    return await mapItems(response.data)
   } catch (error) {
     logseq.UI.showMsg(
       `❌ Connection error
@@ -47,24 +52,27 @@ ${(error as AxiosError).message}`,
   }
 }
 
-export const getZotCollections = async (): Promise<ZotCollection[] | void> => {
+export const getZotCollections = async (): Promise<CollectionItem[]> => {
   try {
     const response = await axios({
       method: 'get',
       url: COLLECTIONS_URL,
       headers: {
-        'Content-Type': 'text/plain',
+        'Content-Type': 'application/json',
         'x-zotero-connector-api-version': '3.0',
         'zotero-allowed-request': 'true',
       },
     })
-    return response.data
+    return response.data.map((item: ZotCollection) => ({
+      key: item.data.key,
+      name: item.data.name,
+    }))
   } catch (error) {
     logseq.UI.showMsg(
       `❌ Connection error
 ${(error as AxiosError).message}`,
       'error',
     )
-    throw new Error((error as AxiosError).message)
+    return []
   }
 }

@@ -1,6 +1,7 @@
 import { BlockEntity, IBatchBlock } from '@logseq/libs/dist/LSPlugin'
 
 import { ZotData } from '../features/main/interfaces'
+import { getZotCollections } from './get-zot-items'
 import { handleContentBlocks } from './handle-content-blocks'
 import { replaceTemplateWithValues } from './replace-template-with-values'
 
@@ -34,10 +35,14 @@ export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
     return
   }
 
+  const collections = await getZotCollections()
+  console.log(collections)
+
   // template[0] will always be the block properties
   const pageProps = await replaceTemplateWithValues(
     template[0]!.content,
     zotItem,
+    collections,
   )
 
   const pageName = await replaceTemplateWithValues(
@@ -48,7 +53,7 @@ export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
 
   const existingPage = await logseq.Editor.getPage(pageName)
   if (!existingPage) {
-    // Create page
+    //Create page
     await logseq.Editor.createPage(
       pageName,
       {},
@@ -58,18 +63,18 @@ export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
         journal: false,
       },
     )
-    //// Create properties block
+    // Create properties block
     const propsBlock = await logseq.Editor.appendBlockInPage(
       pageName,
       pageProps,
     )
-    //// Add content from template
-    //// First block is the properties, which has already been inserted
+    // Add content from template
+    // First block is the properties, which has already been inserted
     const contentBlockArr = template.slice(1) as BlockEntity[]
     const result: IBatchBlock[] = []
     await handleContentBlocks(contentBlockArr, zotItem, result)
     await logseq.Editor.insertBatchBlock(propsBlock!.uuid, result)
-    //// Insert page reference onto where the slash command came from
+    // Insert page reference onto where the slash command came from
     await logseq.Editor.updateBlock(uuid, `[[${pageName}]]`)
   }
 

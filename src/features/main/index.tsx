@@ -1,15 +1,13 @@
 import './index.css'
 
-import Fuse from 'fuse.js'
 import { ShieldAlert, SquareX } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { LoadingSpinner } from '../../components/LoadingSpinner'
 import { ResultsTable } from '../../components/ResultsTable'
-import { FUSE_KEYS, FUSE_THRESHOLD } from '../../constants'
+import { useFuse } from '../../hooks/use-fuse'
 import { useZotItems } from '../../hooks/use-items'
-import { mapItems } from '../../services/map-items'
 import { ZotData } from './interfaces'
 
 interface ZoteroProps {
@@ -17,40 +15,28 @@ interface ZoteroProps {
 }
 
 const Zotero = ({ uuid }: ZoteroProps) => {
-  const { data, isLoading, error } = useZotItems()
-  const [items, setItems] = useState<ZotData[]>([])
+  const { data, isLoading, isSuccess, error } = useZotItems()
   const [searchResults, setSearchResults] = useState<ZotData[]>([])
   const { register, watch } = useForm()
 
   useEffect(() => {
     if (data) {
       const updateLocalItems = async () => {
-        const items = await mapItems(data)
-        setItems(items)
-        setSearchResults(items)
+        setSearchResults(data)
       }
       updateLocalItems()
     }
   }, [data])
 
-  const fuse = useMemo(() => {
-    return new Fuse(items, {
-      keys: FUSE_KEYS,
-      threshold: FUSE_THRESHOLD,
-      includeScore: true,
-    })
-  }, [items])
-
   const searchInput = watch('search')
 
   useEffect(() => {
-    if (!searchInput) {
-      setSearchResults(items)
-      return
+    if (!searchInput) return // Returns all items by default
+    if (data) {
+      const results = useFuse(data, searchInput)
+      setSearchResults(results.map((result) => result.item))
     }
-    const results = fuse.search(searchInput)
-    setSearchResults(results.map((result) => result.item))
-  }, [searchInput, fuse, items])
+  }, [searchInput])
 
   const handleClose = useCallback(() => {
     logseq.hideMainUI()
@@ -73,7 +59,7 @@ const Zotero = ({ uuid }: ZoteroProps) => {
           {error.message}
         </div>
       )}
-      {!isLoading && !error && (
+      {isSuccess && (
         <>
           <div id="zot-input-container">
             <input
