@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 
 import { LoadingSpinner } from '../../components/LoadingSpinner'
 import { ResultsTable } from '../../components/ResultsTable'
+import { useDebounce } from '../../hooks/use-debounce'
 import { useFuse } from '../../hooks/use-fuse'
 import { useZotItems } from '../../hooks/use-items'
 import { ZotData } from './interfaces'
@@ -17,7 +18,7 @@ interface ZoteroProps {
 const Zotero = ({ uuid }: ZoteroProps) => {
   const { data, isLoading, isSuccess, error } = useZotItems()
   const [searchResults, setSearchResults] = useState<ZotData[]>([])
-  const { register, watch } = useForm()
+  const { register, watch, reset } = useForm()
 
   useEffect(() => {
     if (data) {
@@ -29,14 +30,15 @@ const Zotero = ({ uuid }: ZoteroProps) => {
   }, [data])
 
   const searchInput = watch('search')
+  const debounceSearch = useDebounce(searchInput, 300)
 
   useEffect(() => {
-    if (!searchInput) return // Returns all items by default
+    if (!debounceSearch) return // Returns all items by default
     if (data) {
-      const results = useFuse(data, searchInput)
+      const results = useFuse(data, debounceSearch)
       setSearchResults(results.map((result) => result.item))
     }
-  }, [searchInput])
+  }, [debounceSearch, data])
 
   const handleClose = useCallback(() => {
     logseq.hideMainUI()
@@ -72,7 +74,9 @@ const Zotero = ({ uuid }: ZoteroProps) => {
           </div>
 
           <div id="zot-results-table">
-            {searchResults && <ResultsTable data={searchResults} uuid={uuid} />}
+            {searchResults && (
+              <ResultsTable data={searchResults} uuid={uuid} reset={reset} />
+            )}
           </div>
         </>
       )}

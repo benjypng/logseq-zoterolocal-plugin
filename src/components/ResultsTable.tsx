@@ -9,6 +9,7 @@ import {
 } from '@tanstack/react-table'
 import { ArrowUpAZ, ArrowUpZA } from 'lucide-react'
 import { memo, useCallback, useMemo, useState } from 'react'
+import { FieldValues, UseFormReset } from 'react-hook-form'
 
 import { ZotData } from '../features/main/interfaces'
 import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
@@ -18,9 +19,10 @@ import { createColumns } from './create-columns'
 interface TableProps {
   data: ZotData[]
   uuid: string
+  reset: UseFormReset<FieldValues>
 }
 
-export const ResultsTable = memo(({ data, uuid }: TableProps) => {
+export const ResultsTable = memo(({ data, uuid, reset }: TableProps) => {
   const [sorting, setSorting] = useState<any[]>([])
   const [columnVisibility, setColumnVisibility] = useState<
     Record<string, boolean>
@@ -29,6 +31,7 @@ export const ResultsTable = memo(({ data, uuid }: TableProps) => {
   const handleInsert = useCallback(
     (row: ZotData) => {
       insertZotIntoGraph(row, uuid)
+      reset()
     },
     [uuid],
   )
