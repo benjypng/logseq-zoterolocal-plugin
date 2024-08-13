@@ -3,7 +3,7 @@ import '@logseq/libs'
 import { createRoot } from 'react-dom/client'
 
 import { Zotero } from './features/main'
-import { GlossaryObj, ZotData } from './features/main/interfaces'
+import { GlossaryObj } from './features/main/interfaces'
 import { handlePopup } from './handle-popup'
 import { isValidSettings } from './services/check-settings'
 import { createTemplateGlossary } from './services/create-template-glossary'

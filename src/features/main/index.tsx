@@ -1,5 +1,6 @@
 import './index.css'
 
+import { SquareX } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -7,7 +8,6 @@ import { ResultsTable } from '../../components/ResultsTable'
 import { FUSE_KEYS } from '../../constants'
 import { fuseHook } from '../../services/fuse-hook'
 import { ZotData } from './interfaces'
-import { SquareX } from 'lucide-react'
 
 interface ZoteroProps {
   items: ZotData[]
@@ -27,7 +27,7 @@ export const Zotero = ({ items, uuid }: ZoteroProps) => {
     threshold: 0.6,
     includeScore: true,
   }
-
+  console.log('HELLO WORLD')
   const searchInput = watch('search')
   useEffect(() => {
     if (!searchInput) return
