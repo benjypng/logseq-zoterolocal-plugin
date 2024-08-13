@@ -1,6 +1,5 @@
 import './index.css'
 
-import { IconX } from '@tabler/icons-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -8,6 +7,7 @@ import { ResultsTable } from '../../components/ResultsTable'
 import { FUSE_KEYS } from '../../constants'
 import { fuseHook } from '../../services/fuse-hook'
 import { ZotData } from './interfaces'
+import { SquareX } from 'lucide-react'
 
 interface ZoteroProps {
   items: ZotData[]
@@ -44,7 +44,7 @@ export const Zotero = ({ items, uuid }: ZoteroProps) => {
     <div id="zot-container">
       <div id="zot-header-container">
         <h1>logseq-zoterolocal-plugin</h1>
-        <IconX onClick={handleClose} id="zot-close-button" />
+        <SquareX onClick={handleClose} id="zot-close-button" />
       </div>
       <div id="zot-input-container">
         <input

@@ -3,13 +3,16 @@ import './table.css'
 import {
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { ArrowUpAZ, ArrowUpZA } from 'lucide-react'
 import { useState } from 'react'
 
 import { ZotData } from '../features/main/interfaces'
 import { getColumns } from './get-columns'
+import { ButtonContainer } from './ButtonContainer'
 
 interface TableProps {
   data: ZotData[]
@@ -21,7 +24,6 @@ export const ResultsTable = ({ data, uuid }: TableProps) => {
   const [columnVisibility, setColumnVisibility] = useState<
     Record<string, boolean>
   >(logseq.settings!.columnVisibility as Record<string, boolean>)
-  const [showColumnChooser, setShowColumnChooser] = useState(false)
 
   const columns = getColumns(uuid)
 
@@ -37,39 +39,21 @@ export const ResultsTable = ({ data, uuid }: TableProps) => {
     getSortedRowModel: getSortedRowModel(),
     enableSortingRemoval: false,
     onColumnVisibilityChange: setColumnVisibility,
+    getPaginationRowModel: getPaginationRowModel(),
+    initialState: {
+      pagination: {
+        pageIndex: 0,
+        pageSize: 10,
+      },
+    },
   })
-
-  const ColumnVisibilityChooser = () => (
-    <div className="column-chooser">
-      {table.getAllLeafColumns().map((column) => (
-        <div key={column.id}>
-          <label>
-            <input
-              type="checkbox"
-              checked={column.getIsVisible()}
-              onChange={column.getToggleVisibilityHandler()}
-            />
-            {column.id}
-          </label>
-        </div>
-      ))}
-    </div>
-  )
 
   // Save column visibility to settings for persistence
   logseq.updateSettings({ columnVisibility })
 
   return (
     <div className="zot-table-container">
-      <div style={{ position: 'relative', marginBottom: '10px' }}>
-        <button
-          className="column-chooser-button"
-          onClick={() => setShowColumnChooser(!showColumnChooser)}
-        >
-          Choose Columns
-        </button>
-        {showColumnChooser && <ColumnVisibilityChooser />}
-      </div>
+      <ButtonContainer table={table} />
       <table className="zot-table">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -84,8 +68,20 @@ export const ResultsTable = ({ data, uuid }: TableProps) => {
                     header.getContext(),
                   )}
                   {{
-                    asc: ' 🔼',
-                    desc: ' 🔽',
+                    asc: (
+                      <ArrowUpAZ
+                        size="1rem"
+                        style={{ marginLeft: '0.2rem' }}
+                        color="#333"
+                      />
+                    ),
+                    desc: (
+                      <ArrowUpZA
+                        size="1rem"
+                        style={{ marginLeft: '0.2rem' }}
+                        color="#333"
+                      />
+                    ),
                   }[header.column.getIsSorted() as string] ?? null}
                 </th>
               ))}

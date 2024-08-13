@@ -1,11 +1,7 @@
 import axios, { AxiosError } from 'axios'
 
 import { COLLECTIONS_URL, ITEM_URL } from '../constants'
-import {
-  CollectionItem,
-  ZotCollection,
-  ZotItem,
-} from '../features/main/interfaces'
+import { ZotCollection, ZotItem } from '../features/main/interfaces'
 
 export const testZotConnection = async () => {
   try {

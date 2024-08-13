@@ -5,6 +5,14 @@
   overflow-x: auto;
 }
 
+.zot-button-container {
+  position: relative;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
 .zot-table {
   width: 100%;
   border-collapse: separate;
