@@ -8,18 +8,18 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { ArrowUpAZ, ArrowUpZA } from 'lucide-react'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 
 import { ZotData } from '../features/main/interfaces'
-import { getColumns } from './get-columns'
 import { ButtonContainer } from './ButtonContainer'
+import { getColumns } from './get-columns'
 
 interface TableProps {
   data: ZotData[]
   uuid: string
 }
 
-export const ResultsTable = ({ data, uuid }: TableProps) => {
+export const ResultsTable = memo(({ data, uuid }: TableProps) => {
   const [sorting, setSorting] = useState<any[]>([])
   const [columnVisibility, setColumnVisibility] = useState<
     Record<string, boolean>
@@ -102,4 +102,4 @@ export const ResultsTable = ({ data, uuid }: TableProps) => {
       </table>
     </div>
   )
-}
+})

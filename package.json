@@ -11,7 +11,7 @@
   },
   "scripts": {
     "dev": "npx vite",
-    "build": "npx tsc && npx vite build",
+    "build": "npx tsc && npx eslint . && npx vite build",
     "preview": "npx vite preview"
   },
   "release": {

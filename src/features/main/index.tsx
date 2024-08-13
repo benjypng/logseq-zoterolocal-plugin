@@ -1,14 +1,14 @@
 import './index.css'
 
+import Fuse from 'fuse.js'
 import { ShieldAlert, SquareX } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { LoadingSpinner } from '../../components/LoadingSpinner'
 import { ResultsTable } from '../../components/ResultsTable'
 import { FUSE_KEYS, FUSE_THRESHOLD } from '../../constants'
 import { useZotItems } from '../../hooks/use-items'
-import { fuseHook } from '../../services/fuse-hook'
 import { mapItems } from '../../services/map-items'
 import { ZotData } from './interfaces'
 
@@ -18,30 +18,39 @@ interface ZoteroProps {
 
 const Zotero = ({ uuid }: ZoteroProps) => {
   const { data, isLoading, error } = useZotItems()
-  const [localItems, setLocalItems] = useState<ZotData[]>()
+  const [items, setItems] = useState<ZotData[]>([])
+  const [searchResults, setSearchResults] = useState<ZotData[]>([])
   const { register, watch } = useForm()
 
   useEffect(() => {
     if (data) {
       const updateLocalItems = async () => {
         const items = await mapItems(data)
-        setLocalItems(items)
+        setItems(items)
+        setSearchResults(items)
       }
       updateLocalItems()
     }
   }, [data])
 
-  const fuseOptions = {
-    keys: FUSE_KEYS,
-    threshold: FUSE_THRESHOLD,
-    includeScore: true,
-  }
+  const fuse = useMemo(() => {
+    return new Fuse(items, {
+      keys: FUSE_KEYS,
+      threshold: FUSE_THRESHOLD,
+      includeScore: true,
+    })
+  }, [items])
+
   const searchInput = watch('search')
+
   useEffect(() => {
-    if (!searchInput) return
-    const results = fuseHook(data, fuseOptions, searchInput)
-    setLocalItems(results.map((result) => result.item))
-  }, [searchInput])
+    if (!searchInput) {
+      setSearchResults(items)
+      return
+    }
+    const results = fuse.search(searchInput)
+    setSearchResults(results.map((result) => result.item))
+  }, [searchInput, fuse, items])
 
   const handleClose = useCallback(() => {
     logseq.hideMainUI()
@@ -73,11 +82,11 @@ const Zotero = ({ uuid }: ZoteroProps) => {
               type="text"
               placeholder="Start searching"
             />
-            {localItems && <p>Results: {localItems.length}</p>}
+            {searchResults && <p>Results: {searchResults.length}</p>}
           </div>
 
           <div id="zot-results-table">
-            {localItems && <ResultsTable data={localItems} uuid={uuid} />}
+            {searchResults && <ResultsTable data={searchResults} uuid={uuid} />}
           </div>
         </>
       )}
