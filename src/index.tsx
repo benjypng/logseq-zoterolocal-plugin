@@ -1,5 +1,6 @@
 import '@logseq/libs'
 
+import { BlockCursorPosition } from '@logseq/libs/dist/LSPlugin'
 import { createRoot } from 'react-dom/client'
 
 import { handlePopup } from './handle-popup'
@@ -9,8 +10,7 @@ import { createTemplateGlossary } from './services/create-template-glossary'
 import { testZotConnection } from './services/get-zot-items'
 import { handleSettings } from './settings'
 import { ZotContainer } from './ZotContainer'
-import { BlockCursorPosition } from '@logseq/libs/dist/LSPlugin'
-import { SearchItem } from './features/search-item'
+import { createLogger } from 'vite'
 
 const main = async () => {
   console.log('logseq-zoterolocal-plugin loaded')
@@ -29,10 +29,13 @@ const main = async () => {
   if (!el) return
   const root = createRoot(el)
 
-  logseq.Editor.registerSlashCommand('Launch Zotero plugin', async (e) => {
+  ///////////////////////////////////
+  // INSERT FULL DOCUMENT IN GRAPH //
+  ///////////////////////////////////
+  logseq.Editor.registerSlashCommand('Zotero: Insert full item', async (e) => {
     const { rect } =
       (await logseq.Editor.getEditingCursorPosition()) as BlockCursorPosition
-    root.render(<ZotContainer flag={'search'} uuid={e.uuid} rect={rect} />)
+    root.render(<ZotContainer flag={'full'} uuid={e.uuid} rect={rect} />)
     logseq.showMainUI()
 
     document.addEventListener('keydown', (e: KeyboardEvent) => {
@@ -43,7 +46,34 @@ const main = async () => {
       }
     })
   })
+  ///////////////////////////////////
+  // INSERT FULL DOCUMENT IN GRAPH //
+  ///////////////////////////////////
 
+  //////////////////////////////
+  // INSERT CITATION IN GRAPH //
+  //////////////////////////////
+  logseq.Editor.registerSlashCommand('Zotero: Insert citation', async (e) => {
+    const { rect } =
+      (await logseq.Editor.getEditingCursorPosition()) as BlockCursorPosition
+    root.render(<ZotContainer flag={'citation'} uuid={e.uuid} rect={rect} />)
+    logseq.showMainUI()
+
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') {
+        const searchField: HTMLInputElement =
+          document.querySelector('#search-field')!
+        searchField.focus()
+      }
+    })
+  })
+  //////////////////////////////
+  // INSERT CITATION IN GRAPH //
+  //////////////////////////////
+
+  //////////////////////////////
+  // REGISTER ICON TO TOOLBAR //
+  //////////////////////////////
   logseq.provideModel({
     async viewZotItems() {
       root.render(<ZotContainer flag={'table'} />)
@@ -54,6 +84,9 @@ const main = async () => {
     key: 'logseq-zoterolocal-plugin',
     template: `<a data-on-click="viewZotItems" class="button"><i class="ti ti-news"></i></a>`,
   })
+  //////////////////////////////
+  // REGISTER ICON TO TOOLBAR //
+  //////////////////////////////
 
   // Insert glossary as blocks for user to choose
   logseq.Editor.registerSlashCommand('Insert Zotero template', async (e) => {

@@ -9,9 +9,11 @@ import { useZotItem } from '../../hooks/use-items'
 import { ZotItem } from '../../interfaces'
 
 export const SearchItem = ({
+  flag,
   rect: { x, y },
   uuid,
 }: {
+  flag: 'full' | 'table' | 'citation'
   rect: { x: number; y: number }
   uuid: string
 }) => {
@@ -40,7 +42,12 @@ export const SearchItem = ({
         )}
         {zotResult &&
           zotResult.map((item: ZotItem) => (
-            <ResultCard key={item.key} item={item.data} />
+            <ResultCard
+              key={item.key}
+              flag={flag}
+              uuid={uuid}
+              item={item.data}
+            />
           ))}
       </div>
     </div>

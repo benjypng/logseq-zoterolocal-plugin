@@ -12,15 +12,15 @@ export const ZotContainer = ({
   uuid,
   rect,
 }: {
-  flag: 'search' | 'table'
+  flag: 'full' | 'table' | 'citation'
   uuid?: string
   rect?: { x: number; y: number }
 }) => {
   return (
     <QueryClientProvider client={queryClient}>
       {flag == 'table' && <Zotero />}
-      {flag == 'search' && rect && uuid && (
-        <SearchItem rect={rect} uuid={uuid} />
+      {(flag == 'full' || flag == 'citation') && rect && uuid && (
+        <SearchItem flag={flag} rect={rect} uuid={uuid} />
       )}
     </QueryClientProvider>
   )
