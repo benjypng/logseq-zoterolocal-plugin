@@ -1,13 +1,23 @@
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 import Zotero from './features/items-table'
+import { SearchItem } from './features/search-item'
 
 const queryClient = new QueryClient()
 
-export const ZotContainer = ({ uuid }: { uuid: string }) => {
+export const ZotContainer = ({
+  flag,
+  uuid,
+  rect,
+}: {
+  flag: 'search' | 'table'
+  uuid: string
+  rect: { x: number; y: number }
+}) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <Zotero uuid={uuid} />
+      {flag == 'table' && <Zotero uuid={uuid} />}
+      {flag == 'search' && <SearchItem rect={rect} />}
     </QueryClientProvider>
   )
 }

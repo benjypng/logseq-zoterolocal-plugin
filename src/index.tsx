@@ -9,6 +9,8 @@ import { createTemplateGlossary } from './services/create-template-glossary'
 import { testZotConnection } from './services/get-zot-items'
 import { handleSettings } from './settings'
 import { ZotContainer } from './ZotContainer'
+import { BlockCursorPosition } from '@logseq/libs/dist/LSPlugin'
+import { SearchItem } from './features/search-item'
 
 const main = async () => {
   console.log('logseq-zoterolocal-plugin loaded')
@@ -28,7 +30,10 @@ const main = async () => {
   const root = createRoot(el)
 
   logseq.Editor.registerSlashCommand('Launch Zotero plugin', async (e) => {
-    root.render(<ZotContainer uuid={e.uuid} />)
+    const { rect } =
+      (await logseq.Editor.getEditingCursorPosition()) as BlockCursorPosition
+
+    root.render(<ZotContainer flag={'search'} uuid={e.uuid} rect={rect} />)
     logseq.showMainUI()
 
     document.addEventListener('keydown', (e: KeyboardEvent) => {

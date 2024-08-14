@@ -6,29 +6,33 @@ interface ResultCardProps {
 
 const Creators = ({ creator }: { creator: CreatorItem }) => {
   return (
-    <div style={{ marginRight: '5px' }}>
+    <span style={{ marginRight: '5px' }}>
       {creator.firstName} {creator.lastName} ({creator.creatorType})
-    </div>
+    </span>
   )
 }
 
 export const ResultCard = ({ item }: ResultCardProps) => {
   const { title, creators, itemType, date } = item
-  console.log(creators)
 
   return (
     <div className="zot-result-card">
-      <div>
-        {title}{' '}
-        <div style={{ display: 'flex' }}>
-          {creators &&
-            creators.map((creator) => <Creators creator={creator} />)}
+      <div className="result-details">
+        <div className="left">
+          <div className="title">
+            {title} <span className="tag">{itemType}</span>
+          </div>
+          <div className="creators">
+            {creators &&
+              creators.map((creator, index) => (
+                <Creators key={index} creator={creator} />
+              ))}
+          </div>
         </div>
-        <div>{item.inGraph ? 'IN GRAPH' : 'NOT IN GRAPH'}</div>
-      </div>
-      <div style={{ justifyContent: 'end' }}>
-        {itemType}
-        <div>{date}</div>
+        <div className="right">
+          <div>{date}</div>
+          <div>{item.inGraph ? 'IN GRAPH' : 'NOT IN GRAPH'}</div>
+        </div>
       </div>
     </div>
   )
