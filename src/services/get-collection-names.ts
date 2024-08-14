@@ -1,4 +1,4 @@
-import { CollectionItem } from '../features/main/interfaces'
+import { CollectionItem } from '../interfaces'
 
 export const getCollectionNames = (
   keys: string[],

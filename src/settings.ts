@@ -26,7 +26,7 @@ export const handleSettings = async (
       key: 'pagenameTemplate',
       type: 'string',
       title: 'Page Name Template',
-      description: `Specify the page name for each Zotero import. Available placeholders: <% citeKey %>, <% title %>, <% shortTitle %>`,
+      description: `Specify the page name for each Zotero import. Available placeholders: <% citeKey %>, <% title %>`,
       default: `R: <% citeKey %>`,
     },
     {

@@ -5,7 +5,7 @@ import {
   CreatorItem,
   NoteItem,
   ZotData,
-} from '../features/main/interfaces'
+} from '../interfaces'
 import { getCollectionNames } from './get-collection-names'
 
 export const replaceTemplateWithValues = async (

@@ -1,12 +1,8 @@
 import axios, { AxiosError } from 'axios'
 
 import { COLLECTIONS_URL, ITEM_URL } from '../constants'
-import {
-  CollectionItem,
-  ZotCollection,
-  ZotData,
-} from '../features/main/interfaces'
-import { mapItems } from './map-items'
+import { CollectionItem, ZotCollection, ZotItem } from '../interfaces'
+import { getCiteKey } from '../components/create-columns'
 
 export const testZotConnection = async () => {
   try {
@@ -30,7 +26,7 @@ export const testZotConnection = async () => {
   }
 }
 
-export const getZotItems = async (): Promise<ZotData[]> => {
+export const getZotItems = async (): Promise<ZotItem[]> => {
   try {
     const response = await axios({
       method: 'get',
@@ -40,8 +36,59 @@ export const getZotItems = async (): Promise<ZotData[]> => {
         'x-zotero-connector-api-version': '3.0',
         'zotero-allowed-request': 'true',
       },
+      params: {
+        sort: 'dateAdded',
+        direction: 'desc',
+      },
     })
     return response.data
+  } catch (error) {
+    logseq.UI.showMsg(
+      `❌ Connection error
+${(error as AxiosError).message}`,
+      'error',
+    )
+    return []
+  }
+}
+
+export const getOneZotItem = async (queryString: string) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: ITEM_URL,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-zotero-connector-api-version': '3.0',
+        'zotero-allowed-request': 'true',
+      },
+      params: {
+        sort: 'dateAdded',
+        direction: 'desc',
+        q: queryString,
+        qmode: 'everything',
+      },
+    })
+
+    const itemArr = []
+    for (const item of response.data) {
+      const title = item.data.title
+      const citeKey = getCiteKey(item.data.extra)
+      if (citeKey) {
+        const pageToCheck = (logseq.settings!.pagenameTemplate as string)
+          .replace(/Citation Key: ([^\s\n]+)/, citeKey)
+          .replace('<% title %>', title)
+
+        const page = await logseq.Editor.getPage(pageToCheck)
+        if (page) {
+          item.data.inGraph = true
+        } else {
+          item.data.inGraph = false
+        }
+        itemArr.push(item)
+      }
+    }
+    return itemArr
   } catch (error) {
     logseq.UI.showMsg(
       `❌ Connection error

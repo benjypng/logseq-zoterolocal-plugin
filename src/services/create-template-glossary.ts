@@ -1,4 +1,4 @@
-import { GlossaryObj } from '../features/main/interfaces'
+import { GlossaryObj } from '../interfaces'
 
 export const createTemplateGlossary = async (
   glossaryObj: Partial<GlossaryObj>,

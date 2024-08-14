@@ -1,9 +1,5 @@
-import { ZotData, ZotItem } from '../features/main/interfaces'
+import { ZotData, ZotItem } from '../interfaces'
 import { replaceTemplateWithValues } from './replace-template-with-values'
-
-export const checkInGraph = async (query: string) => {
-  return (await logseq.Editor.getPage(query.toLowerCase())) ? true : false
-}
 
 export const mapItems = async (data: ZotItem[]): Promise<ZotData[]> => {
   const parentItems: ZotItem[] = []

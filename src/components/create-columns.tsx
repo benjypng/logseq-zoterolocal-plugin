@@ -1,91 +1,99 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 
-import { ZotData, ZotItem } from '../features/main/interfaces'
+import { CreatorItem, ZotItem, ZotItemForTable } from '../interfaces'
+import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
 
-const CreatorsCell = memo(({ value }: { value: ZotData['creators'] }) => (
-  <div>
-    {value?.map((creator, index) => (
-      <div key={index}>
-        {creator.firstName} {creator.lastName} ({creator.creatorType}),{' '}
-      </div>
-    ))}
-  </div>
-))
+export const getCiteKey = (extra: string | undefined) => {
+  if (!extra) return
+  const citeKey = /Citation Key: ([^\s\n]+)/.exec(extra)
+  if (citeKey && citeKey[1]) return citeKey[1]
+}
 
-export const createColumns = (
-  handleInsert: (row: ZotItem) => void,
-): ColumnDef<ZotItem>[] => [
-  {
-    header: 'In Graph?',
-    accessorKey: 'inGraph',
-    cell: ({ getValue, row }) => (
-      <div>
-        {getValue<ZotData['inGraph']>() ? (
-          '✅'
-        ) : (
-          <button onClick={() => handleInsert(row.original)}>Insert</button>
-        )}
-      </div>
-    ),
-  },
+const MemoizedCell = memo(({ item, uuid }: { item: ZotItem; uuid: string }) => {
+  const insertInGraph = useCallback(() => {
+    insertZotIntoGraph(item, uuid)
+  }, [item, uuid])
+  //return <button onClick={insertInGraph}>Insert</button>
+  return 'Hello World'
+})
+
+export const CreatorsCell = memo(({ value }: { value: CreatorItem[] }) => {
+  if (value.length == 0) return 'N/A'
+  return value
+    .map(
+      (creator) =>
+        `${creator.firstName} ${creator.lastName} (${creator.creatorType})`,
+    )
+    .join(', ')
+})
+
+export const createColumns = (uuid: string): ColumnDef<ZotItemForTable>[] => [
+  // {
+  //   header: 'In Graph?',
+  //   id: 'inGraph',
+  //   accessorKey: 'data.inGraph',
+  //   cell: ({ getValue, row }) =>
+  //     getValue() &&
+  //     (!getValue ? <MemoizedCell item={row.original} uuid={uuid} /> : '✅'),
+  // },
   {
     header: 'Title',
-    accessorKey: 'data.title',
+    accessorFn: (row) => row.data.title || 'N/A',
+  },
+  {
+    header: 'Cite Key',
+    id: 'citeKey',
+    accessorFn: (row) => getCiteKey(row.data.extra) ?? 'N/A',
   },
   {
     header: 'Creators',
-    accessorKey: 'data.creators',
-    cell: ({ getValue }) => (
-      <CreatorsCell value={getValue<ZotData['creators']>()} />
-    ),
-  },
-  {
-    header: 'Citation Key',
-    accessorKey: 'data.citeKey',
+    accessorFn: (row) => row.data.creators || [],
+    cell: ({ getValue }) =>
+      getValue() ? <CreatorsCell value={getValue() as CreatorItem[]} /> : 'N/A',
   },
   {
     header: 'Item Type',
-    accessorKey: 'data.itemType',
+    accessorFn: (row) => row.data.itemType || 'N/A',
   },
   {
     header: 'Key',
-    accessorKey: 'data.key',
+    accessorFn: (row) => row.data.key || 'N/A',
   },
   {
     header: 'Short Title',
-    accessorKey: 'data.shortTitle',
+    accessorFn: (row) => row.data.shortTitle || 'N/A',
   },
   {
     header: 'Access Date',
-    accessorKey: 'data.accessDate',
+    accessorFn: (row) => row.data.accessDate || 'N/A',
   },
   {
     header: 'Date Added',
-    accessorKey: 'data.dateAdded',
+    accessorFn: (row) => row.data.dateAdded || 'N/A',
   },
   {
     header: 'Date Modified',
-    accessorKey: 'data.dateModified',
+    accessorFn: (row) => row.data.dateModified || 'N/A',
   },
   {
     header: 'Date',
-    accessorKey: 'data.date',
+    accessorFn: (row) => row.data.date || 'N/A',
   },
   {
     header: 'Language',
-    accessorKey: 'data.language',
+    accessorFn: (row) => row.data.language || 'N/A',
   },
   {
     header: 'Library Catalog',
-    accessorKey: 'data.libraryCatalog',
+    accessorFn: (row) => row.data.libraryCatalog || 'N/A',
   },
   {
     header: 'URL',
-    accessorKey: 'data.url',
+    accessorFn: (row) => row.data.url || 'N/A',
   },
   {
     header: 'Version',
-    accessorKey: 'data.version',
+    accessorFn: (row) => row.version.toString(),
   },
 ]

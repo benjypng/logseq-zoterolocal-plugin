@@ -1,15 +1,13 @@
 import { QueryClient, QueryClientProvider } from 'react-query'
 
-import Zotero from './features/main'
+import Zotero from './features/items-table'
 
 const queryClient = new QueryClient()
 
-const ZotContainer = ({ uuid }: { uuid: string }) => {
+export const ZotContainer = ({ uuid }: { uuid: string }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <Zotero uuid={uuid} />
     </QueryClientProvider>
   )
 }
-
-export default ZotContainer

@@ -51,6 +51,10 @@
   letter-spacing: 0.05em;
 }
 
+.zot-table th:hover {
+  cursor: pointer !important;
+}
+
 .zot-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }

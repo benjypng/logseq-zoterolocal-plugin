@@ -78,9 +78,39 @@ button:hover {
   cursor: pointer;
 }
 
-#zot-input-container {
+#zot-search-container {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
   font-style: italic;
+  overflow: scroll;
+}
+
+#zot-input input {
+  width: 98%;
+}
+
+#zot-results {
+  flex: 0 1 auto;
+  max-height: 30rem;
+  overflow-y: auto;
+}
+
+#zot-results:empty {
+  flex-basis: 0;
+}
+
+.zot-result-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 3rem;
+  padding: 1rem;
+  border: 0.1rem solid #ccc;
+  border-radius: 1rem;
+  margin: 1rem 0;
+}
+
+.zot-result-card:hover {
+  cursor: pointer;
 }
