@@ -6,13 +6,8 @@ import { useCallback, useState } from 'react'
 import { ItemsTable } from '../../components/ItemsTable'
 import { LoadingSpinner } from '../../components/LoadingSpinner'
 import { useZotItems } from '../../hooks/use-items'
-import { SearchItem } from '../search-item'
 
-interface ZoteroProps {
-  uuid: string
-}
-
-const Zotero = ({ uuid }: ZoteroProps) => {
+const Zotero = () => {
   const { data: zotItems, isSuccess, error, isFetching } = useZotItems()
   const [resultsShown, setResultsShown] = useState(false)
 
@@ -26,7 +21,6 @@ const Zotero = ({ uuid }: ZoteroProps) => {
         <h1>logseq-zoterolocal-plugin</h1>
         <SquareX onClick={handleClose} id="zot-close-button" />
       </div>
-      <SearchItem />
       <button
         onClick={() => {
           if (resultsShown) {
@@ -56,7 +50,7 @@ const Zotero = ({ uuid }: ZoteroProps) => {
           {isSuccess && (
             <>
               <div id="zot-results-table">
-                {zotItems && <ItemsTable data={zotItems} uuid={uuid} />}
+                {zotItems && <ItemsTable data={zotItems} />}
               </div>
             </>
           )}

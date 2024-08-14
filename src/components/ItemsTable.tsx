@@ -13,20 +13,19 @@ import { memo, useMemo, useState } from 'react'
 
 import { ZotItem } from '../interfaces'
 import { ButtonContainer } from './ButtonContainer'
-import { createColumns } from './create-columns'
+import { Columns } from './create-columns'
 
 interface TableProps {
   data: ZotItem[]
-  uuid: string
 }
 
-export const ItemsTable = memo(({ data, uuid }: TableProps) => {
+export const ItemsTable = memo(({ data }: TableProps) => {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnVisibility, setColumnVisibility] = useState<
     Record<string, boolean>
   >(logseq.settings!.columnVisibility as Record<string, boolean>)
 
-  const columns = useMemo(() => createColumns(uuid), [uuid])
+  const columns = useMemo(() => Columns, [data])
 
   const table = useReactTable({
     data,

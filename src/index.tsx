@@ -32,7 +32,6 @@ const main = async () => {
   logseq.Editor.registerSlashCommand('Launch Zotero plugin', async (e) => {
     const { rect } =
       (await logseq.Editor.getEditingCursorPosition()) as BlockCursorPosition
-
     root.render(<ZotContainer flag={'search'} uuid={e.uuid} rect={rect} />)
     logseq.showMainUI()
 
@@ -43,6 +42,17 @@ const main = async () => {
         searchField.focus()
       }
     })
+  })
+
+  logseq.provideModel({
+    async viewZotItems() {
+      root.render(<ZotContainer flag={'table'} />)
+      logseq.showMainUI()
+    },
+  })
+  logseq.App.registerUIItem('toolbar', {
+    key: 'logseq-zoterolocal-plugin',
+    template: `<a data-on-click="viewZotItems" class="button"><i class="ti ti-news"></i></a>`,
   })
 
   // Insert glossary as blocks for user to choose

@@ -1,22 +1,13 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { memo, useCallback } from 'react'
+import { memo } from 'react'
 
-import { CreatorItem, ZotItem, ZotItemForTable } from '../interfaces'
-import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
+import { CreatorItem, ZotItem } from '../interfaces'
 
 export const getCiteKey = (extra: string | undefined) => {
   if (!extra) return
   const citeKey = /Citation Key: ([^\s\n]+)/.exec(extra)
   if (citeKey && citeKey[1]) return citeKey[1]
 }
-
-const MemoizedCell = memo(({ item, uuid }: { item: ZotItem; uuid: string }) => {
-  const insertInGraph = useCallback(() => {
-    insertZotIntoGraph(item, uuid)
-  }, [item, uuid])
-  //return <button onClick={insertInGraph}>Insert</button>
-  return 'Hello World'
-})
 
 export const CreatorsCell = memo(({ value }: { value: CreatorItem[] }) => {
   if (value.length == 0) return 'N/A'
@@ -28,7 +19,7 @@ export const CreatorsCell = memo(({ value }: { value: CreatorItem[] }) => {
     .join(', ')
 })
 
-export const createColumns = (uuid: string): ColumnDef<ZotItemForTable>[] => [
+export const Columns: ColumnDef<ZotItem>[] = [
   // {
   //   header: 'In Graph?',
   //   id: 'inGraph',

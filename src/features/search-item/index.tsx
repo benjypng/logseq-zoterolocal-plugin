@@ -10,8 +10,10 @@ import { ZotItem } from '../../interfaces'
 
 export const SearchItem = ({
   rect: { x, y },
+  uuid,
 }: {
   rect: { x: number; y: number }
+  uuid: string
 }) => {
   const { register, watch } = useForm()
   const queryString = watch('search')
