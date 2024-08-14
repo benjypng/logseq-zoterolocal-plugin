@@ -61,7 +61,6 @@ button:hover {
   top: 5rem;
   left: 50%;
   transform: translateX(-50%);
-  max-width: 800px;
   width: 90%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   display: flex;

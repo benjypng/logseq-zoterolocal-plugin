@@ -1,7 +1,6 @@
 .zot-table-container {
   font-family: Arial, sans-serif;
   font-size: 0.8rem;
-  max-width: 100%;
   overflow-x: auto;
 }
 
@@ -20,7 +19,7 @@
 }
 
 .zot-table {
-  width: 100%;
+  table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
   border: 1px solid #e0e0e0;
@@ -61,7 +60,11 @@
 }
 
 .zot-table td {
+  max-width: 12rem;
   color: #555;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .column-chooser {
