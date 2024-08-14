@@ -1,10 +1,10 @@
 import { useQuery } from 'react-query'
 
-import { ZotData } from '../features/main/interfaces'
+import { ZotData, ZotItem } from '../features/main/interfaces'
 import { getZotItems } from '../services/get-zot-items'
 
 export const useZotItems = () => {
-  return useQuery<ZotData[], Error>('zotItems', getZotItems, {
+  return useQuery<ZotItem[], Error>('zotItems', getZotItems, {
     retry: false,
     refetchOnWindowFocus: false,
     onError: (error: Error) => {

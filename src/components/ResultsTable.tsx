@@ -11,13 +11,13 @@ import { ArrowUpAZ, ArrowUpZA } from 'lucide-react'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { FieldValues, UseFormReset } from 'react-hook-form'
 
-import { ZotData } from '../features/main/interfaces'
+import { ZotData, ZotItem } from '../features/main/interfaces'
 import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
 import { ButtonContainer } from './ButtonContainer'
 import { createColumns } from './create-columns'
 
 interface TableProps {
-  data: ZotData[]
+  data: ZotItem[]
   uuid: string
   reset: UseFormReset<FieldValues>
 }
@@ -29,7 +29,7 @@ export const ResultsTable = memo(({ data, uuid, reset }: TableProps) => {
   >(logseq.settings!.columnVisibility as Record<string, boolean>)
 
   const handleInsert = useCallback(
-    (row: ZotData) => {
+    (row: ZotItem) => {
       insertZotIntoGraph(row, uuid)
       reset()
     },

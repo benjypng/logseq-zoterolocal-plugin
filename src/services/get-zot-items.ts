@@ -41,7 +41,7 @@ export const getZotItems = async (): Promise<ZotData[]> => {
         'zotero-allowed-request': 'true',
       },
     })
-    return await mapItems(response.data)
+    return response.data
   } catch (error) {
     logseq.UI.showMsg(
       `❌ Connection error

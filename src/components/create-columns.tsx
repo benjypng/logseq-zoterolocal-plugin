@@ -1,7 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { memo } from 'react'
 
-import { ZotData } from '../features/main/interfaces'
+import { ZotData, ZotItem } from '../features/main/interfaces'
 
 const CreatorsCell = memo(({ value }: { value: ZotData['creators'] }) => (
   <div>
@@ -14,8 +14,8 @@ const CreatorsCell = memo(({ value }: { value: ZotData['creators'] }) => (
 ))
 
 export const createColumns = (
-  handleInsert: (row: ZotData) => void,
-): ColumnDef<ZotData>[] => [
+  handleInsert: (row: ZotItem) => void,
+): ColumnDef<ZotItem>[] => [
   {
     header: 'In Graph?',
     accessorKey: 'inGraph',
@@ -31,61 +31,61 @@ export const createColumns = (
   },
   {
     header: 'Title',
-    accessorKey: 'title',
+    accessorKey: 'data.title',
   },
   {
     header: 'Creators',
-    accessorKey: 'creators',
+    accessorKey: 'data.creators',
     cell: ({ getValue }) => (
       <CreatorsCell value={getValue<ZotData['creators']>()} />
     ),
   },
   {
     header: 'Citation Key',
-    accessorKey: 'citeKey',
+    accessorKey: 'data.citeKey',
   },
   {
     header: 'Item Type',
-    accessorKey: 'itemType',
+    accessorKey: 'data.itemType',
   },
   {
     header: 'Key',
-    accessorKey: 'key',
+    accessorKey: 'data.key',
   },
   {
     header: 'Short Title',
-    accessorKey: 'shortTitle',
+    accessorKey: 'data.shortTitle',
   },
   {
     header: 'Access Date',
-    accessorKey: 'accessDate',
+    accessorKey: 'data.accessDate',
   },
   {
     header: 'Date Added',
-    accessorKey: 'dateAdded',
+    accessorKey: 'data.dateAdded',
   },
   {
     header: 'Date Modified',
-    accessorKey: 'dateModified',
+    accessorKey: 'data.dateModified',
   },
   {
     header: 'Date',
-    accessorKey: 'date',
+    accessorKey: 'data.date',
   },
   {
     header: 'Language',
-    accessorKey: 'language',
+    accessorKey: 'data.language',
   },
   {
     header: 'Library Catalog',
-    accessorKey: 'libraryCatalog',
+    accessorKey: 'data.libraryCatalog',
   },
   {
     header: 'URL',
-    accessorKey: 'url',
+    accessorKey: 'data.url',
   },
   {
     header: 'Version',
-    accessorKey: 'version',
+    accessorKey: 'data.version',
   },
 ]

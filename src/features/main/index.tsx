@@ -9,7 +9,7 @@ import { ResultsTable } from '../../components/ResultsTable'
 import { useDebounce } from '../../hooks/use-debounce'
 import { useFuse } from '../../hooks/use-fuse'
 import { useZotItems } from '../../hooks/use-items'
-import { ZotData } from './interfaces'
+import { ZotData, ZotItem } from './interfaces'
 
 interface ZoteroProps {
   uuid: string
@@ -17,7 +17,7 @@ interface ZoteroProps {
 
 const Zotero = ({ uuid }: ZoteroProps) => {
   const { data, isLoading, isSuccess, error } = useZotItems()
-  const [searchResults, setSearchResults] = useState<ZotData[]>([])
+  const [searchResults, setSearchResults] = useState<ZotItem[]>([])
   const { register, watch, reset } = useForm()
 
   useEffect(() => {
