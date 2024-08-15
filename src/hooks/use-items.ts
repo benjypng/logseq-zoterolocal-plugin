@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 
-import { ZotItem } from '../interfaces'
+import { ZotData, ZotItem } from '../interfaces'
 import { getOneZotItem, getZotItems } from '../services/get-zot-items'
 
 export const useZotItems = () => {
@@ -14,7 +14,7 @@ export const useZotItems = () => {
 }
 
 export const useZotItem = (queryString: string, options = {}) => {
-  return useQuery<ZotItem[], Error>(
+  return useQuery<ZotData[], Error>(
     ['zotItem', queryString],
     () => getOneZotItem(queryString),
     {

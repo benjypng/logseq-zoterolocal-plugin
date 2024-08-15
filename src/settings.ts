@@ -37,6 +37,13 @@ export const handleSettings = async (
         'Specify how authors should be shown in the properties. Available placeholders: <% firstName %>, <% lastName %>, <% creatorType %>',
       default: '<% firstName %> <% lastName %> (<% creatorType %>)',
     },
+    {
+      key: 'citekeyTemplate',
+      type: 'string',
+      title: 'Template for Cite Key',
+      description: `Specify the template when using the command /Zotero: Insert citation. Ensure that <% citeKey %> placeholder is indicated in your template`,
+      default: '[@<% citeKey %>]',
+    },
   ]
 
   logseq.useSettingsSchema(settings)

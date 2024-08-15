@@ -1,9 +1,13 @@
+import { UseFormReset } from 'react-hook-form'
+
+import { FormValues } from '../features/search-item'
 import { CreatorItem, ZotData } from '../interfaces'
 
 interface ResultCardProps {
   flag: 'full' | 'table' | 'citation'
   uuid: string
-  item: Partial<ZotData>
+  item: ZotData
+  reset: UseFormReset<FormValues>
 }
 
 const Creators = ({ creator }: { creator: CreatorItem }) => {
@@ -14,17 +18,23 @@ const Creators = ({ creator }: { creator: CreatorItem }) => {
   )
 }
 
-export const ResultCard = ({ flag, uuid, item }: ResultCardProps) => {
-  const { title, creators, itemType, date } = item
+export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
+  const { title, creators, itemType, citeKey, date } = item
 
   const handleClick = () => {
     if (flag === 'citation') insertCitation()
     if (flag === 'full') insertZot()
   }
 
-  const insertCitation = () => {
-    console.log('UUID', uuid)
-    console.log('Insert Citation')
+  const insertCitation = async () => {
+    if (!citeKey) logseq.UI.showMsg('No citation key found', 'error')
+    const templateStr = (logseq.settings!.citekeyTemplate as string).replace(
+      `<% citeKey %>`,
+      citeKey,
+    )
+    await logseq.Editor.updateBlock(uuid, templateStr)
+    reset()
+    logseq.hideMainUI()
   }
 
   const insertZot = () => {

@@ -6,7 +6,11 @@ import { ResultCard } from '../../components/ResultCard'
 import { DEBOUNCE_DELAY } from '../../constants'
 import { useDebounce } from '../../hooks/use-debounce'
 import { useZotItem } from '../../hooks/use-items'
-import { ZotItem } from '../../interfaces'
+import { ZotData } from '../../interfaces'
+
+export interface FormValues {
+  search: string
+}
 
 export const SearchItem = ({
   flag,
@@ -17,11 +21,11 @@ export const SearchItem = ({
   rect: { x: number; y: number }
   uuid: string
 }) => {
-  const { register, watch } = useForm()
+  const { register, watch, reset } = useForm<FormValues>()
   const queryString = watch('search')
   const debounceSearch = useDebounce(queryString, DEBOUNCE_DELAY)
 
-  const { data: zotResult } = useZotItem(debounceSearch)
+  const { data: zotDataResult } = useZotItem(debounceSearch)
 
   return (
     <div id="zot-search-container" style={{ left: x, top: y }}>
@@ -34,19 +38,20 @@ export const SearchItem = ({
         />
       </div>
       <div id="zot-results">
-        {zotResult && zotResult.length == 0 && (
+        {zotDataResult && zotDataResult.length == 0 && (
           <div className="results-length">No results</div>
         )}
-        {zotResult && zotResult.length > 0 && (
-          <div className="results-length">{zotResult.length} results</div>
+        {zotDataResult && zotDataResult.length > 0 && (
+          <div className="results-length">{zotDataResult.length} results</div>
         )}
-        {zotResult &&
-          zotResult.map((item: ZotItem) => (
+        {zotDataResult &&
+          zotDataResult.map((item: ZotData) => (
             <ResultCard
               key={item.key}
               flag={flag}
               uuid={uuid}
-              item={item.data}
+              item={item}
+              reset={reset}
             />
           ))}
       </div>

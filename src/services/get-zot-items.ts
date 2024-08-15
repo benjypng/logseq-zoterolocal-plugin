@@ -1,8 +1,8 @@
 import axios, { AxiosError } from 'axios'
 
-import { COLLECTIONS_URL, ITEM_URL } from '../constants'
-import { CollectionItem, ZotCollection, ZotItem } from '../interfaces'
 import { getCiteKey } from '../components/create-columns'
+import { COLLECTIONS_URL, ITEM_URL } from '../constants'
+import { CollectionItem, ZotCollection, ZotData, ZotItem } from '../interfaces'
 
 export const testZotConnection = async () => {
   try {
@@ -70,25 +70,26 @@ export const getOneZotItem = async (queryString: string) => {
       },
     })
 
-    const itemArr = []
-    for (const item of response.data) {
-      const title = item.data.title
-      const citeKey = getCiteKey(item.data.extra)
-      if (citeKey) {
-        const pageToCheck = (logseq.settings!.pagenameTemplate as string)
-          .replace(/Citation Key: ([^\s\n]+)/, citeKey)
-          .replace('<% title %>', title)
+    const zotDataArr: ZotData[] = response.data.map(
+      (item: ZotItem) => item.data,
+    )
 
-        const page = await logseq.Editor.getPage(pageToCheck)
-        if (page) {
-          item.data.inGraph = true
-        } else {
-          item.data.inGraph = false
-        }
-        itemArr.push(item)
-      }
+    for (const item of zotDataArr) {
+      const title = item.title
+      const citeKey = getCiteKey(item.extra)
+
+      // Map inGraph
+      const pageToCheck = (logseq.settings!.pagenameTemplate as string)
+        .replace(/Citation Key: ([^\s\n]+)/, citeKey ?? '$&')
+        .replace('<% title %>', title)
+      const page = await logseq.Editor.getPage(pageToCheck)
+      item.inGraph = !!page
+
+      // Map citeKey
+      item.citeKey = citeKey ?? 'N/A'
     }
-    return itemArr
+
+    return zotDataArr
   } catch (error) {
     logseq.UI.showMsg(
       `❌ Connection error
