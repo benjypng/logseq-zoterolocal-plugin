@@ -1,11 +1,6 @@
 import { format, parse, parseISO } from 'date-fns'
 
-import {
-  CollectionItem,
-  CreatorItem,
-  NoteItem,
-  ZotData,
-} from '../interfaces'
+import { CollectionItem, CreatorItem, NoteItem, ZotData } from '../interfaces'
 import { getCollectionNames } from './get-collection-names'
 
 export const replaceTemplateWithValues = async (

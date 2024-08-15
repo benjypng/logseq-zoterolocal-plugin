@@ -1,12 +1,12 @@
 import { BlockEntity, IBatchBlock } from '@logseq/libs/dist/LSPlugin'
 
-import { ZotItem } from '../interfaces'
+import { ZotData } from '../interfaces'
 import { getZotCollections } from './get-zot-items'
 import { handleContentBlocks } from './handle-content-blocks'
 import { replaceTemplateWithValues } from './replace-template-with-values'
 
-export const insertZotIntoGraph = async (zotItem: ZotItem, uuid: string) => {
-  const msgId = await logseq.UI.showMsg('Inserting into graph...', 'success')
+export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
+  const msgId = await logseq.UI.showMsg('Inserting into graph...', 'warning')
 
   const templateName = logseq.settings!.zotTemplate as string
   if (!templateName && templateName.length === 0) {
@@ -36,7 +36,6 @@ export const insertZotIntoGraph = async (zotItem: ZotItem, uuid: string) => {
   }
 
   const collections = await getZotCollections()
-  console.log(collections)
 
   // template[0] will always be the block properties
   const pageProps = await replaceTemplateWithValues(
@@ -79,5 +78,6 @@ export const insertZotIntoGraph = async (zotItem: ZotItem, uuid: string) => {
   }
 
   logseq.UI.closeMsg(msgId)
+  logseq.UI.showMsg('Completed!', 'success')
   logseq.hideMainUI()
 }

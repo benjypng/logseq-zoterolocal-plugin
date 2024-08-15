@@ -1,7 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { memo } from 'react'
 
-import { CreatorItem, ZotItem } from '../interfaces'
+import { CreatorItem, ZotItem } from '../../interfaces'
 
 export const getCiteKey = (extra: string | undefined) => {
   if (!extra) return
@@ -19,7 +19,7 @@ export const CreatorsCell = memo(({ value }: { value: CreatorItem[] }) => {
     .join(', ')
 })
 
-export const Columns: ColumnDef<ZotItem>[] = [
+export const columns: ColumnDef<ZotItem>[] = [
   {
     header: 'Title',
     accessorFn: (row) => row.data.title || 'N/A',

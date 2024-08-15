@@ -1,8 +1,7 @@
 import axios, { AxiosError } from 'axios'
 
-import { getCiteKey } from '../components/create-columns'
 import { COLLECTIONS_URL, ITEM_URL } from '../constants'
-import { CollectionItem, ZotCollection, ZotData, ZotItem } from '../interfaces'
+import { CollectionItem, ZotCollection, ZotItem } from '../interfaces'
 import { mapItems } from './map-items'
 
 export const testZotConnection = async () => {
@@ -70,6 +69,7 @@ export const getOneZotItem = async (queryString: string) => {
         qmode: 'everything',
       },
     })
+
     const zotDataArr = await mapItems(response.data)
     return zotDataArr
   } catch (error) {

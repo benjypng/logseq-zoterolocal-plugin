@@ -1,4 +1,4 @@
-import { getCiteKey } from '../components/create-columns'
+import { getCiteKey } from '../features/items-table/create-columns'
 import { ZotData, ZotItem } from '../interfaces'
 
 export const mapItems = async (data: ZotItem[]): Promise<ZotData[]> => {

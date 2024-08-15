@@ -1,7 +1,9 @@
+import { useCallback } from 'react'
 import { UseFormReset } from 'react-hook-form'
 
 import { FormValues } from '../features/search-item'
 import { CreatorItem, ZotData } from '../interfaces'
+import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
 
 interface ResultCardProps {
   flag: 'full' | 'table' | 'citation'
@@ -26,7 +28,7 @@ export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
     if (flag === 'full') insertZot()
   }
 
-  const insertCitation = async () => {
+  const insertCitation = useCallback(async () => {
     if (!citeKey) logseq.UI.showMsg('No citation key found', 'error')
     const templateStr = (logseq.settings!.citekeyTemplate as string).replace(
       `<% citeKey %>`,
@@ -35,13 +37,12 @@ export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
     await logseq.Editor.updateBlock(uuid, templateStr)
     reset()
     logseq.hideMainUI()
-  }
+  }, [item])
 
-  const insertZot = () => {
-    console.log(item)
-    console.log('UUID', uuid)
-    console.log('Insert full Zotero Item')
-  }
+  const insertZot = useCallback(
+    async () => await insertZotIntoGraph(item, uuid),
+    [item],
+  )
 
   return (
     <div className="zot-result-card" onClick={handleClick}>

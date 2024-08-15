@@ -1,4 +1,4 @@
-import './table.css'
+import '../features/items-table/index.css'
 
 import {
   flexRender,
