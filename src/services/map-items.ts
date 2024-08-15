@@ -1,5 +1,5 @@
+import { getCiteKey } from '../components/create-columns'
 import { ZotData, ZotItem } from '../interfaces'
-import { replaceTemplateWithValues } from './replace-template-with-values'
 
 export const mapItems = async (data: ZotItem[]): Promise<ZotData[]> => {
   const parentItems: ZotItem[] = []
@@ -23,17 +23,17 @@ export const mapItems = async (data: ZotItem[]): Promise<ZotData[]> => {
 
   for (const item of parentZotData) {
     // Map citeKey
-    if (item.extra) {
-      const citeKey = /Citation Key: ([^\s\n]+)/.exec(item.extra)
-      if (citeKey && citeKey[1]) item.citeKey = citeKey[1]
-    }
+    const title = item.title
+    const citeKey = getCiteKey(item.extra)
+    item.citeKey = citeKey ?? 'N/A'
 
     // Map "if in graph"
-    const pageName = await replaceTemplateWithValues(
-      logseq.settings!.pagenameTemplate as string,
-      item,
-    )
-    item.inGraph = await checkInGraph(pageName)
+    const pageToCheck = (logseq.settings!.pagenameTemplate as string)
+      .replace(/Citation Key: ([^\s\n]+)/, citeKey ?? '$&')
+      .replace('<% title %>', title)
+
+    const page = await logseq.Editor.getPage(pageToCheck)
+    item.inGraph = !!page
 
     // Map attachment
     for (const attachment of attachments) {
@@ -44,7 +44,6 @@ export const mapItems = async (data: ZotItem[]): Promise<ZotData[]> => {
       ) {
         item.attachments.push(attachment.links.enclosure)
       }
-
       // itemType: 'note'
       if (
         attachment.data.parentItem === item.key &&

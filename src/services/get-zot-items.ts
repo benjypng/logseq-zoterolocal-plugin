@@ -3,6 +3,7 @@ import axios, { AxiosError } from 'axios'
 import { getCiteKey } from '../components/create-columns'
 import { COLLECTIONS_URL, ITEM_URL } from '../constants'
 import { CollectionItem, ZotCollection, ZotData, ZotItem } from '../interfaces'
+import { mapItems } from './map-items'
 
 export const testZotConnection = async () => {
   try {
@@ -69,26 +70,7 @@ export const getOneZotItem = async (queryString: string) => {
         qmode: 'everything',
       },
     })
-
-    const zotDataArr: ZotData[] = response.data.map(
-      (item: ZotItem) => item.data,
-    )
-
-    for (const item of zotDataArr) {
-      const title = item.title
-      const citeKey = getCiteKey(item.extra)
-
-      // Map inGraph
-      const pageToCheck = (logseq.settings!.pagenameTemplate as string)
-        .replace(/Citation Key: ([^\s\n]+)/, citeKey ?? '$&')
-        .replace('<% title %>', title)
-      const page = await logseq.Editor.getPage(pageToCheck)
-      item.inGraph = !!page
-
-      // Map citeKey
-      item.citeKey = citeKey ?? 'N/A'
-    }
-
+    const zotDataArr = await mapItems(response.data)
     return zotDataArr
   } catch (error) {
     logseq.UI.showMsg(

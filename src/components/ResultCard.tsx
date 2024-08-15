@@ -38,6 +38,7 @@ export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
   }
 
   const insertZot = () => {
+    console.log(item)
     console.log('UUID', uuid)
     console.log('Insert full Zotero Item')
   }
