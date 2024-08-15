@@ -54,7 +54,7 @@ ${(error as AxiosError).message}`,
 
 export const getOneZotItem = async (queryString: string) => {
   try {
-    const response = await axios({
+    const zotItemsResponse = await axios({
       method: 'get',
       url: ITEM_URL,
       headers: {
@@ -63,6 +63,7 @@ export const getOneZotItem = async (queryString: string) => {
         'zotero-allowed-request': 'true',
       },
       params: {
+        limit: 500,
         sort: 'dateAdded',
         direction: 'desc',
         q: queryString,
@@ -70,7 +71,26 @@ export const getOneZotItem = async (queryString: string) => {
       },
     })
 
-    const zotDataArr = await mapItems(response.data)
+    const allNotesResponse = await axios({
+      method: 'get',
+      url: ITEM_URL,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-zotero-connector-api-version': '3.0',
+        'zotero-allowed-request': 'true',
+      },
+      params: {
+        limit: 500,
+        itemType: 'note',
+        sort: 'dateAdded',
+        direction: 'desc',
+      },
+    })
+
+    const zotDataArr = await mapItems(
+      zotItemsResponse.data,
+      allNotesResponse.data,
+    )
     return zotDataArr
   } catch (error) {
     logseq.UI.showMsg(

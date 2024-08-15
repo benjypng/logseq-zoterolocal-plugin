@@ -52,7 +52,7 @@ export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
 
   const existingPage = await logseq.Editor.getPage(pageName)
   if (!existingPage) {
-    //Create page
+    //  //Create page
     await logseq.Editor.createPage(
       pageName,
       {},
@@ -62,7 +62,7 @@ export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
         journal: false,
       },
     )
-    // Create properties block
+    //  // Create properties block
     const propsBlock = await logseq.Editor.appendBlockInPage(
       pageName,
       pageProps,
