@@ -1,24 +1,90 @@
-#zot-container {
-  background-color: #f6f8fa;
-  border-radius: 8px;
-  padding: 20px;
+.zot-table-container {
+  font-size: 0.8rem;
+  overflow-x: auto;
+}
+
+.zot-button-container {
   position: relative;
-  top: 5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  flex-direction: row;
+  gap: 0.5rem;
 }
 
-#zot-header-container {
+.zot-loading-error {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-#zot-close-button:hover {
-  background-color: #eee;
-  cursor: pointer;
+.zot-table {
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.zot-table button {
+  font-size: 0.6rem;
+  background-color: teal;
+}
+
+.zot-table th,
+.zot-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.zot-table thead {
+  background-color: #f8f8f8;
+}
+
+.zot-table th {
+  font-weight: bold;
+  color: #333;
+  text-transform: uppercase;
+  font-size: 0.85em;
+  letter-spacing: 0.05em;
+}
+
+.zot-table th:hover {
+  cursor: pointer !important;
+}
+
+.zot-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.zot-table tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+.zot-table td {
+  max-width: 12rem;
+  color: #555;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.column-chooser {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.column-chooser label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.column-chooser input[type='checkbox'] {
+  margin-right: 5px;
 }

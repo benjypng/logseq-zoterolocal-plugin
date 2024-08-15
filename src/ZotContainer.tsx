@@ -1,5 +1,3 @@
-import './base.css'
-
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 import Zotero from './features/items-table'

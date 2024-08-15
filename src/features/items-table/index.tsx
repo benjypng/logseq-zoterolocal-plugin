@@ -1,3 +1,4 @@
+import './base.css'
 import './index.css'
 
 import { ShieldAlert, SquareX } from 'lucide-react'
