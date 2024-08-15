@@ -7,9 +7,9 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 
-import { ZotData } from '../features/main/interfaces'
+import { ZotItem } from '../interfaces'
 
-export const ButtonContainer = ({ table }: { table: Table<ZotData> }) => {
+export const ButtonContainer = ({ table }: { table: Table<ZotItem> }) => {
   const [showColumnChooser, setShowColumnChooser] = useState(false)
 
   const ColumnVisibilityChooser = () => (

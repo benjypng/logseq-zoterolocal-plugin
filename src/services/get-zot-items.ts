@@ -1,11 +1,7 @@
 import axios, { AxiosError } from 'axios'
 
 import { COLLECTIONS_URL, ITEM_URL } from '../constants'
-import {
-  CollectionItem,
-  ZotCollection,
-  ZotData,
-} from '../features/main/interfaces'
+import { CollectionItem, ZotCollection, ZotItem } from '../interfaces'
 import { mapItems } from './map-items'
 
 export const testZotConnection = async () => {
@@ -30,7 +26,7 @@ export const testZotConnection = async () => {
   }
 }
 
-export const getZotItems = async (): Promise<ZotData[]> => {
+export const getZotItems = async (): Promise<ZotItem[]> => {
   try {
     const response = await axios({
       method: 'get',
@@ -40,8 +36,62 @@ export const getZotItems = async (): Promise<ZotData[]> => {
         'x-zotero-connector-api-version': '3.0',
         'zotero-allowed-request': 'true',
       },
+      params: {
+        sort: 'dateAdded',
+        direction: 'desc',
+      },
     })
-    return await mapItems(response.data)
+    return response.data
+  } catch (error) {
+    logseq.UI.showMsg(
+      `❌ Connection error
+${(error as AxiosError).message}`,
+      'error',
+    )
+    return []
+  }
+}
+
+export const getOneZotItem = async (queryString: string) => {
+  try {
+    const zotItemsResponse = await axios({
+      method: 'get',
+      url: ITEM_URL,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-zotero-connector-api-version': '3.0',
+        'zotero-allowed-request': 'true',
+      },
+      params: {
+        limit: 500,
+        sort: 'dateAdded',
+        direction: 'desc',
+        q: queryString,
+        qmode: 'everything',
+      },
+    })
+
+    const allNotesResponse = await axios({
+      method: 'get',
+      url: ITEM_URL,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-zotero-connector-api-version': '3.0',
+        'zotero-allowed-request': 'true',
+      },
+      params: {
+        limit: 500,
+        itemType: 'note',
+        sort: 'dateAdded',
+        direction: 'desc',
+      },
+    })
+
+    const zotDataArr = await mapItems(
+      zotItemsResponse.data,
+      allNotesResponse.data,
+    )
+    return zotDataArr
   } catch (error) {
     logseq.UI.showMsg(
       `❌ Connection error

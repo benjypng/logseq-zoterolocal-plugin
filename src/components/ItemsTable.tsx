@@ -1,42 +1,31 @@
-import './table.css'
+import '../features/items-table/index.css'
 
 import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  SortingState,
   useReactTable,
 } from '@tanstack/react-table'
 import { ArrowUpAZ, ArrowUpZA } from 'lucide-react'
-import { memo, useCallback, useMemo, useState } from 'react'
-import { FieldValues, UseFormReset } from 'react-hook-form'
+import { memo, useMemo, useState } from 'react'
 
-import { ZotData } from '../features/main/interfaces'
-import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
+import { ZotItem } from '../interfaces'
 import { ButtonContainer } from './ButtonContainer'
-import { createColumns } from './create-columns'
+import { Columns } from './create-columns'
 
 interface TableProps {
-  data: ZotData[]
-  uuid: string
-  reset: UseFormReset<FieldValues>
+  data: ZotItem[]
 }
 
-export const ResultsTable = memo(({ data, uuid, reset }: TableProps) => {
-  const [sorting, setSorting] = useState<any[]>([])
+export const ItemsTable = memo(({ data }: TableProps) => {
+  const [sorting, setSorting] = useState<SortingState>([])
   const [columnVisibility, setColumnVisibility] = useState<
     Record<string, boolean>
   >(logseq.settings!.columnVisibility as Record<string, boolean>)
 
-  const handleInsert = useCallback(
-    (row: ZotData) => {
-      insertZotIntoGraph(row, uuid)
-      reset()
-    },
-    [uuid],
-  )
-
-  const columns = useMemo(() => createColumns(handleInsert), [handleInsert])
+  const columns = useMemo(() => Columns, [data])
 
   const table = useReactTable({
     data,

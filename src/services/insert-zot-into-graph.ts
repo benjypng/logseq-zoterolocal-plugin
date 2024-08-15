@@ -1,12 +1,12 @@
 import { BlockEntity, IBatchBlock } from '@logseq/libs/dist/LSPlugin'
 
-import { ZotData } from '../features/main/interfaces'
+import { ZotData } from '../interfaces'
 import { getZotCollections } from './get-zot-items'
 import { handleContentBlocks } from './handle-content-blocks'
 import { replaceTemplateWithValues } from './replace-template-with-values'
 
 export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
-  const msgId = await logseq.UI.showMsg('Inserting into graph...', 'success')
+  const msgId = await logseq.UI.showMsg('Inserting into graph...', 'warning')
 
   const templateName = logseq.settings!.zotTemplate as string
   if (!templateName && templateName.length === 0) {
@@ -36,7 +36,6 @@ export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
   }
 
   const collections = await getZotCollections()
-  console.log(collections)
 
   // template[0] will always be the block properties
   const pageProps = await replaceTemplateWithValues(
@@ -53,7 +52,7 @@ export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
 
   const existingPage = await logseq.Editor.getPage(pageName)
   if (!existingPage) {
-    //Create page
+    //  //Create page
     await logseq.Editor.createPage(
       pageName,
       {},
@@ -63,7 +62,7 @@ export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
         journal: false,
       },
     )
-    // Create properties block
+    //  // Create properties block
     const propsBlock = await logseq.Editor.appendBlockInPage(
       pageName,
       pageProps,
@@ -79,5 +78,6 @@ export const insertZotIntoGraph = async (zotItem: ZotData, uuid: string) => {
   }
 
   logseq.UI.closeMsg(msgId)
+  logseq.UI.showMsg('Completed!', 'success')
   logseq.hideMainUI()
 }

@@ -1,8 +1,10 @@
-body {
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(5px);
-  font-family: Inter, Arial, sans-serif;
-  color: #333;
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
 }
 
 h1 {
@@ -30,14 +32,6 @@ p {
   line-height: 1.4;
 }
 
-input {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
 button {
   background-color: #3498db;
   color: #fff;
@@ -54,6 +48,7 @@ button:hover {
 }
 
 #zot-container {
+  font-family: Arial, Helvetica, sans-serif;
   background-color: #f6f8fa;
   border-radius: 8px;
   padding: 20px;
@@ -61,7 +56,6 @@ button:hover {
   top: 5rem;
   left: 50%;
   transform: translateX(-50%);
-  max-width: 800px;
   width: 90%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -77,11 +71,4 @@ button:hover {
 #zot-close-button:hover {
   background-color: #eee;
   cursor: pointer;
-}
-
-#zot-input-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  font-style: italic;
 }

@@ -26,7 +26,7 @@ export const handleSettings = async (
       key: 'pagenameTemplate',
       type: 'string',
       title: 'Page Name Template',
-      description: `Specify the page name for each Zotero import. Available placeholders: <% citeKey %>, <% title %>, <% shortTitle %>`,
+      description: `Specify the page name for each Zotero import. Available placeholders: <% citeKey %>, <% title %>`,
       default: `R: <% citeKey %>`,
     },
     {
@@ -36,6 +36,13 @@ export const handleSettings = async (
       description:
         'Specify how authors should be shown in the properties. Available placeholders: <% firstName %>, <% lastName %>, <% creatorType %>',
       default: '<% firstName %> <% lastName %> (<% creatorType %>)',
+    },
+    {
+      key: 'citekeyTemplate',
+      type: 'string',
+      title: 'Template for Cite Key',
+      description: `Specify the template when using the command /Zotero: Insert citation. Ensure that <% citeKey %> placeholder is indicated in your template`,
+      default: '[@<% citeKey %>]',
     },
   ]
 

@@ -1,6 +1,6 @@
 import { BlockEntity, IBatchBlock } from '@logseq/libs/dist/LSPlugin'
 
-import { ZotData } from '../features/main/interfaces'
+import { ZotData } from '../interfaces'
 import { replaceTemplateWithValues } from './replace-template-with-values'
 
 export const handleContentBlocks = async (

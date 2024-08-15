@@ -132,6 +132,13 @@ export interface ZotCollection {
 }
 // DO NOT TOUCH ABOVE SECTION //
 
+export interface ZotItemForTable extends ZotItem {
+  data: ZotItem['data'] & {
+    citeKey: string
+    inGraph: boolean
+  }
+}
+
 export interface ZotData {
   abstractNote?: string
   accessDate?: string
