@@ -1,6 +1,5 @@
 import { QueryClient, QueryClientProvider } from 'react-query'
 
-import Zotero from './features/items-table'
 import { SearchItem } from './features/search-item'
 
 const queryClient = new QueryClient()
@@ -16,7 +15,9 @@ export const ZotContainer = ({
 }) => {
   return (
     <QueryClientProvider client={queryClient}>
-      {flag == 'table' && <Zotero />}
+      {
+        //Deprecated for now: flag == 'table' && <Zotero />
+      }
       {(flag == 'full' || flag == 'citation') && rect && uuid && (
         <SearchItem flag={flag} rect={rect} uuid={uuid} />
       )}
