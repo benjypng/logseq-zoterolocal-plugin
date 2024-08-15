@@ -1,4 +1,4 @@
-import { CreatorItem } from '../features/items-table/interfaces'
+import { ZotItem } from './interfaces'
 
 export const ITEM_URL = 'http://127.0.0.1:23119/api/users/0/items'
 export const COLLECTIONS_URL = 'http://127.0.0.1:23119/api/users/0/collections'
@@ -7,23 +7,29 @@ export const FUSE_KEYS = [
   {
     name: 'combinedSearch',
     weight: 1,
-    getFn: (obj: { creators: CreatorItem[]; date: string; title: string }) => {
-      const authors = obj.creators
-        .filter((creator) => creator.creatorType === 'author')
-        .map((author) => `${author.firstName} ${author.lastName}`)
-        .join(' ')
-      const year = obj.date ? new Date(obj.date).getFullYear().toString() : ''
-      return `${authors} ${obj.title} ${year}`.trim()
+    getFn: (obj: ZotItem) => {
+      const authors = obj.data.creators
+        ? obj.data.creators
+            .filter((creator) => creator.creatorType === 'author')
+            .map((author) => `${author.firstName} ${author.lastName}`)
+            .join(' ')
+        : ''
+      const year = obj.data.date
+        ? new Date(obj.data.date).getFullYear().toString()
+        : ''
+      return `${authors} ${obj.data.title} ${year}`.trim()
     },
   },
   {
-    name: 'authors',
+    name: 'creators',
     weight: 0.9,
-    getFn: (obj: { creators: CreatorItem[] }) => {
-      return obj.creators
-        .filter((creator) => creator.creatorType === 'author')
-        .map((author) => `${author.firstName} ${author.lastName}`)
-        .join(' ')
+    getFn: (obj: ZotItem) => {
+      return obj.data.creators
+        ? obj.data.creators
+            .filter((creator) => creator.creatorType === 'author')
+            .map((author) => `${author.firstName} ${author.lastName}`)
+            .join(' ')
+        : ''
     },
   },
   { name: 'title', weight: 0.9 },
