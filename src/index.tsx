@@ -45,9 +45,6 @@ const main = async () => {
       }
     })
   })
-  ///////////////////////////////////
-  // INSERT FULL DOCUMENT IN GRAPH //
-  ///////////////////////////////////
 
   //////////////////////////////
   // INSERT CITATION IN GRAPH //
@@ -66,13 +63,10 @@ const main = async () => {
       }
     })
   })
-  //////////////////////////////
-  // INSERT CITATION IN GRAPH //
-  //////////////////////////////
 
-  //////////////////////////////
-  // REGISTER ICON TO TOOLBAR //
-  //////////////////////////////
+  //////////////////////////////////////////
+  // DEPRECATED: REGISTER ICON TO TOOLBAR //
+  //////////////////////////////////////////
   logseq.provideModel({
     async viewZotItems() {
       root.render(<ZotContainer flag={'table'} />)
@@ -83,9 +77,6 @@ const main = async () => {
     key: 'logseq-zoterolocal-plugin',
     template: `<a data-on-click="viewZotItems" class="button"><i class="ti ti-news"></i></a>`,
   })
-  //////////////////////////////
-  // REGISTER ICON TO TOOLBAR //
-  //////////////////////////////
 
   // Insert glossary as blocks for user to choose
   logseq.Editor.registerSlashCommand('Insert Zotero template', async (e) => {
