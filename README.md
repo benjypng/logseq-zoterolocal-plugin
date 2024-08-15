@@ -4,8 +4,6 @@
 
 Connect locally to Zotero 7 (and above) and pull your items into Logseq without needing to sync with Zotero Cloud.
 
-![Demo GIF](/screenshots/demo.gif)
-
 ## Features
 
 - Direct connection to Zotero 7+ without needing to sync with Zotero Cloud
@@ -39,17 +37,24 @@ Connect locally to Zotero 7 (and above) and pull your items into Logseq without 
 
    ![Template Example](/screenshots/template.png)
 
-2. Insert Zotero items:
+2. Insert Zotero item:
    - Navigate to the page where you want to insert a Zotero item.
-   - Type `/Launch Zotero plugin`.
-   - Select the desired item and click "Insert".
+   - Type `/Zotero: Insert full item`.
+   - Perform your search.
+   - Click the desired item.
    - A new page will be created, and a reference to it will be inserted at your cursor position.
-
-   ![Zotero Portal](/screenshots/portal.png)
+  
+3. Insert citation
+   - Ensure that your citation key template is set up in your plugin settings.
+   - Navigate to the page where you want to insert a Zotero item.
+   - Type `/Zotero: Insert citation`.
+   - Perform your search.
+   - Click the desired item.
+   - Citation will be added to your cursor position.
 
 ## Configuration
 
-For Author and Page Name templates, use only the stated placeholders. Refer to the plugin settings for available options.
+For Citation Key, Author and Page Name templates, use only the stated placeholders. Refer to the plugin settings for available options.
 
 ## Support
 
