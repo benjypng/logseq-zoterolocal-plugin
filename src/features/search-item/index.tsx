@@ -21,7 +21,11 @@ export const SearchItem = ({
   rect: { x: number; y: number }
   uuid: string
 }) => {
-  const { register, watch, reset } = useForm<FormValues>()
+  const { register, watch, reset } = useForm<FormValues>({
+    defaultValues: {
+      search: '',
+    },
+  })
   const queryString = watch('search')
   const debounceSearch = useDebounce(queryString, DEBOUNCE_DELAY)
 

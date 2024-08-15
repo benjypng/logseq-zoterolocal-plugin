@@ -72,19 +72,44 @@
 
 .result-details > .left {
   max-width: 75%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
 }
 
 .result-details > .right {
   width: 20%;
   text-align: right;
+  display: flex;
+  flex-direction: column;
   gap: 0.2rem;
 }
 
-.result-details .tag {
+.title .tag {
   border: 0;
   background-color: #e9e9e9;
   padding: 0.2rem 0.5rem;
   color: #555;
   border-radius: 0.2rem;
   font-size: 0.9rem;
+}
+
+.right .ingraph {
+  border: 0;
+  background-color: #008000;
+  color: #fff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.2rem;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+.right .notingraph {
+  border: 0;
+  background-color: #dc143c;
+  color: #fff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.2rem;
+  font-size: 0.8rem;
+  margin: 0.5rem 0;
 }

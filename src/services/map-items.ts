@@ -34,7 +34,7 @@ export const mapItems = async (
 
     // Map "if in graph"
     const pageToCheck = (logseq.settings!.pagenameTemplate as string)
-      .replace(/Citation Key: ([^\s\n]+)/, citeKey ?? '$&')
+      .replace('<% citeKey %>', citeKey ?? '$&')
       .replace('<% title %>', title)
 
     const page = await logseq.Editor.getPage(pageToCheck)

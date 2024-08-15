@@ -10,7 +10,6 @@ import { createTemplateGlossary } from './services/create-template-glossary'
 import { testZotConnection } from './services/get-zot-items'
 import { handleSettings } from './settings'
 import { ZotContainer } from './ZotContainer'
-import { createLogger } from 'vite'
 
 const main = async () => {
   console.log('logseq-zoterolocal-plugin loaded')

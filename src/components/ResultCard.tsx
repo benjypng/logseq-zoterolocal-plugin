@@ -39,10 +39,11 @@ export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
     logseq.hideMainUI()
   }, [item])
 
-  const insertZot = useCallback(
-    async () => await insertZotIntoGraph(item, uuid),
-    [item],
-  )
+  const insertZot = useCallback(async () => {
+    await insertZotIntoGraph(item, uuid)
+    reset()
+    logseq.hideMainUI()
+  }, [item])
 
   return (
     <div className="zot-result-card" onClick={handleClick}>
@@ -60,7 +61,11 @@ export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
         </div>
         <div className="right">
           <div>{date}</div>
-          <div>{item.inGraph ? 'IN GRAPH' : 'NOT IN GRAPH'}</div>
+          <div>
+            <span className={item.inGraph ? 'ingraph' : 'notingraph'}>
+              {item.inGraph ? 'in graph' : 'not in graph'}
+            </span>
+          </div>
         </div>
       </div>
     </div>
