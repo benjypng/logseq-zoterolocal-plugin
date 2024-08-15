@@ -4,6 +4,8 @@
 
 Connect locally to Zotero 7 (and above) and pull your items into Logseq without needing to sync with Zotero Cloud.
 
+![](/screenshots/demo.gif)
+
 ## Features
 
 - Direct connection to Zotero 7+ without needing to sync with Zotero Cloud
