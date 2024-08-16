@@ -1,4 +1,12 @@
-import { Button, Checkbox, Group, Select, Space, Stack } from '@mantine/core'
+import {
+  Button,
+  Checkbox,
+  Group,
+  Select,
+  Space,
+  Stack,
+  Tooltip,
+} from '@mantine/core'
 import { Table } from '@tanstack/react-table'
 import {
   Ban,
@@ -85,14 +93,19 @@ export const ButtonContainer = ({
           </Button>
         )}
         {!userConfirmation && (
-          <Button
-            w="11rem"
-            color="blue"
-            radius="sm"
-            onClick={() => setUserConfirmation(true)}
+          <Tooltip
+            label={'There may be an issue inserting more than 100 items'}
           >
-            Insert {table.getRowCount().toLocaleString()} items
-          </Button>
+            <Button
+              w="11rem"
+              color="blue"
+              radius="sm"
+              disabled={table.getRowCount() > 100 ? true : false}
+              onClick={() => setUserConfirmation(true)}
+            >
+              Insert {table.getRowCount().toLocaleString()} items
+            </Button>
+          </Tooltip>
         )}
         {!userConfirmation && (
           <>

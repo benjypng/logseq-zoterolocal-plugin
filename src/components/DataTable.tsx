@@ -14,6 +14,7 @@ import { ZotItem } from '../interfaces'
 import tdStyle from '../styles/Td.module.css'
 import { ButtonContainer } from './ButtonContainer'
 import { Columns } from './create-columns'
+import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
 
 interface TableProps {
   data: ZotItem[]
