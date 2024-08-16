@@ -1,12 +1,8 @@
+import './bg.css'
 import '@mantine/core/styles.css'
 import 'inter-ui/inter.css'
 
-import {
-  alpha,
-  createTheme,
-  MantineProvider,
-  MantineTheme,
-} from '@mantine/core'
+import { createTheme, MantineProvider, MantineTheme, rgba } from '@mantine/core'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 import { SearchItem } from './features/search-item'
@@ -40,16 +36,6 @@ export const ZotContainer = ({
       ],
     },
     fontFamily: 'Inter',
-    components: {
-      Body: {
-        styles: (theme: MantineTheme) => ({
-          root: {
-            // Set background to fully transparent
-            background: alpha(theme.white, 0),
-          },
-        }),
-      },
-    },
   })
 
   return (
