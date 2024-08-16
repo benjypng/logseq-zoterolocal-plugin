@@ -12,7 +12,8 @@
   "scripts": {
     "dev": "npx vite",
     "build": "npx eslint . && npx tsc && npx vite build",
-    "preview": "npx vite preview"
+    "preview": "npx vite preview",
+    "prepare": "husky"
   },
   "release": {
     "branches": [
@@ -60,6 +61,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
+    "husky": "^9.1.4",
     "postcss": "^8.4.41",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
