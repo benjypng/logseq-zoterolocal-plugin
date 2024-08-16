@@ -5,7 +5,7 @@ import 'inter-ui/inter.css'
 import { createTheme, MantineProvider } from '@mantine/core'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
-import Zotero from './features/items-table'
+import { ItemsTable } from './features/items-table'
 import { SearchItem } from './features/search-item'
 
 const queryClient = new QueryClient()
@@ -43,7 +43,7 @@ export const ZotContainer = ({
     <QueryClientProvider client={queryClient}>
       <MantineProvider theme={theme}>
         <div style={{ background: 'none' }}>
-          {flag == 'table' && <Zotero />}
+          {flag == 'table' && <ItemsTable />}
           {(flag == 'full' || flag == 'citation') && rect && uuid && (
             <SearchItem flag={flag} rect={rect} uuid={uuid} />
           )}
