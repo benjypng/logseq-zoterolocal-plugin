@@ -9,7 +9,7 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   prettierConfig,
   {
-    ignores: ['**/dist/'],
+    ignores: ['**/dist/', '**/postcss.config.cjs'],
   },
   {
     plugins: {

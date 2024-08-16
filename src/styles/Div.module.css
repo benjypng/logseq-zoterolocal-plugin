@@ -1,0 +1,6 @@
+.div {
+  &:hover {
+    cursor: pointer;
+    background-color: #eee;
+  }
+}

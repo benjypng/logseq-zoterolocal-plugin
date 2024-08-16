@@ -1,9 +1,11 @@
+import { Badge, Flex, Text, Title } from '@mantine/core'
 import { useCallback } from 'react'
 import { UseFormReset } from 'react-hook-form'
 
 import { FormValues } from '../features/search-item'
 import { CreatorItem, ZotData } from '../interfaces'
 import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
+import divStyle from '../styles/Div.module.css'
 
 interface ResultCardProps {
   flag: 'full' | 'table' | 'citation'
@@ -12,11 +14,20 @@ interface ResultCardProps {
   reset: UseFormReset<FormValues>
 }
 
-const Creators = ({ creator }: { creator: CreatorItem }) => {
+const Creators = ({
+  index,
+  length,
+  creator,
+}: {
+  index: number
+  length: number
+  creator: CreatorItem
+}) => {
   return (
-    <span style={{ marginRight: '5px' }}>
+    <Text size="sm" mr="0.2rem">
       {creator.firstName} {creator.lastName} ({creator.creatorType})
-    </span>
+      {length - index == 1 ? '' : ','}
+    </Text>
   )
 }
 
@@ -46,28 +57,43 @@ export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
   }, [item])
 
   return (
-    <div className="zot-result-card" onClick={handleClick}>
-      <div className="result-details">
-        <div className="left">
-          <div className="title">
-            {title} <span className="tag">{itemType}</span>
-          </div>
-          <div className="creators">
-            {creators &&
-              creators.map((creator, index) => (
-                <Creators key={index} creator={creator} />
-              ))}
-          </div>
-        </div>
-        <div className="right">
-          <div>{date}</div>
-          <div>
-            <span className={item.inGraph ? 'ingraph' : 'notingraph'}>
-              {item.inGraph ? 'in graph' : 'not in graph'}
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Flex
+      onClick={handleClick}
+      direction="row"
+      justify="space-between"
+      my="0.2rem"
+      className={divStyle.style}
+    >
+      <Flex p="lg" w="70%" direction="column">
+        <Title size="md">
+          {title}{' '}
+          <Badge radius="sm" color="#A9A9A9" px="0.2rem">
+            {itemType}
+          </Badge>
+        </Title>
+        <Flex dir="row" wrap="wrap" mt="0.2rem">
+          {creators &&
+            creators.map((creator, index) => (
+              <Creators
+                key={index}
+                index={index}
+                length={creators.length}
+                creator={creator}
+              />
+            ))}
+        </Flex>
+      </Flex>
+      <Flex p="lg" w="25%" direction="column" align="flex-end">
+        <Text size="sm">{date}</Text>
+        <Badge
+          radius="sm"
+          size="sm"
+          px="0.2rem"
+          color={item.inGraph ? 'green' : 'red'}
+        >
+          {item.inGraph ? 'in graph' : 'not in graph'}
+        </Badge>
+      </Flex>
+    </Flex>
   )
 }

@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios'
 
 import { COLLECTIONS_URL, ITEM_URL } from '../constants'
-import { CollectionItem, ZotCollection, ZotItem } from '../interfaces'
+import { CollectionItem, ZotCollection } from '../interfaces'
 import { mapItems } from './map-items'
 
 export const testZotConnection = async () => {
@@ -26,9 +26,9 @@ export const testZotConnection = async () => {
   }
 }
 
-export const getZotItems = async (): Promise<ZotItem[]> => {
+export const getZotItems = async () => {
   try {
-    const response = await axios({
+    const zotItemsResponse = await axios({
       method: 'get',
       url: ITEM_URL,
       headers: {
@@ -41,7 +41,27 @@ export const getZotItems = async (): Promise<ZotItem[]> => {
         direction: 'desc',
       },
     })
-    return response.data
+    const allNotesResponse = await axios({
+      method: 'get',
+      url: ITEM_URL,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-zotero-connector-api-version': '3.0',
+        'zotero-allowed-request': 'true',
+      },
+      params: {
+        limit: 500,
+        itemType: 'note',
+        sort: 'dateAdded',
+        direction: 'desc',
+      },
+    })
+
+    const zotDataArr = await mapItems(
+      zotItemsResponse.data,
+      allNotesResponse.data,
+    )
+    return zotDataArr
   } catch (error) {
     logseq.UI.showMsg(
       `❌ Connection error
@@ -52,7 +72,7 @@ ${(error as AxiosError).message}`,
   }
 }
 
-export const getOneZotItem = async (queryString: string) => {
+export const getZotItemsFromQueryString = async (queryString: string) => {
   try {
     const zotItemsResponse = await axios({
       method: 'get',

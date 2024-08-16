@@ -1,5 +1,4 @@
-import '../features/items-table/index.css'
-
+import { Container, Table } from '@mantine/core'
 import {
   flexRender,
   getCoreRowModel,
@@ -8,18 +7,21 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table'
+import { format } from 'date-fns'
 import { ArrowUpAZ, ArrowUpZA } from 'lucide-react'
 import { memo, useMemo, useState } from 'react'
 
-import { ZotItem } from '../interfaces'
+import { ZotData } from '../interfaces'
+import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
+import tdStyle from '../styles/Td.module.css'
 import { ButtonContainer } from './ButtonContainer'
 import { Columns } from './create-columns'
 
 interface TableProps {
-  data: ZotItem[]
+  data: ZotData[]
 }
 
-export const ItemsTable = memo(({ data }: TableProps) => {
+export const DataTable = memo(({ data }: TableProps) => {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnVisibility, setColumnVisibility] = useState<
     Record<string, boolean>
@@ -51,15 +53,40 @@ export const ItemsTable = memo(({ data }: TableProps) => {
   // Save column visibility to settings for persistence
   logseq.updateSettings({ columnVisibility })
 
+  const insertAll = async () => {
+    // Get todays page to insert references to
+    const { preferredDateFormat } = await logseq.App.getUserConfigs()
+    const todayDate = format(new Date(), preferredDateFormat)
+    const page = await logseq.Editor.getPage(todayDate)
+    if (!page) {
+      logseq.UI.showMsg(
+        'Error getting todays date. No Zotero items have been inserted',
+        'error',
+      )
+      return
+    }
+
+    try {
+      await Promise.all(
+        data.map((item) => insertZotIntoGraph(item, page.name, 'page')),
+      )
+    } catch (error) {
+      logseq.UI.showMsg(
+        'Error inserting items. You may wish to go to your file explorer to check which ZotItems have been inserted',
+      )
+      console.error(error)
+    }
+  }
+
   return (
-    <div className="zot-table-container">
-      <ButtonContainer table={table} />
-      <table className="zot-table">
-        <thead>
+    <Container m={0} p={0} w="100%" style={{ overflowX: 'scroll' }}>
+      <ButtonContainer table={table} insertAll={insertAll} />
+      <Table mah="50rem" style={{ fontSize: '0.8rem' }}>
+        <Table.Thead>
           {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
+            <Table.Tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th
+                <Table.Th
                   key={header.id}
                   onClick={header.column.getToggleSortingHandler()}
                 >
@@ -83,23 +110,23 @@ export const ItemsTable = memo(({ data }: TableProps) => {
                       />
                     ),
                   }[header.column.getIsSorted() as string] ?? null}
-                </th>
+                </Table.Th>
               ))}
-            </tr>
+            </Table.Tr>
           ))}
-        </thead>
-        <tbody>
+        </Table.Thead>
+        <Table.Tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
+            <Table.Tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
+                <Table.Td key={cell.id} maw="12rem" className={tdStyle.td}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
+                </Table.Td>
               ))}
-            </tr>
+            </Table.Tr>
           ))}
-        </tbody>
-      </table>
-    </div>
+        </Table.Tbody>
+      </Table>
+    </Container>
   )
 })

@@ -49,20 +49,23 @@ const main = async () => {
   //////////////////////////////
   // INSERT CITATION IN GRAPH //
   //////////////////////////////
-  logseq.Editor.registerSlashCommand('Zotero: Insert citation', async (e) => {
-    const { rect } =
-      (await logseq.Editor.getEditingCursorPosition()) as BlockCursorPosition
-    root.render(<ZotContainer flag={'citation'} uuid={e.uuid} rect={rect} />)
-    logseq.showMainUI()
+  logseq.Editor.registerSlashCommand(
+    'Zotero: Cite (insert citation)',
+    async (e) => {
+      const { rect } =
+        (await logseq.Editor.getEditingCursorPosition()) as BlockCursorPosition
+      root.render(<ZotContainer flag={'citation'} uuid={e.uuid} rect={rect} />)
+      logseq.showMainUI()
 
-    document.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key !== 'Escape') {
-        const searchField: HTMLInputElement =
-          document.querySelector('#search-field')!
-        searchField.focus()
-      }
-    })
-  })
+      document.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key !== 'Escape') {
+          const searchField: HTMLInputElement =
+            document.querySelector('#search-field')!
+          searchField.focus()
+        }
+      })
+    },
+  )
 
   //////////////////////////////////////////
   // DEPRECATED: REGISTER ICON TO TOOLBAR //
