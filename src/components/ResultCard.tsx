@@ -1,11 +1,11 @@
-import { Badge, Flex, Group, Paper, Space, Text, Title } from '@mantine/core'
+import { Badge, Flex, Text, Title } from '@mantine/core'
 import { useCallback } from 'react'
 import { UseFormReset } from 'react-hook-form'
 
-import divStyle from '../Div.module.css'
 import { FormValues } from '../features/search-item'
 import { CreatorItem, ZotData } from '../interfaces'
 import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
+import divStyle from '../styles/Div.module.css'
 
 interface ResultCardProps {
   flag: 'full' | 'table' | 'citation'

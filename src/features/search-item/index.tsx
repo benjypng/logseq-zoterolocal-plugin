@@ -1,4 +1,4 @@
-import { Box, Container, Flex, Input, Text } from '@mantine/core'
+import { Flex, Input, Text } from '@mantine/core'
 import { useForm } from 'react-hook-form'
 
 import { ResultCard } from '../../components/ResultCard'
