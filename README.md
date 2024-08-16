@@ -21,10 +21,15 @@ Connect locally to Zotero 7 (and above) and pull your items into Logseq without 
 
 ## Setup
 
-1. Ensure Zotero 7 is running.
-2. Open plugin settings in Logseq.
-3. Verify that "Connection to Zotero is working" is checked.
-4. Complete the rest of the plugin settings.
+1. Close Logseq.
+2. Ensure Zotero 7 is running, and then:
+   - In settings, under `Advanced`, check `Allow other applications on this computer to communicate with Zotero`.
+   - (only if you want to citation keys) Install [Better Bibtex](https://github.com/retorquere/zotero-better-bibtex/releases).
+   - In the Better Bibtex section of your Zotero settings, ensure that `Automatically pin citation key after X seconds` is set to `1`.
+   - Restart Zotero.
+3. Open Logseq, and then plugin settings.
+4. Verify that "Connection to Zotero is working" is checked.
+5. Complete the rest of the plugin settings.
 
 ![Plugin Settings](/screenshots/plugin-settings.png)
 
