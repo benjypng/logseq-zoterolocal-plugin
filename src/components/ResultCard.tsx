@@ -62,7 +62,7 @@ export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
       direction="row"
       justify="space-between"
       my="0.2rem"
-      className={divStyle.style}
+      className={divStyle.div}
     >
       <Flex p="lg" w="70%" direction="column">
         <Title size="md">

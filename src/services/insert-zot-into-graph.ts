@@ -8,7 +8,7 @@ import { replaceTemplateWithValues } from './replace-template-with-values'
 export const insertZotIntoGraph = async (
   zotItem: ZotData,
   blockOrPageIdentity: string,
-  flag: 'page',
+  flag?: 'page',
 ) => {
   const msgId = await logseq.UI.showMsg('Inserting into graph...', 'warning')
 
