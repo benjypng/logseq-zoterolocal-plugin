@@ -7,17 +7,18 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table'
+import { format } from 'date-fns'
 import { ArrowUpAZ, ArrowUpZA } from 'lucide-react'
 import { memo, useMemo, useState } from 'react'
 
-import { ZotItem } from '../interfaces'
+import { ZotData } from '../interfaces'
+import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
 import tdStyle from '../styles/Td.module.css'
 import { ButtonContainer } from './ButtonContainer'
 import { Columns } from './create-columns'
-import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
 
 interface TableProps {
-  data: ZotItem[]
+  data: ZotData[]
 }
 
 export const DataTable = memo(({ data }: TableProps) => {
@@ -52,8 +53,29 @@ export const DataTable = memo(({ data }: TableProps) => {
   // Save column visibility to settings for persistence
   logseq.updateSettings({ columnVisibility })
 
-  const insertAll = () => {
-    console.log('Insert all')
+  const insertAll = async () => {
+    // Get todays page to insert references to
+    const { preferredDateFormat } = await logseq.App.getUserConfigs()
+    const todayDate = format(new Date(), preferredDateFormat)
+    const page = await logseq.Editor.getPage(todayDate)
+    if (!page) {
+      logseq.UI.showMsg(
+        'Error getting todays date. No Zotero items have been inserted',
+        'error',
+      )
+      return
+    }
+
+    try {
+      await Promise.all(
+        data.map((item) => insertZotIntoGraph(item, page.name, 'page')),
+      )
+    } catch (error) {
+      logseq.UI.showMsg(
+        'Error inserting items. You may wish to go to your file explorer to check which ZotItems have been inserted',
+      )
+      console.error(error)
+    }
   }
 
   return (

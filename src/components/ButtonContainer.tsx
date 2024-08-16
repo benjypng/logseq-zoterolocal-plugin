@@ -18,7 +18,7 @@ import {
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import { ZotItem } from '../interfaces'
+import { ZotData } from '../interfaces'
 
 interface FormValues {
   pageSize: string
@@ -29,7 +29,7 @@ export const ButtonContainer = ({
   table,
   insertAll,
 }: {
-  table: Table<ZotItem>
+  table: Table<ZotData>
   insertAll: () => void
 }) => {
   const { control, watch } = useForm<FormValues>({
@@ -80,7 +80,7 @@ export const ButtonContainer = ({
       <Group gap={2}>
         {userConfirmation && (
           <Button w="11rem" color="red" radius="sm" onClick={insertAll}>
-            Are you sure?
+            Click to Proceed (re-index is recommended after completion)
           </Button>
         )}
         {userConfirmation && (
