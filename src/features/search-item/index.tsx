@@ -1,5 +1,6 @@
 import './index.css'
 
+import { Flex } from '@mantine/core'
 import { useForm } from 'react-hook-form'
 
 import { ResultCard } from '../../components/ResultCard'
@@ -32,7 +33,14 @@ export const SearchItem = ({
   const { data: zotDataResult } = useZotItem(debounceSearch)
 
   return (
-    <div id="zot-search-container" style={{ left: x, top: y }}>
+    <Flex
+      id="zot-search-container"
+      style={{ left: x, top: y }}
+      direction="column"
+      pos="absolute"
+      w="40rem"
+      bg="#fff"
+    >
       <div id="zot-input">
         <input
           id="search-field"
@@ -59,6 +67,6 @@ export const SearchItem = ({
             />
           ))}
       </div>
-    </div>
+    </Flex>
   )
 }

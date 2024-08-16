@@ -1,3 +1,6 @@
+body {
+  background: none;
+}
 #zot-search-container {
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
