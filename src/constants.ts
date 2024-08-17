@@ -2,6 +2,7 @@ import { ZotItem } from './interfaces'
 
 export const ITEM_URL = 'http://127.0.0.1:23119/api/users/0/items'
 export const COLLECTIONS_URL = 'http://127.0.0.1:23119/api/users/0/collections'
+export const ZOTERO_LIBRARY_ITEM = 'zotero://select/library/items?itemKey='
 
 export const FUSE_KEYS = [
   {

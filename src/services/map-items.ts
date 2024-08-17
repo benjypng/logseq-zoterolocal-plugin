@@ -1,3 +1,4 @@
+import { ZOTERO_LIBRARY_ITEM } from '../constants'
 import { getCiteKey } from '../features/items-table/create-columns'
 import { ZotData, ZotItem } from '../interfaces'
 
@@ -42,7 +43,7 @@ export const mapItems = async (
     item.inGraph = !!page
 
     // Map libraryLink
-    item.libraryLink = `zotero://select/library/items?itemKey=${item.key}`
+    item.libraryLink = `${ZOTERO_LIBRARY_ITEM}${item.key}`
 
     // Map attachment
     for (const attachment of attachments) {
