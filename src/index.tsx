@@ -102,6 +102,7 @@ const main = async () => {
       key: '<% key %>',
       language: '<% language %>',
       libraryCatalog: '<% libraryCatalog %>',
+      libraryLink: '<% libraryLink %>',
       pages: '<% pages %>',
       parentItem: '<% parentItem %>',
       publicationTitle: '<% publicationTitle %>',

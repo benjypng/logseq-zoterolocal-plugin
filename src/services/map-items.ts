@@ -23,6 +23,7 @@ export const mapItems = async (
     attachments: [],
     citeKey: '',
     inGraph: false,
+    libraryLink: '',
     notes: [],
   }))
 
@@ -39,6 +40,9 @@ export const mapItems = async (
 
     const page = await logseq.Editor.getPage(pageToCheck)
     item.inGraph = !!page
+
+    // Map libraryLink
+    item.libraryLink = `zotero://select/library/items?itemKey=${item.key}`
 
     // Map attachment
     for (const attachment of attachments) {

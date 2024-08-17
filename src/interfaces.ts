@@ -132,13 +132,6 @@ export interface ZotCollection {
 }
 // DO NOT TOUCH ABOVE SECTION //
 
-export interface ZotItemForTable extends ZotItem {
-  data: ZotItem['data'] & {
-    citeKey: string
-    inGraph: boolean
-  }
-}
-
 export interface ZotData {
   abstractNote?: string
   accessDate?: string
@@ -182,6 +175,7 @@ export interface ZotData {
   attachments: AttachmentItem[]
   citeKey: string
   inGraph: boolean
+  libraryLink: string
   notes: NoteItem[]
 }
 
@@ -229,6 +223,7 @@ export interface GlossaryObj {
   key: string
   language: string
   libraryCatalog: string
+  libraryLink: string
   notes: string
   pages: string
   parentItem: string
