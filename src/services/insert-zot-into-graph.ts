@@ -56,7 +56,7 @@ export const insertZotIntoGraph = async (
 
   const existingPage = await logseq.Editor.getPage(pageName)
   if (!existingPage) {
-    //  //Create page
+    // Create page
     await logseq.Editor.createPage(
       pageName,
       {},
@@ -77,6 +77,7 @@ export const insertZotIntoGraph = async (
     const result: IBatchBlock[] = []
     await handleContentBlocks(contentBlockArr, zotItem, result)
     await logseq.Editor.insertBatchBlock(propsBlock!.uuid, result)
+
     // Insert page reference onto where the slash command came from
     // If insert all, then the below is ignored
     if (flag == 'page') {
@@ -87,6 +88,14 @@ export const insertZotIntoGraph = async (
     } else {
       await logseq.Editor.updateBlock(blockOrPageIdentity, `[[${pageName}]]`)
     }
+  }
+  if (existingPage) {
+    // Handles existing page
+    // Removes the existing properties and re-inserts it
+    const pbt = await logseq.Editor.getPageBlocksTree(existingPage)
+    if (!pbt[0]) return
+    await logseq.Editor.removeBlock(pbt[0].content)
+    await logseq.Editor.prependBlockInPage(existingPage, pageProps)
   }
 
   logseq.UI.closeMsg(msgId)
