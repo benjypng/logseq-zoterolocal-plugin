@@ -1,6 +1,5 @@
 import './styles/bg.css'
 import '@mantine/core/styles.css'
-import 'inter-ui/inter.css'
 
 import { createTheme, MantineProvider } from '@mantine/core'
 import { QueryClient, QueryClientProvider } from 'react-query'
@@ -36,7 +35,6 @@ export const ZotContainer = ({
         '#0d89a0',
       ],
     },
-    fontFamily: 'Inter',
   })
 
   return (
