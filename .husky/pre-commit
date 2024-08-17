@@ -1,3 +1,2 @@
 npx eslint . --fix
 tsc
-npx vite build
