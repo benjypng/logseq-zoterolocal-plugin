@@ -1,13 +1,12 @@
-import { Container, Group, Space, Title } from '@mantine/core'
+import { Container, Group, Loader, Space, Text, Title } from '@mantine/core'
 import { ShieldAlert, SquareX } from 'lucide-react'
 import { useCallback } from 'react'
 
 import { DataTable } from '../../components/DataTable'
-import { LoadingSpinner } from '../../components/LoadingSpinner'
 import { useZotItems } from '../../hooks/use-items'
 
 export const ItemsTable = () => {
-  const { data: zotItems, isSuccess, error, isFetching } = useZotItems()
+  const { data: zotItems, isSuccess, error, isLoading } = useZotItems()
 
   const handleClose = useCallback(() => {
     logseq.hideMainUI()
@@ -26,11 +25,13 @@ export const ItemsTable = () => {
       </Group>
       <Space h="1rem" />
       <>
-        {isFetching && (
-          <Group className="zot-loading-error">
-            <LoadingSpinner size="2rem" color="teal" /> Fetching data from
-            Zotero 7... <br />
-            It may take up to 5 seconds for larger libraries.
+        {isLoading && (
+          <Group className="zot-loading-error" gap="1rem">
+            <Loader type="bars" size={20} />
+            <Text size="sm">
+              Fetching data from Zotero 7... <br />
+              It may take up to 5 seconds for larger libraries.
+            </Text>
           </Group>
         )}
         {error && (

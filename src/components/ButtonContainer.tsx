@@ -1,12 +1,4 @@
-import {
-  Button,
-  Checkbox,
-  Group,
-  Select,
-  Space,
-  Stack,
-  Tooltip,
-} from '@mantine/core'
+import { Button, Checkbox, Group, Select, Stack, Tooltip } from '@mantine/core'
 import { Table } from '@tanstack/react-table'
 import {
   Ban,
@@ -59,6 +51,7 @@ export const ButtonContainer = ({
               label={column.id}
               checked={column.getIsVisible()}
               onChange={column.getToggleVisibilityHandler()}
+              size="xs"
             />
           )}
         />
@@ -69,22 +62,30 @@ export const ButtonContainer = ({
   return (
     <Stack gap="sm">
       <Group>
-        <Button onClick={() => setShowColumnChooser(!showColumnChooser)}>
+        <Button
+          size="xs"
+          onClick={() => setShowColumnChooser(!showColumnChooser)}
+        >
           {showColumnChooser ? 'Close' : 'Choose Columns'}
         </Button>
         {showColumnChooser && <ColumnVisibilityChooser />}
       </Group>
 
-      <Space h="1rem" />
-
       <Group gap={2}>
         {userConfirmation && (
-          <Button w="11rem" color="red" radius="sm" onClick={insertAll}>
+          <Button
+            size="xs"
+            w="11rem"
+            color="red"
+            radius="sm"
+            onClick={insertAll}
+          >
             Click to Proceed (re-index is recommended after completion)
           </Button>
         )}
         {userConfirmation && (
           <Button
+            size="xs"
             color="gray"
             radius="sm"
             onClick={() => setUserConfirmation(false)}
@@ -97,6 +98,7 @@ export const ButtonContainer = ({
             label={'There may be an issue inserting more than 100 items'}
           >
             <Button
+              size="xs"
               w="11rem"
               color="blue"
               radius="sm"
@@ -110,24 +112,28 @@ export const ButtonContainer = ({
         {!userConfirmation && (
           <>
             <Button
+              size="xs"
               onClick={() => table.firstPage()}
               disabled={!table.getCanPreviousPage()}
             >
               <ChevronFirst size="1rem" />
             </Button>
             <Button
+              size="xs"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
               <ChevronLeft size="1rem" />
             </Button>
             <Button
+              size="xs"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
               <ChevronRight size="1rem" />
             </Button>
             <Button
+              size="xs"
               onClick={() => table.lastPage()}
               disabled={!table.getCanNextPage()}
             >
@@ -139,13 +145,14 @@ export const ButtonContainer = ({
               name="pageSize"
               render={({ field }) => (
                 <Select
+                  size="xs"
                   {...field}
                   data={[
-                    { value: '10', label: '10' },
-                    { value: '20', label: '20' },
-                    { value: '30', label: '30' },
-                    { value: '50', label: '50' },
-                    { value: '100', label: '100' },
+                    { value: '10', label: '10 results' },
+                    { value: '20', label: '20 results' },
+                    { value: '30', label: '30 results' },
+                    { value: '50', label: '50 results' },
+                    { value: '100', label: '100 results' },
                   ]}
                 />
               )}
