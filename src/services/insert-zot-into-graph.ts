@@ -75,6 +75,7 @@ export const insertZotIntoGraph = async (
     // First block is the properties, which has already been inserted
     const contentBlockArr = template.slice(1) as BlockEntity[]
     const result: IBatchBlock[] = []
+
     await handleContentBlocks(contentBlockArr, zotItem, result)
     await logseq.Editor.insertBatchBlock(propsBlock!.uuid, result)
     // Insert page reference onto where the slash command came from
