@@ -1,18 +1,20 @@
 import axios, { AxiosError } from 'axios'
 
-import { COLLECTIONS_URL, ITEM_URL } from '../constants'
-import { CollectionItem, ZotCollection } from '../interfaces'
+import { COLLECTIONS_URL, ITEM_URL, ZOT_URL } from '../constants'
+import { CollectionItem, ZotCollection, ZotItem } from '../interfaces'
 import { mapItems } from './map-items'
+import wretch from 'wretch'
+import QueryAddon from 'wretch/addons/queryString'
+
+const api = wretch().url(ZOT_URL).headers({
+  'Content-Type': 'application/json',
+  'x-zotero-connector-api-version': '3.0',
+  'zotero-allowed-request': 'true',
+})
 
 export const testZotConnection = async () => {
   try {
-    const response = await axios.head(ITEM_URL, {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-zotero-connector-api-version': '3.0',
-        'zotero-allowed-request': 'true',
-      },
-    })
+    const response = await api.url('/items').head().res()
     return {
       message: '✅ Connection to Zotero is working',
       code: response.status,
@@ -41,6 +43,7 @@ export const getZotItems = async () => {
         direction: 'desc',
       },
     })
+
     const allNotesResponse = await axios({
       method: 'get',
       url: ITEM_URL,
@@ -76,49 +79,38 @@ export const getZotItemsFromQueryString = async (queryString: string) => {
   const startTime = performance.now()
 
   try {
-    const zotParentResultsResponse = await axios({
-      method: 'get',
-      url: `${ITEM_URL}/top`,
-      headers: {
-        'Content-Type': 'application/json',
-        'x-zotero-connector-api-version': '3.0',
-        'zotero-allowed-request': 'true',
-      },
-      params: {
+    const zotParentResultsFromSearch: ZotItem[] = await api
+      .url('/items/top')
+      .addon(QueryAddon)
+      .query({
         sort: 'dateAdded',
         direction: 'desc',
         q: queryString,
         qmode: 'everything',
-      },
-    })
+      })
+      .get()
+      .json()
 
-    const noteAttachmentResponse = await axios({
-      method: 'get',
-      url: ITEM_URL,
-      headers: {
-        'Content-Type': 'application/json',
-        'x-zotero-connector-api-version': '3.0',
-        'zotero-allowed-request': 'true',
-      },
-      params: {
+    const notesAndAttachments: ZotItem[] = await api
+      .url('/items')
+      .addon(QueryAddon)
+      .query({
         itemType: 'note||attachment',
-      },
-      paramsSerializer: {
-        serialize: (params) => {
-          return Object.entries(params)
-            .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-            .join('&')
-        },
-      },
-    })
+      })
+      .get()
+      .json()
 
     const zotDataArr = await mapItems(
-      zotParentResultsResponse.data,
-      noteAttachmentResponse.data,
+      zotParentResultsFromSearch,
+      notesAndAttachments,
     )
 
     const endTime = performance.now()
-    console.log('Time taken for query: ', endTime - startTime, 'ms')
+    console.log(
+      'logseq-zoterolocal-plugin: Time taken for query: ',
+      endTime - startTime,
+      'ms',
+    )
 
     return zotDataArr
   } catch (error) {
