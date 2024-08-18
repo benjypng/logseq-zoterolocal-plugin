@@ -2,12 +2,12 @@ import { useQuery } from 'react-query'
 
 import { ZotData } from '../interfaces'
 import {
-  getZotItems,
   getZotItemsFromQueryString,
+  getZotItemsWithoutQueryString,
 } from '../services/get-zot-items'
 
 export const useZotItems = () => {
-  return useQuery<ZotData[], Error>('zotItems', getZotItems, {
+  return useQuery<ZotData[], Error>('zotItems', getZotItemsWithoutQueryString, {
     retry: false,
     onError: (error: Error) => {
       console.error('Error fetching Zotero items:', error)
