@@ -73,17 +73,18 @@ ${(error as AxiosError).message}`,
 }
 
 export const getZotItemsFromQueryString = async (queryString: string) => {
+  const startTime = performance.now()
+
   try {
-    const zotItemsResponse = await axios({
+    const zotParentResultsResponse = await axios({
       method: 'get',
-      url: ITEM_URL,
+      url: `${ITEM_URL}/top`,
       headers: {
         'Content-Type': 'application/json',
         'x-zotero-connector-api-version': '3.0',
         'zotero-allowed-request': 'true',
       },
       params: {
-        limit: 500,
         sort: 'dateAdded',
         direction: 'desc',
         q: queryString,
@@ -91,7 +92,7 @@ export const getZotItemsFromQueryString = async (queryString: string) => {
       },
     })
 
-    const allNotesResponse = await axios({
+    const noteAttachmentResponse = await axios({
       method: 'get',
       url: ITEM_URL,
       headers: {
@@ -100,17 +101,25 @@ export const getZotItemsFromQueryString = async (queryString: string) => {
         'zotero-allowed-request': 'true',
       },
       params: {
-        limit: 500,
-        itemType: 'note',
-        sort: 'dateAdded',
-        direction: 'desc',
+        itemType: 'note||attachment',
+      },
+      paramsSerializer: {
+        serialize: (params) => {
+          return Object.entries(params)
+            .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+            .join('&')
+        },
       },
     })
 
     const zotDataArr = await mapItems(
-      zotItemsResponse.data,
-      allNotesResponse.data,
+      zotParentResultsResponse.data,
+      noteAttachmentResponse.data,
     )
+
+    const endTime = performance.now()
+    console.log('Time taken for query: ', endTime - startTime, 'ms')
+
     return zotDataArr
   } catch (error) {
     logseq.UI.showMsg(

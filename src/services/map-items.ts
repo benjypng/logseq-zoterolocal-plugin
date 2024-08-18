@@ -3,23 +3,10 @@ import { getCiteKey } from '../features/items-table/create-columns'
 import { ZotData, ZotItem } from '../interfaces'
 
 export const mapItems = async (
-  allZotItems: ZotItem[],
-  notes: ZotItem[],
+  zotParentItems: ZotItem[],
+  noteAttachmentItems: ZotItem[],
 ): Promise<ZotData[]> => {
-  // Note: When used to retrieve query items, notes are actually not retrieved and does not appear in the ZotItem[]
-  const parentItems: ZotItem[] = []
-  const attachments: ZotItem[] = []
-
-  // Map attachment (see note above)
-  for (const item of allZotItems) {
-    if (!item.data.parentItem) {
-      parentItems.push(item)
-    } else {
-      attachments.push(item)
-    }
-  }
-
-  const parentZotData: ZotData[] = parentItems.map((item) => ({
+  const parentZotData: ZotData[] = zotParentItems.map((item) => ({
     ...item.data,
     attachments: [],
     citeKey: '',
@@ -46,25 +33,23 @@ export const mapItems = async (
     item.libraryLink = `${ZOTERO_LIBRARY_ITEM}${item.key}`
 
     // Map attachment
-    for (const attachment of attachments) {
+    for (const noteAttachment of noteAttachmentItems) {
       // itemType: 'attachment'
-
       if (
-        attachment.data.parentItem === item.key &&
-        attachment.links.enclosure
+        noteAttachment.data.itemType === 'attachment' &&
+        noteAttachment.data.parentItem === item.key &&
+        noteAttachment.links.enclosure
       ) {
-        item.attachments.push(attachment.links.enclosure)
+        item.attachments.push(noteAttachment.links.enclosure)
       }
-    }
 
-    for (const note of notes) {
       // itemType: 'note'
       if (
-        note.data.parentItem === item.key &&
-        note.data.itemType === 'note' &&
-        note.data.note
+        noteAttachment.data.parentItem === item.key &&
+        noteAttachment.data.itemType === 'note' &&
+        noteAttachment.data.note
       ) {
-        item.notes.push({ note: note.data.note })
+        item.notes.push({ note: noteAttachment.data.note })
       }
     }
   }

@@ -53,8 +53,8 @@ export const replaceTemplateWithValues = async (
       for (const attachment of value) {
         const str = await replaceTemplateWithValues(
           attachment.type === 'application/pdf'
-            ? `![${encodeURIComponent(attachment.title)}](${encodeURIComponent(attachment.href)})`
-            : `[${encodeURIComponent(attachment.title)}](${encodeURIComponent(attachment.href)})`,
+            ? `![${encodeURIComponent(attachment.title)}](${attachment.href})`
+            : `[${encodeURIComponent(attachment.title)}](${attachment.href})`,
           attachment,
         )
         attachmentArr.push(str)
