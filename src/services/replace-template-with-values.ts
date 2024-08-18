@@ -73,7 +73,9 @@ export const replaceTemplateWithValues = async (
     } else if (key === 'notes') {
       result = result.replace(
         placeholder,
-        value.map((note: NoteItem) => note.note).join('||||||'),
+        value.length > 1
+          ? value.map((note: NoteItem) => note.note).join('||||||') // handle items with > 1 note
+          : value[0].note + '||||||', // handles items with only 1 note
       )
     } else if (key === 'tags') {
       const tagsArr = []
