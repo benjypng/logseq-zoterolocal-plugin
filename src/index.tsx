@@ -24,9 +24,9 @@ const main = async () => {
   const validSettings = isValidSettings()
   if (!validSettings) return
 
-  const el = document.getElementById('app')
-  if (!el) return
-  const root = createRoot(el)
+  const zoteroEl = document.createElement('div')
+  document.getElementById('app')!.appendChild(zoteroEl)
+  const root = createRoot(zoteroEl)
 
   ///////////////////////////////////
   // INSERT FULL DOCUMENT IN GRAPH //
