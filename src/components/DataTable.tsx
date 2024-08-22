@@ -68,7 +68,7 @@ export const DataTable = memo(({ data }: TableProps) => {
 
     try {
       await Promise.all(
-        data.map((item) => insertZotIntoGraph(item, page.name, 'page')),
+        data.map((item) => insertZotIntoGraph(item, page.name, 'table')),
       )
     } catch (error) {
       logseq.UI.showMsg(

@@ -8,7 +8,7 @@ import { replaceTemplateWithValues } from './replace-template-with-values'
 export const insertZotIntoGraph = async (
   zotItem: ZotData,
   blockOrPageIdentity: string,
-  flag?: 'page',
+  flag?: 'full' | 'table' | 'citation',
 ) => {
   const msgId = await logseq.UI.showMsg('Inserting into graph...', 'warning')
 
@@ -80,14 +80,9 @@ export const insertZotIntoGraph = async (
     await logseq.Editor.insertBatchBlock(propsBlock!.uuid, result)
     // Insert page reference onto where the slash command came from
     // If insert all, then the below is ignored
-    if (flag == 'page') {
-      await logseq.Editor.appendBlockInPage(
-        blockOrPageIdentity,
-        `[[${pageName}]]`,
-      )
-    } else {
-      await logseq.Editor.updateBlock(blockOrPageIdentity, `[[${pageName}]]`)
-    }
+  }
+  if (flag === 'full' || flag === 'citation') {
+    await logseq.Editor.updateBlock(blockOrPageIdentity, `[[${pageName}]]`)
   }
 
   logseq.UI.closeMsg(msgId)
