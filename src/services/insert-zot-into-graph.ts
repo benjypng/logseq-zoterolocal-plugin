@@ -5,11 +5,7 @@ import { getZotCollections } from './get-zot-items'
 import { handleContentBlocks } from './handle-content-blocks'
 import { replaceTemplateWithValues } from './replace-template-with-values'
 
-export const insertZotIntoGraph = async (
-  zotItem: ZotData,
-  blockOrPageIdentity: string,
-  flag?: 'full' | 'table' | 'citation',
-) => {
+export const insertZotIntoGraph = async (zotItem: ZotData) => {
   const msgId = await logseq.UI.showMsg('Inserting into graph...', 'warning')
 
   const templateName = logseq.settings!.zotTemplate as string
@@ -48,11 +44,21 @@ export const insertZotIntoGraph = async (
     collections,
   )
 
-  const pageName = await replaceTemplateWithValues(
-    logseq.settings!.pagenameTemplate as string,
-    zotItem,
-  )
-  if (!pageName) throw new Error('Unable to derive page name')
+  // Can only be <% title %> or <% citeKey %>. Latter may not be 'N/A'
+  if (
+    (logseq.settings!.pagenameTemplate as string).includes('<% citeKey %>') &&
+    zotItem.citeKey === 'N/A'
+  ) {
+    logseq.UI.showMsg(
+      'Cite key is not configured properly in BetterBibTex',
+      'error',
+    )
+    return
+  }
+  const pageName = (logseq.settings!.pagenameTemplate as string)
+    .replace('<% title %>', zotItem.title)
+    .replace('<% citeKey %>', zotItem.citeKey)
+    .trim()
 
   const existingPage = await logseq.Editor.getPage(pageName)
   if (!existingPage) {
@@ -81,11 +87,9 @@ export const insertZotIntoGraph = async (
     // Insert page reference onto where the slash command came from
     // If insert all, then the below is ignored
   }
-  if (flag === 'full' || flag === 'citation') {
-    await logseq.Editor.updateBlock(blockOrPageIdentity, `[[${pageName}]]`)
-  }
 
   logseq.UI.closeMsg(msgId)
   logseq.UI.showMsg('Completed!', 'success')
   logseq.hideMainUI()
+  return pageName
 }

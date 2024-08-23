@@ -35,23 +35,28 @@ export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
   const { title, creators, itemType, citeKey, date } = item
 
   const insertCitation = useCallback(async () => {
-    if (!citeKey) {
-      logseq.UI.showMsg('No citation key found', 'error')
+    if (!citeKey || citeKey === 'N/A') {
+      logseq.UI.showMsg(
+        'Citation key not configured properly in Better BibTex',
+        'error',
+      )
       return
     }
     const templateStr = (logseq.settings!.citekeyTemplate as string).replace(
       `<% citeKey %>`,
       citeKey,
     )
-    await logseq.Editor.updateBlock(uuid, templateStr)
     reset()
     logseq.hideMainUI()
+    await logseq.Editor.updateBlock(uuid, templateStr)
   }, [item])
 
   const insertZot = useCallback(async () => {
-    await insertZotIntoGraph(item, uuid)
+    const pageName = await insertZotIntoGraph(item)
     reset()
     logseq.hideMainUI()
+    if (!pageName) return
+    await logseq.Editor.updateBlock(uuid, `[[${pageName}]]`)
   }, [item])
 
   const handleClick = () => {
@@ -85,6 +90,7 @@ export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
               />
             ))}
         </Flex>
+        {citeKey && <Text size="xs">Cite Key: {citeKey}</Text>}
       </Flex>
       <Flex p="lg" w="25%" direction="column" align="flex-end">
         <Text size="sm">{date}</Text>

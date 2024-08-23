@@ -9,13 +9,13 @@ import {
 } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { ArrowUpAZ, ArrowUpZA } from 'lucide-react'
-import { memo, useMemo, useState } from 'react'
+import { memo, useState } from 'react'
 
+import { columns } from '../features/items-table/Columns'
 import { ZotData } from '../interfaces'
 import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
 import tdStyle from '../styles/Td.module.css'
 import { ButtonContainer } from './ButtonContainer'
-import { Columns } from './create-columns'
 
 interface TableProps {
   data: ZotData[]
@@ -26,8 +26,6 @@ export const DataTable = memo(({ data }: TableProps) => {
   const [columnVisibility, setColumnVisibility] = useState<
     Record<string, boolean>
   >(logseq.settings!.columnVisibility as Record<string, boolean>)
-
-  const columns = useMemo(() => Columns, [data])
 
   const table = useReactTable({
     data,
@@ -67,9 +65,7 @@ export const DataTable = memo(({ data }: TableProps) => {
     }
 
     try {
-      await Promise.all(
-        data.map((item) => insertZotIntoGraph(item, page.name, 'table')),
-      )
+      await Promise.all(data.map((item) => insertZotIntoGraph(item)))
     } catch (error) {
       logseq.UI.showMsg(
         'Error inserting items. You may wish to go to your file explorer to check which ZotItems have been inserted',

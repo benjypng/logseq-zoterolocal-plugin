@@ -1,7 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { memo } from 'react'
 
-import { CreatorItem, ZotItem } from '../../interfaces'
+import { CreatorItem, ZotData } from '../../interfaces'
 
 export const getCiteKey = (extra: string | undefined) => {
   if (!extra) return
@@ -19,61 +19,61 @@ export const CreatorsCell = memo(({ value }: { value: CreatorItem[] }) => {
     .join(', ')
 })
 
-export const columns: ColumnDef<ZotItem>[] = [
+export const columns: ColumnDef<ZotData>[] = [
   {
     header: 'Title',
-    accessorFn: (row) => row.data.title || 'N/A',
+    accessorFn: (row) => row.title || 'N/A',
   },
   {
     header: 'Cite Key',
     id: 'citeKey',
-    accessorFn: (row) => getCiteKey(row.data.extra) ?? 'N/A',
+    accessorFn: (row) => getCiteKey(row.extra) ?? 'N/A',
   },
   {
     header: 'Creators',
-    accessorFn: (row) => row.data.creators || [],
+    accessorFn: (row) => row.creators || [],
     cell: ({ getValue }) =>
       getValue() ? <CreatorsCell value={getValue() as CreatorItem[]} /> : 'N/A',
   },
   {
     header: 'Item Type',
-    accessorFn: (row) => row.data.itemType || 'N/A',
+    accessorFn: (row) => row.itemType || 'N/A',
   },
   {
     header: 'Key',
-    accessorFn: (row) => row.data.key || 'N/A',
+    accessorFn: (row) => row.key || 'N/A',
   },
   {
     header: 'Short Title',
-    accessorFn: (row) => row.data.shortTitle || 'N/A',
+    accessorFn: (row) => row.shortTitle || 'N/A',
   },
   {
     header: 'Access Date',
-    accessorFn: (row) => row.data.accessDate || 'N/A',
+    accessorFn: (row) => row.accessDate || 'N/A',
   },
   {
     header: 'Date Added',
-    accessorFn: (row) => row.data.dateAdded || 'N/A',
+    accessorFn: (row) => row.dateAdded || 'N/A',
   },
   {
     header: 'Date Modified',
-    accessorFn: (row) => row.data.dateModified || 'N/A',
+    accessorFn: (row) => row.dateModified || 'N/A',
   },
   {
     header: 'Date',
-    accessorFn: (row) => row.data.date || 'N/A',
+    accessorFn: (row) => row.date || 'N/A',
   },
   {
     header: 'Language',
-    accessorFn: (row) => row.data.language || 'N/A',
+    accessorFn: (row) => row.language || 'N/A',
   },
   {
     header: 'Library Catalog',
-    accessorFn: (row) => row.data.libraryCatalog || 'N/A',
+    accessorFn: (row) => row.libraryCatalog || 'N/A',
   },
   {
     header: 'URL',
-    accessorFn: (row) => row.data.url || 'N/A',
+    accessorFn: (row) => row.url || 'N/A',
   },
   {
     header: 'Version',
