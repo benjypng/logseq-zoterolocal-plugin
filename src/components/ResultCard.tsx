@@ -34,13 +34,11 @@ const Creators = ({
 export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
   const { title, creators, itemType, citeKey, date } = item
 
-  const handleClick = () => {
-    if (flag === 'citation') insertCitation()
-    if (flag === 'full') insertZot()
-  }
-
   const insertCitation = useCallback(async () => {
-    if (!citeKey) logseq.UI.showMsg('No citation key found', 'error')
+    if (!citeKey) {
+      logseq.UI.showMsg('No citation key found', 'error')
+      return
+    }
     const templateStr = (logseq.settings!.citekeyTemplate as string).replace(
       `<% citeKey %>`,
       citeKey,
@@ -55,6 +53,11 @@ export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
     reset()
     logseq.hideMainUI()
   }, [item])
+
+  const handleClick = () => {
+    if (flag === 'citation') insertCitation()
+    if (flag === 'full') insertZot()
+  }
 
   return (
     <Flex

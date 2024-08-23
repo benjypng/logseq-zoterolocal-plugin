@@ -12,18 +12,28 @@ const api = wretch().url(ZOT_URL).headers({
   'zotero-allowed-request': 'true',
 })
 
-export const testZotConnection = async () => {
+export const testZotConnection = async (): Promise<{
+  code: 'success' | 'error'
+  msg: string
+}> => {
   try {
-    const response = await api.url('/items').head().res()
-    return {
-      message: '✅ Connection to Zotero is working',
-      code: response.status,
-    }
+    await api.url('/items').addon(QueryAddon).query({ limit: 1 }).get().res()
+    return { code: 'success', msg: '✅ Connection to Zotero is working' }
   } catch (error) {
+    // If error.status is undefined, it means Zotero is not open
+
+    const wretchError = error as WretchError
+    logseq.UI.showMsg(
+      `❌ Connection error
+Status: ${wretchError.status}
+Response: ${wretchError.message}`,
+      'error',
+    )
     return {
-      data: error,
-      message:
-        '❌ Unable to retrieve items from Zotero. Please ensure that you are using Zotero 7 (and above), and that the app is running.',
+      code: 'error',
+      msg: `❌ Connection error
+Status: ${wretchError.status}
+Response: ${wretchError.message}`,
     }
   }
 }

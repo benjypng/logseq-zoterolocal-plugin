@@ -19,7 +19,7 @@ const main = async () => {
 
   // Get initial items
   const response = await testZotConnection()
-  handleSettings(response.message, response.code)
+  handleSettings(response)
 
   const validSettings = isValidSettings()
   if (!validSettings) return
