@@ -11,7 +11,7 @@
   },
   "scripts": {
     "dev": "npx vite",
-    "build": "npx eslint . && npx tsc && npx vite build",
+    "build": "npx eslint . --fix && npx tsc && npx vite build",
     "preview": "npx vite preview",
     "prepare": "husky"
   },

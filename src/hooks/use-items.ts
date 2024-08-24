@@ -9,6 +9,7 @@ import {
 export const useZotItems = () => {
   return useQuery<ZotData[], Error>('zotItems', getZotItemsWithoutQueryString, {
     retry: false,
+    refetchOnWindowFocus: false,
     onError: (error: Error) => {
       console.error('Error fetching Zotero items:', error)
     },
@@ -21,6 +22,7 @@ export const useZotItem = (queryString: string, options = {}) => {
     () => getZotItemsFromQueryString(queryString),
     {
       retry: false,
+      refetchOnWindowFocus: false,
       onError: (error: Error) => {
         console.error('Error fetching Zotero items:', error)
       },
