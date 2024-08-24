@@ -51,12 +51,20 @@ export const replaceTemplateWithValues = async (
     } else if (key === 'attachments') {
       const attachmentArr = []
       for (const attachment of value) {
-        const str = await replaceTemplateWithValues(
-          attachment.type === 'application/pdf'
-            ? `![${encodeURIComponent(attachment.title)}](${attachment.href})`
-            : `[${encodeURIComponent(attachment.title)}](${attachment.href})`,
-          attachment,
-        )
+        let str
+        if (attachment.linkMode === 'linked_url') {
+          str = `[${encodeURIComponent(attachment.title)}](${attachment.url})`
+        }
+
+        if (attachment.linkMode === 'imported_file') {
+          str = await replaceTemplateWithValues(
+            attachment.type === 'application/pdf'
+              ? `![${encodeURIComponent(attachment.title)}](${attachment.href})`
+              : `[${encodeURIComponent(attachment.title)}](${attachment.href})`,
+            attachment,
+          )
+        }
+
         attachmentArr.push(str)
       }
       result = result.replace(placeholder, attachmentArr.join(', '))

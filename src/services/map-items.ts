@@ -35,12 +35,32 @@ export const mapItems = async (
     // Map attachment
     for (const noteAttachment of noteAttachmentItems) {
       // itemType: 'attachment'
+
+      // linkMode: 'imported_file'
       if (
         noteAttachment.data.itemType === 'attachment' &&
         noteAttachment.data.parentItem === item.key &&
+        noteAttachment.data.linkMode === 'imported_file' &&
         noteAttachment.links.enclosure
       ) {
-        item.attachments.push(noteAttachment.links.enclosure)
+        item.attachments.push({
+          linkMode: 'imported_file',
+          ...noteAttachment.links.enclosure,
+        })
+      }
+
+      // linkMode: 'linked_url'
+      if (
+        noteAttachment.data.itemType === 'attachment' &&
+        noteAttachment.data.parentItem === item.key &&
+        noteAttachment.data.linkMode === 'linked_url' &&
+        noteAttachment.data.url
+      ) {
+        item.attachments.push({
+          linkMode: 'linked_url',
+          title: noteAttachment.data.title,
+          url: noteAttachment.data.url,
+        })
       }
 
       // itemType: 'note'

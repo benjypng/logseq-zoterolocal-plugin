@@ -179,12 +179,25 @@ export interface ZotData {
   notes: NoteItem[]
 }
 
-export interface AttachmentItem {
+export interface URLItem {
+  title: string
+  url: string
+}
+
+export interface FileItem {
   href: string
   length: number
   title: string
   type: string
 }
+
+export type AttachmentItem =
+  | ({
+      linkMode: 'linked_url'
+    } & URLItem)
+  | ({
+      linkMode: 'imported_file'
+    } & FileItem)
 
 export interface CollectionItem {
   key: string
