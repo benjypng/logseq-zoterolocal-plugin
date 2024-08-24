@@ -109,7 +109,7 @@ const main = async () => {
       relations: '<% relations %>',
       shortTitle: '<% shortTitle %>',
       tags: '<% tags %>',
-      title: '<% title %>',
+      itemTitle: '<% title %>',
       url: '<% url %>',
       version: '<% version %>',
       volume: '<% volume %>',

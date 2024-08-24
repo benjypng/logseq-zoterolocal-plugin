@@ -244,7 +244,7 @@ export interface GlossaryObj {
   relations: string
   shortTitle: string
   tags: string
-  title: string
+  itemTitle: string
   url: string
   version: string
   volume: string
