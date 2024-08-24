@@ -1,2 +1,4 @@
+echo 'Running npx eslint . --fix'
 npx eslint . --fix
-tsc
+echo 'Running tsc'
+npx tsc
