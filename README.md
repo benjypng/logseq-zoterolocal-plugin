@@ -55,6 +55,7 @@ Connect locally to Zotero 7 (and above) and pull your items into Logseq without 
   ISBN:: <% ISBN %>
   ISSN:: <% ISSN %>
   issue:: <% issue %>
+  itemTitle:: <% title %>
   itemType:: <% itemType %>
   journalAbbreviation:: <% journalAbbreviation %>
   key:: <% key %>
@@ -67,7 +68,6 @@ Connect locally to Zotero 7 (and above) and pull your items into Logseq without 
   relations:: <% relations %>
   shortTitle:: <% shortTitle %>
   tags:: <% tags %>
-  title:: <% title %>
   url:: <% url %>
   version:: <% version %>
   volume:: <% volume %>
