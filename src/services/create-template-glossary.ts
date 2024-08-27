@@ -18,6 +18,17 @@ ${key}:: ${value}`),
   })
   if (!templateRootBlk) return
 
+  const abstractBlk = await logseq.Editor.insertBlock(
+    templateRootBlk.uuid,
+    'Abstract',
+    { sibling: true },
+  )
+  if (!abstractBlk) return
+
+  await logseq.Editor.insertBlock(abstractBlk.uuid, '<% abstractNote %>', {
+    sibling: false,
+  })
+
   const attachmentsBlk = await logseq.Editor.insertBlock(
     templateRootBlk.uuid,
     'Attachments',
