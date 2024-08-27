@@ -18,9 +18,13 @@ export const insertZotIntoGraph = async (zotItem: ZotData) => {
   }
 
   const templateRoot = await logseq.App.getTemplate(templateName)
+  if (!templateRoot) {
+    logseq.UI.showMsg(`Unable to locate template`, 'error')
+    return
+  }
   if (!templateRoot || templateRoot.properties!.templateIncludingParent) {
     logseq.UI.showMsg(
-      `Ensure that the template property 'template-including-parent' is set to false`,
+      `Ensure that the template property 'template-including-parent' is set to false or that your template block has its properties set`,
       'error',
     )
     return

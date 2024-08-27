@@ -119,8 +119,8 @@ const main = async () => {
     await logseq.Editor.updateBlock(
       e.uuid,
       `Zotero Template
-    template:: Zotero Template
-    template-including-parent:: false`,
+template:: Zotero Template
+template-including-parent:: false`,
     )
 
     await createTemplateGlossary(glossaryObj, e.uuid)
