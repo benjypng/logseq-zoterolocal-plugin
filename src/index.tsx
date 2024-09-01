@@ -116,11 +116,18 @@ const main = async () => {
       volume: '<% volume %>',
     }
 
-    await logseq.Editor.updateBlock(
+    await logseq.Editor.updateBlock(e.uuid, `Zotero Template`)
+
+    // Add template props
+    await logseq.Editor.upsertBlockProperty(
       e.uuid,
-      `Zotero Template
-template:: Zotero Template
-template-including-parent:: false`,
+      'template',
+      'Zotero Template',
+    )
+    await logseq.Editor.upsertBlockProperty(
+      e.uuid,
+      'template-including-parent',
+      false,
     )
 
     await createTemplateGlossary(glossaryObj, e.uuid)
