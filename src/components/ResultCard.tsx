@@ -46,9 +46,10 @@ export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
       `<% citeKey %>`,
       citeKey,
     )
+    await logseq.Editor.insertAtEditingCursor(templateStr)
+
     reset()
     logseq.hideMainUI()
-    await logseq.Editor.updateBlock(uuid, templateStr)
   }, [item])
 
   const insertZot = useCallback(async () => {
@@ -56,7 +57,8 @@ export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
     reset()
     logseq.hideMainUI()
     if (!pageName) return
-    await logseq.Editor.updateBlock(uuid, `[[${pageName}]]`)
+    console.log(uuid)
+    await logseq.Editor.insertAtEditingCursor(`[[${pageName}]]`)
   }, [item])
 
   const handleClick = () => {
