@@ -24,7 +24,8 @@ export const insertZotIntoGraph = async (zotItem: ZotData) => {
   }
   if (!templateRoot.properties!.templateIncludingParent) {
     logseq.UI.showMsg(
-      `Ensure that the template property 'template-including-parent' is set to false or that your template block has its properties set`,
+      `Ensure that the template property 'template-including-parent' is set to false or that your template block has its properties set
+Ref: ${templateRoot.properties}`,
       'error',
     )
     return
