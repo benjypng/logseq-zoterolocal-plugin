@@ -57,8 +57,9 @@ export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
     reset()
     logseq.hideMainUI()
     if (!pageName) return
-    console.log(uuid)
-    await logseq.Editor.insertAtEditingCursor(`[[${pageName}]]`)
+
+    const content = await logseq.Editor.getEditingBlockContent()
+    await logseq.Editor.updateBlock(uuid, `${content} [[${pageName}]]`)
   }, [item])
 
   const handleClick = () => {

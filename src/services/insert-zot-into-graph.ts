@@ -66,7 +66,7 @@ export const insertZotIntoGraph = async (zotItem: ZotData) => {
 
   const existingPage = await logseq.Editor.getPage(pageName)
   if (!existingPage) {
-    //  //Create page
+    //Create page
     await logseq.Editor.createPage(
       pageName,
       {},
@@ -88,8 +88,6 @@ export const insertZotIntoGraph = async (zotItem: ZotData) => {
 
     await handleContentBlocks(contentBlockArr, zotItem, result)
     await logseq.Editor.insertBatchBlock(propsBlock!.uuid, result)
-    // Insert page reference onto where the slash command came from
-    // If insert all, then the below is ignored
   }
 
   logseq.UI.closeMsg(msgId)
