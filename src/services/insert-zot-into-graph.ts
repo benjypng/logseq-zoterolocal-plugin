@@ -76,7 +76,7 @@ export const insertZotIntoGraph = async (zotItem: ZotData) => {
         journal: false,
       },
     )
-    //  // Create properties block
+    // Create properties block
     const propsBlock = await logseq.Editor.appendBlockInPage(
       pageName,
       pageProps,
