@@ -97,12 +97,12 @@ For Citation Key, Author and Page Name templates, use only the stated placeholde
 
 If you find this plugin useful, consider supporting the developer:
 
-- [:gift_heart: Sponsor this project on Github](https://github.com/sponsors/hkgnp)
+- [:gift_heart: Sponsor this project on Github](https://github.com/sponsors/benjypng)
 - [:coffee: Buy me a coffee](https://www.buymeacoffee.com/hkgnp.dev)
 
 ## Issues and Contributions
 
-For bug reports, feature requests, or contributions, please visit the [GitHub repository](https://github.com/hkgnp/logseq-zotero-plugin).
+For bug reports, feature requests, or contributions, please visit the [GitHub repository](https://github.com/benjypng/logseq-zoterolocal-plugin).
 
 *Note: This repository is currently not taking in any pull requests.*
 
