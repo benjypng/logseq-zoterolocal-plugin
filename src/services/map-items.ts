@@ -40,11 +40,11 @@ export const mapItems = async (
       if (
         noteAttachment.data.itemType === 'attachment' &&
         noteAttachment.data.parentItem === item.key &&
-        noteAttachment.data.linkMode === 'imported_file' &&
+        (noteAttachment.data.linkMode === 'imported_file' || noteAttachment.data.linkMode === 'imported_url' ) &&
         noteAttachment.links.enclosure
       ) {
         item.attachments.push({
-          linkMode: 'imported_file',
+          linkMode: noteAttachment.data.linkMode,
           ...noteAttachment.links.enclosure,
         })
       }

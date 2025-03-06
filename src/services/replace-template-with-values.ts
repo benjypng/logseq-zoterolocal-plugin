@@ -56,7 +56,7 @@ export const replaceTemplateWithValues = async (
           str = `[${encodeURIComponent(attachment.title)}](${attachment.url})`
         }
 
-        if (attachment.linkMode === 'imported_file') {
+        if (attachment.linkMode === 'imported_file' || attachment.linkMode === 'imported_url') {
           str = await replaceTemplateWithValues(
             attachment.type === 'application/pdf'
               ? `![${encodeURIComponent(attachment.title)}](${attachment.href})`
