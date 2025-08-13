@@ -1,11 +1,11 @@
 import { format, parse, parseISO } from 'date-fns'
 
-import { CollectionItem, CreatorItem, NoteItem, ZotData } from '../interfaces'
+import { AttachmentItem, CollectionItem, CreatorItem, NoteItem, ZotData } from '../interfaces'
 import { getCollectionNames } from './get-collection-names'
 
 export const replaceTemplateWithValues = async (
   template: string,
-  data: ZotData | CreatorItem,
+  data: ZotData | CreatorItem | AttachmentItem,
   collections?: CollectionItem[],
 ) => {
   const keys = Object.keys(data)
@@ -50,19 +50,42 @@ export const replaceTemplateWithValues = async (
       }
     } else if (key === 'attachments') {
       const attachmentArr = []
-      for (const attachment of value) {
+      for (const attachment of value as AttachmentItem[]) {
         let str
-        if (attachment.linkMode === 'linked_url') {
-          str = `[${encodeURIComponent(attachment.title)}](${attachment.url})`
-        }
-
-        if (attachment.linkMode === 'imported_file' || attachment.linkMode === 'imported_url') {
-          str = await replaceTemplateWithValues(
-            attachment.type === 'application/pdf'
-              ? `![${encodeURIComponent(attachment.title)}](${attachment.href})`
-              : `[${encodeURIComponent(attachment.title)}](${attachment.href})`,
-            attachment,
-          )
+        // Use zotero://select links to open items through Zotero, including the
+        // file macros used by the built-in Zotero integration
+        if (logseq.settings!.useZoteroLinks) {
+          const zoteroLink = `zotero://select/${attachment.library}/items/${attachment.key}`
+          switch (attachment.linkMode) {
+            case 'linked_url':
+              str = `[${attachment.title}](${attachment.url})`
+              break
+            case 'linked_file':
+              str = `[${attachment.title}](${zoteroLink}) {{zotero-linked-file "${attachment.path}"}}`
+              break
+            case 'imported_file':
+            case 'imported_url':
+              str = `[${attachment.title}](${zoteroLink}) {{zotero-imported-file ${attachment.key}, "${attachment.filename}"}}`
+              break
+          }
+        // Use standard file system links to items
+        } else {
+          switch (attachment.linkMode) {
+            case 'linked_url':
+              str = `[${encodeURIComponent(attachment.title)}](${attachment.url})`
+              break
+            case 'linked_file':
+              str = `[${encodeURIComponent(attachment.title)}](${logseq.settings!.linkedAttachmentBasePath}/${attachment.path})`
+              break
+            case 'imported_file':
+            case 'imported_url':
+              str = await replaceTemplateWithValues(
+                attachment.type === 'application/pdf'
+                  ? `![${encodeURIComponent(attachment.title)}](${attachment.href})`
+                  : `[${encodeURIComponent(attachment.title)}](${attachment.href})`,
+                attachment,
+              )
+          }
         }
 
         attachmentArr.push(str)

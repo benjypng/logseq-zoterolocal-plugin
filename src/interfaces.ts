@@ -67,6 +67,7 @@ export interface ZotItem {
     contentType?: string
     charset?: string
     filename?: string
+    path?: string
     mtime?: number
     md5?: string
     tags: TagItem[]
@@ -179,29 +180,30 @@ export interface ZotData {
   notes: NoteItem[]
 }
 
-export interface URLItem {
-  title: string
+export interface LinkedUrlItem {
   url: string
 }
 
-export interface FileItem {
-  href: string
-  length: number
-  title: string
-  type: string
+export interface LinkedFileItem {
+  path: string
 }
 
-export type AttachmentItem =
-  | ({
-      linkMode: 'linked_url'
-    } & URLItem)
-  | ({
-      linkMode: 'imported_file'
-    } & FileItem)
-  | ({
-    linkMode: 'imported_url'
-    } & FileItem)
-    
+export interface ImportedItem {
+  href: string
+  length: number
+  type: string
+  filename: string
+}
+
+export type AttachmentItem = {
+    title: string
+    library: string
+    key: string
+  } & (
+    | ({ linkMode: 'linked_url'} & LinkedUrlItem)
+    | ({ linkMode: 'linked_file' } & LinkedFileItem)
+    | ({ linkMode: 'imported_url' | 'imported_file' } & ImportedItem)
+  )
 
 export interface CollectionItem {
   key: string

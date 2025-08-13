@@ -35,38 +35,60 @@ export const mapItems = async (
     // Map attachment
     for (const noteAttachment of noteAttachmentItems) {
       // itemType: 'attachment'
-
-      // linkMode: 'imported_file'
-      if (
-        noteAttachment.data.itemType === 'attachment' &&
-        noteAttachment.data.parentItem === item.key &&
-        (noteAttachment.data.linkMode === 'imported_file' || noteAttachment.data.linkMode === 'imported_url' ) &&
-        noteAttachment.links.enclosure
-      ) {
-        item.attachments.push({
-          linkMode: noteAttachment.data.linkMode,
-          ...noteAttachment.links.enclosure,
-        })
-      }
-
-      // linkMode: 'linked_url'
-      if (
-        noteAttachment.data.itemType === 'attachment' &&
-        noteAttachment.data.parentItem === item.key &&
-        noteAttachment.data.linkMode === 'linked_url' &&
-        noteAttachment.data.url
-      ) {
-        item.attachments.push({
-          linkMode: 'linked_url',
+      if (noteAttachment.data.itemType === 'attachment' && noteAttachment.data.parentItem === item.key) {
+        const attachment = {
           title: noteAttachment.data.title,
-          url: noteAttachment.data.url,
-        })
+          library: noteAttachment.library.type === 'user' ? 'library' : `groups/${noteAttachment.library.id}`,
+          key: noteAttachment.data.key
+        }
+        
+        // linkMode: 'imported_file' or 'imported_url'
+        if (
+          (noteAttachment.data.linkMode === 'imported_file' || noteAttachment.data.linkMode === 'imported_url' ) &&
+          noteAttachment.links.enclosure && noteAttachment.data.filename
+        ) {
+          item.attachments.push({
+            ...attachment,
+            linkMode: noteAttachment.data.linkMode,
+            ...noteAttachment.links.enclosure,
+            filename: noteAttachment.data.filename
+          })
+        }
+
+        // linkMode: 'linked_url'
+        else if (
+          noteAttachment.data.linkMode === 'linked_url' &&
+          noteAttachment.data.url
+        ) {
+          item.attachments.push({
+            ...attachment,
+            linkMode: 'linked_url',
+            title: noteAttachment.data.title,
+            url: noteAttachment.data.url,
+          })
+        }
+
+        // linkMode: 'linked_file'
+        else if (
+          noteAttachment.data.linkMode === 'linked_file' &&
+          noteAttachment.data.path
+        ) {
+          item.attachments.push({
+            ...attachment,
+            linkMode: 'linked_file',
+            title: noteAttachment.data.title,
+            path: 
+              noteAttachment.data.path.startsWith('attachments:') 
+                ? noteAttachment.data.path.substring('attachments:'.length) 
+                : noteAttachment.data.path
+          })
+        }
       }
 
       // itemType: 'note'
-      if (
-        noteAttachment.data.parentItem === item.key &&
+      else if (
         noteAttachment.data.itemType === 'note' &&
+        noteAttachment.data.parentItem === item.key &&
         noteAttachment.data.note
       ) {
         item.notes.push({ note: noteAttachment.data.note })
