@@ -171,13 +171,28 @@ export const handleZotInDb = async (zotItem: ZotData, pageName: string) => {
   // Insert attachment
   if (zotItem.attachments && zotItem.attachments.length > 0) {
     const attachmentChildBlks = zotItem.attachments.map((attachment) => {
+      const inlineModifier = (contentType: string) =>
+        logseq.settings?.openAttachmentInline &&
+        (contentType === 'application/pdf' ||
+        contentType === 'image/png' ||
+        contentType === 'image/jpg' ||
+        contentType === 'image/jpeg' ||
+        contentType === 'image/gif' ||
+        contentType === 'image/webp' ||
+        contentType === 'image/svg+xml')
+          ? '!' : ''
+
       if (attachment.linkMode === 'linked_url') {
         return {
-          content: `${logseq.settings?.openAttachmentInline ? '!' : ''}[${attachment.title}](${decodeURI(attachment.url)})`,
+          content: `${inlineModifier(attachment.contentType)}[${attachment.title}](${decodeURI(attachment.url)})`,
+        }
+      } else if (attachment.linkMode === 'linked_file') {
+        return {
+          content: `${inlineModifier(attachment.contentType)}[${attachment.title}](file://${decodeURI(attachment.path)})`,
         }
       } else {
         return {
-          content: `${logseq.settings?.openAttachmentInline ? '!' : ''}[${attachment.title}](${decodeURI(attachment.href)})`,
+          content: `${inlineModifier(attachment.type)}[${attachment.title}](${decodeURI(attachment.href)})`,
         }
       }
     })

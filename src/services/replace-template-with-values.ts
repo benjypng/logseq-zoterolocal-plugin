@@ -54,13 +54,21 @@ export const replaceTemplateWithValues = async (
         let str
         if (attachment.linkMode === 'linked_url') {
           str = `[${encodeURIComponent(attachment.title)}](${attachment.url})`
-        }
-
-        if (attachment.linkMode === 'imported_file') {
+        } else if (
+          attachment.linkMode === 'imported_file' ||
+          attachment.linkMode === 'imported_url'
+        ) {
           str = await replaceTemplateWithValues(
             attachment.type === 'application/pdf'
               ? `![${encodeURIComponent(attachment.title)}](${attachment.href})`
               : `[${encodeURIComponent(attachment.title)}](${attachment.href})`,
+            attachment,
+          )
+        } else if (attachment.linkMode === 'linked_file') {
+          str = await replaceTemplateWithValues(
+            attachment.contentType === 'application/pdf' ?
+              `![${encodeURIComponent(attachment.title)}](file://${attachment.path})` :
+              `[${encodeURIComponent(attachment.title)}](file://${attachment.path})`,
             attachment,
           )
         }

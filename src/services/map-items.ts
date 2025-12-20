@@ -60,12 +60,24 @@ export const mapItems = async (
          ITEM TYPE == ATTACHMENT
          */
         if (
-          noteAndAttachment.data.linkMode === 'imported_file' &&
+          (noteAndAttachment.data.linkMode === 'imported_file' ||
+            noteAndAttachment.data.linkMode === 'imported_url') &&
           noteAndAttachment.links.enclosure
         ) {
           item.attachments.push({
             linkMode: 'imported_file',
             ...noteAndAttachment.links.enclosure,
+          })
+        } else if (
+          noteAndAttachment.data.linkMode === 'linked_file' &&
+          noteAndAttachment.data.path &&
+          noteAndAttachment.data.contentType !== undefined
+        ) {
+          item.attachments.push({
+            linkMode: 'linked_file',
+            contentType: noteAndAttachment.data.contentType,
+            path: noteAndAttachment.data.path,
+            title: noteAndAttachment.data.title,
           })
         } else if (
           noteAndAttachment.data.linkMode === 'linked_url' &&
@@ -75,6 +87,8 @@ export const mapItems = async (
             linkMode: 'linked_url',
             title: noteAndAttachment.data.title,
             url: noteAndAttachment.data.url,
+            // every url has a contentType, added for type safety
+            contentType: noteAndAttachment.data.contentType ?? '',
           })
         }
       } else if (

@@ -223,6 +223,7 @@ export type ZotData = Omit<ZotItem['data'], 'code' | 'note'> & {
 }
 
 export interface URLItem {
+  contentType: string
   title: string
   url: string
 }
@@ -234,13 +235,22 @@ export interface FileItem {
   type: string
 }
 
+export interface LinkedFileItem {
+  contentType: string
+  path: string
+  title: string
+}
+
 export type AttachmentItem =
   | ({
       linkMode: 'linked_url'
     } & URLItem)
   | ({
-      linkMode: 'imported_file'
+      linkMode: 'imported_file' | 'imported_url'
     } & FileItem)
+  | ({
+      linkMode: 'linked_file'
+    } & LinkedFileItem)
 
 export interface CollectionItem {
   key: string
