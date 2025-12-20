@@ -134,6 +134,7 @@ export const ZOT_DATA_KEY_MAP = {
   pages: true,
   parentItem: true,
   patentNumber: true,
+  path: true,
   place: true,
   postType: true,
   presentationType: true,

@@ -40,7 +40,7 @@ export interface ZotItem {
       href: string
       type: string
       title: string
-      length: number
+      length?: number
     }
   }
   meta: {
@@ -126,6 +126,7 @@ export interface ZotItem {
     pages?: string
     parentItem?: string
     patentNumber?: string
+    path?: string
     place?: string
     postType?: string
     presentationType?: string
@@ -228,7 +229,7 @@ export interface URLItem {
 
 export interface FileItem {
   href: string
-  length: number
+  length?: number
   title: string
   type: string
 }
