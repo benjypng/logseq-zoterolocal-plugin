@@ -1,7 +1,6 @@
-import './styles/bg.css'
-import './styles/components.css'
+import '@benjypng/ls-plugin-design-system/styles.css'
 
-import { SearchItem } from './features/search-item'
+import { SearchItem } from '.'
 
 export const ZotContainer = ({
   flag,

@@ -1,7 +1,8 @@
+import { Badge, HStack, Text, VStack } from '@benjypng/ls-plugin-design-system'
 import { useCallback } from 'react'
 import { UseFormReset } from 'react-hook-form'
 
-import { FormValues } from '../features/search-item'
+import { FormValues } from './SearchItem'
 import { CreatorItem, ZotData } from '../interfaces'
 import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
 
@@ -22,10 +23,10 @@ const Creators = ({
   creator: CreatorItem
 }) => {
   return (
-    <span className="creator-text">
+    <Text as="span" size="sm" color="secondary">
       {creator.firstName} {creator.lastName} ({creator.creatorType})
       {length - index === 1 ? '' : ','}
-    </span>
+    </Text>
   )
 }
 
@@ -64,13 +65,19 @@ export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
   }
 
   return (
-    <div className="result-card" onClick={handleClick}>
-      <div className="result-card-left">
-        <div className="result-title-row">
-          <span className="result-title">{title}</span>
-          <span className="badge badge-type">{itemType}</span>
-        </div>
-        <div className="creators-list">
+    <HStack
+      justify="between"
+      onClick={handleClick}
+      style={{ padding: '0.6rem 0.85rem', cursor: 'pointer' }}
+    >
+      <VStack spacing="xs" style={{ width: '70%' }}>
+        <HStack align="baseline" wrap>
+          <Text as="span" weight="semibold">
+            {title}
+          </Text>
+          <Badge>{itemType}</Badge>
+        </HStack>
+        <HStack wrap spacing="xs">
           {creators &&
             creators.map((creator, index) => (
               <Creators
@@ -80,17 +87,21 @@ export const ResultCard = ({ flag, uuid, item, reset }: ResultCardProps) => {
                 creator={creator}
               />
             ))}
-        </div>
-        {citeKey && <span className="cite-key-text">Cite Key: {citeKey}</span>}
-      </div>
-      <div className="result-card-right">
-        <span className="date-text">{date}</span>
-        <span
-          className={`badge ${item.inGraph ? 'badge-in-graph' : 'badge-not-in-graph'}`}
-        >
+        </HStack>
+        {citeKey && (
+          <Text as="span" size="xs" color="tertiary">
+            Cite Key: {citeKey}
+          </Text>
+        )}
+      </VStack>
+      <VStack align="end" spacing="xs" style={{ width: '25%' }}>
+        <Text as="span" size="sm" color="secondary">
+          {date}
+        </Text>
+        <Badge variant={item.inGraph ? 'success' : 'error'}>
           {item.inGraph ? 'in graph' : 'not in graph'}
-        </span>
-      </div>
-    </div>
+        </Badge>
+      </VStack>
+    </HStack>
   )
 }

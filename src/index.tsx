@@ -3,6 +3,7 @@ import '@logseq/libs'
 import { BlockCursorPosition } from '@logseq/libs/dist/LSPlugin'
 import { createRoot } from 'react-dom/client'
 
+import { ZotContainer } from './components'
 import { handlePopup } from './handle-popup'
 import { GlossaryObj } from './interfaces'
 import { createTemplateGlossary } from './services/create-template-glossary'
@@ -10,7 +11,6 @@ import { testZotConnection } from './services/get-zot-items'
 import { registerAdminCommands } from './services/register-admin-commands'
 import { syncAnnotations } from './services/sync-annotations'
 import { handleSettings } from './settings'
-import { ZotContainer } from './ZotContainer'
 
 const main = async () => {
   await logseq.UI.showMsg(
