@@ -2,9 +2,9 @@ import { Badge, HStack, Text, VStack } from '@benjypng/ls-plugin-design-system'
 import { useCallback } from 'react'
 import { UseFormReset } from 'react-hook-form'
 
-import { FormValues } from './SearchItem'
 import { CreatorItem, ZotData } from '../interfaces'
 import { insertZotIntoGraph } from '../services/insert-zot-into-graph'
+import { FormValues } from './SearchItem'
 
 interface ResultCardProps {
   flag: 'full' | 'table' | 'citation'
