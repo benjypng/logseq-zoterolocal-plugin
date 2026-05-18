@@ -30,14 +30,14 @@ export const testZotConnection = async (): Promise<{
 
     const wretchError = error as WretchError
     logseq.UI.showMsg(
-      `❌ logseq-zoteroloca-plugin: Connection error
+      `❌ logseq-zoterolocal-plugin: Connection error
 Status: ${wretchError.status}
 Response: ${wretchError.message}`,
       'error',
     )
     return {
       code: 'error',
-      msg: `❌ logseq-zoteroloca-plugin: Connection error
+      msg: `❌ logseq-zoterolocal-plugin: Connection error
 Status: ${wretchError.status}
 Response: ${wretchError.message}`,
     }
