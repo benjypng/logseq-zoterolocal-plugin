@@ -15,6 +15,7 @@ const api = wretch().url(ZOT_URL).headers({
   'Content-Type': 'application/json',
   'x-zotero-connector-api-version': '3.0',
   'zotero-allowed-request': 'true',
+  'User-Agent': 'curl/7.45.1',
 })
 
 export const testZotConnection = async (): Promise<{
