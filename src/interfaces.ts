@@ -357,5 +357,8 @@ export type ZotError = Error & { status?: number; body?: string }
 export interface ProxyRequestHost {
   baseInfo: { id: string }
   Request: { once: (event: string, cb: (payload: unknown) => void) => unknown }
-  _execCallableAPIAsync: (method: string, ...args: unknown[]) => Promise<unknown>
+  _execCallableAPIAsync: (
+    method: string,
+    ...args: unknown[]
+  ) => Promise<unknown>
 }
