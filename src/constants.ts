@@ -15,6 +15,12 @@ export const BASE_QUERY = {
   direction: 'desc',
 }
 
+export const ZOT_HEADERS = {
+  'Content-Type': 'application/json',
+  'x-zotero-connector-api-version': '3.0',
+  'zotero-allowed-request': 'true',
+}
+
 export const FUSE_KEYS = [
   {
     name: 'combinedSearch',
@@ -63,7 +69,6 @@ export const FUSE_THRESHOLD = 0.6
 
 export const DEBOUNCE_DELAY = 400
 
-// Property presets - each tier includes all properties from the tier(s) below it
 export const PROP_PRESET_MINIMAL = [
   'title',
   'date',

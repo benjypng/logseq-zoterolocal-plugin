@@ -41,8 +41,7 @@
     "lucide-react": "^0.554.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-hook-form": "^7.66.1",
-    "wretch": "^3.0.3"
+    "react-hook-form": "^7.66.1"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.8",

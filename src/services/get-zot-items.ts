@@ -1,44 +1,83 @@
-import wretch from 'wretch'
-import QueryAddon from 'wretch/addons/queryString'
-import { WretchError } from 'wretch/resolver'
-
-import { BASE_QUERY, ZOT_URL } from '../constants'
+import { BASE_QUERY, ZOT_HEADERS, ZOT_URL } from '../constants'
 import {
   AnnotationItem,
   CollectionItem,
   ZotCollection,
+  ZotError,
   ZotItem,
+  ZotRequestOptions,
+  ZotResponse,
 } from '../interfaces'
 import { mapItems } from './map-items'
 
-const api = wretch().url(ZOT_URL).headers({
-  'Content-Type': 'application/json',
-  'x-zotero-connector-api-version': '3.0',
-  'zotero-allowed-request': 'true',
-})
+const buildUrl = (
+  path: string,
+  query?: Record<string, string | number>,
+): string => {
+  const url = `${ZOT_URL}${path}`
+  if (!query) return url
+
+  const qs = Object.entries(query)
+    .map(
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`,
+    )
+    .join('&')
+
+  return qs ? `${url}?${qs}` : url
+}
+
+const zotRequest = async <T>(
+  path: string,
+  query?: Record<string, string | number>,
+): Promise<T> => {
+  const options: ZotRequestOptions = {
+    url: buildUrl(path, query),
+    method: 'GET',
+    headers: ZOT_HEADERS,
+    returnType: 'text',
+    includeResponse: true,
+  }
+
+  const res = (await logseq.Request._request(
+    options as unknown as Parameters<typeof logseq.Request._request>[0],
+  )) as ZotResponse
+
+  if (!res || typeof res.status !== 'number') {
+    throw new Error('Could not connect to Zotero. Check if Zotero is running.')
+  }
+
+  if (!res.ok) {
+    const error: ZotError = Object.assign(
+      new Error(res.statusText || `HTTP ${res.status}`),
+      { status: res.status, body: res.body },
+    )
+    throw error
+  }
+
+  return JSON.parse(res.body) as T
+}
 
 export const testZotConnection = async (): Promise<{
   code: 'success' | 'error'
   msg: string
 }> => {
   try {
-    await api.url('/items').addon(QueryAddon).query({ limit: 1 }).get().res()
+    await zotRequest('/items', { limit: 1 })
     return { code: 'success', msg: '✅ Connection to Zotero is working' }
   } catch (error) {
-    // If error.status is undefined, it means Zotero is not open
-
-    const wretchError = error as WretchError
+    const zotError = error as ZotError
     logseq.UI.showMsg(
       `❌ logseq-zoteroloca-plugin: Connection error
-Status: ${wretchError.status}
-Response: ${wretchError.message}`,
+Status: ${zotError.status}
+Response: ${zotError.message}`,
       'error',
     )
     return {
       code: 'error',
       msg: `❌ logseq-zoteroloca-plugin: Connection error
-Status: ${wretchError.status}
-Response: ${wretchError.message}`,
+Status: ${zotError.status}
+Response: ${zotError.message}`,
     }
   }
 }
@@ -57,20 +96,10 @@ const getZotItems = async (queryString?: string) => {
 
     const [zotParentResultsFromSearch, notesAndAttachments] = await Promise.all(
       [
-        api
-          .url('/items/top')
-          .addon(QueryAddon)
-          .query(searchQuery)
-          .get()
-          .json<ZotItem[]>(),
-        api
-          .url('/items')
-          .addon(QueryAddon)
-          .query({
-            itemType: 'note||attachment||annotation',
-          })
-          .get()
-          .json<ZotItem[]>(),
+        zotRequest<ZotItem[]>('/items/top', searchQuery),
+        zotRequest<ZotItem[]>('/items', {
+          itemType: 'note||attachment||annotation',
+        }),
       ],
     )
 
@@ -88,16 +117,17 @@ const getZotItems = async (queryString?: string) => {
 
     return zotDataArr
   } catch (error) {
-    if (error instanceof WretchError) {
+    const zotError = error as ZotError
+    if (typeof zotError.status === 'number') {
       logseq.UI.showMsg(
-        `❌ Connection error: ${error.message}
-Status: ${error.status}
-Response: ${await error.response.text()}`,
+        `❌ Connection error: ${zotError.message}
+Status: ${zotError.status}
+Response: ${zotError.body ?? ''}`,
         'error',
       )
     } else {
       logseq.UI.showMsg(
-        `❌ An unexpected error occurred: ${(error as Error).message}. Check if Zotero is running.`,
+        `❌ An unexpected error occurred: ${zotError.message}. Check if Zotero is running.`,
         'error',
       )
     }
@@ -110,33 +140,22 @@ export const getZotItemsFromQueryString = (queryString: string) =>
 
 export const getZotItemsWithoutQueryString = () => getZotItems()
 
-/**
- * Fetches annotations for a given parent item key that were added after the specified date.
- * Annotations in Zotero are grandchildren: parent item -> attachment -> annotation.
- * Returns a map of attachment key -> annotations.
- */
 export const getAnnotationsByItemKey = async (
   itemKey: string,
   since?: string,
 ): Promise<Map<string, AnnotationItem[]>> => {
-  // Get attachment children of the parent item
-  const attachments: ZotItem[] = await api
-    .url(`/items/${itemKey}/children`)
-    .addon(QueryAddon)
-    .query({ itemType: 'attachment' })
-    .get()
-    .json()
+  const attachments = await zotRequest<ZotItem[]>(
+    `/items/${itemKey}/children`,
+    { itemType: 'attachment' },
+  )
 
-  // For each attachment, get its annotation children
   const annotationMap = new Map<string, AnnotationItem[]>()
 
   for (const attachment of attachments) {
-    const annotations: ZotItem[] = await api
-      .url(`/items/${attachment.data.key}/children`)
-      .addon(QueryAddon)
-      .query({ itemType: 'annotation' })
-      .get()
-      .json()
+    const annotations = await zotRequest<ZotItem[]>(
+      `/items/${attachment.data.key}/children`,
+      { itemType: 'annotation' },
+    )
 
     const filtered = annotations
       .filter((a) => {
@@ -160,26 +179,24 @@ export const getAnnotationsByItemKey = async (
 
 export const getZotCollections = async (): Promise<CollectionItem[]> => {
   try {
-    const allCollectionNames: ZotCollection[] = await api
-      .url('/collections')
-      .get()
-      .json()
+    const allCollectionNames = await zotRequest<ZotCollection[]>('/collections')
 
     return allCollectionNames.map((item: ZotCollection) => ({
       key: item.data.key,
       name: item.data.name,
     }))
   } catch (error) {
-    if (error instanceof WretchError) {
+    const zotError = error as ZotError
+    if (typeof zotError.status === 'number') {
       logseq.UI.showMsg(
-        `❌ Connection error: ${error.message}
-Status: ${error.status}
-Response: ${await error.response.text()}`,
+        `❌ Connection error: ${zotError.message}
+Status: ${zotError.status}
+Response: ${zotError.body ?? ''}`,
         'error',
       )
     } else {
       logseq.UI.showMsg(
-        `❌ An unexpected error occurred: ${(error as Error).message}. Check if Zotero is running.`,
+        `❌ An unexpected error occurred: ${zotError.message}. Check if Zotero is running.`,
         'error',
       )
     }
