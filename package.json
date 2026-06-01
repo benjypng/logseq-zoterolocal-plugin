@@ -34,7 +34,7 @@
     ]
   },
   "dependencies": {
-    "@logseq/libs": "^0.2.9",
+    "@logseq/libs": "^0.3.3",
     "@tanstack/react-table": "^8.21.3",
     "date-fns": "^4.1.0",
     "fuse.js": "^7.1.0",
