@@ -2,6 +2,7 @@ import { BASE_QUERY, ZOT_HEADERS, ZOT_URL } from '../constants'
 import {
   AnnotationItem,
   CollectionItem,
+  ProxyRequestHost,
   ZotCollection,
   ZotError,
   ZotItem,
@@ -39,9 +40,18 @@ const zotRequest = async <T>(
     includeResponse: true,
   }
 
-  const res = (await logseq.Request._request(
-    options as unknown as Parameters<typeof logseq.Request._request>[0],
-  )) as ZotResponse
+  const host = logseq as unknown as ProxyRequestHost
+  const requestClient = host.Request
+
+  const reqID = await host._execCallableAPIAsync(
+    'exper_request',
+    host.baseInfo.id,
+    options,
+  )
+
+  const res = (await new Promise<unknown>((resolve) => {
+    requestClient.once(`task_callback_${reqID}`, resolve)
+  })) as ZotResponse
 
   if (!res || typeof res.status !== 'number') {
     throw new Error('Could not connect to Zotero. Check if Zotero is running.')
