@@ -275,6 +275,12 @@ export interface AnnotationItem {
   annotationSortIndex: string
 }
 
+export interface AttachmentWithAnnotations {
+  key: string
+  link: string
+  annotations: AnnotationItem[]
+}
+
 export interface NoteItem {
   note: string
 }

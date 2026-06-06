@@ -1,6 +1,6 @@
 import { BASE_QUERY, ZOT_HEADERS, ZOT_URL } from '../constants'
 import {
-  AnnotationItem,
+  AttachmentWithAnnotations,
   CollectionItem,
   ProxyRequestHost,
   ZotCollection,
@@ -9,6 +9,7 @@ import {
   ZotRequestOptions,
   ZotResponse,
 } from '../interfaces'
+import { buildAttachmentLink } from './build-attachment-link'
 import { mapItems } from './map-items'
 
 const buildUrl = (
@@ -150,16 +151,15 @@ export const getZotItemsFromQueryString = (queryString: string) =>
 
 export const getZotItemsWithoutQueryString = () => getZotItems()
 
-export const getAnnotationsByItemKey = async (
+export const getAttachmentsWithAnnotations = async (
   itemKey: string,
-  since?: string,
-): Promise<Map<string, AnnotationItem[]>> => {
+): Promise<AttachmentWithAnnotations[]> => {
   const attachments = await zotRequest<ZotItem[]>(
     `/items/${itemKey}/children`,
     { itemType: 'attachment' },
   )
 
-  const annotationMap = new Map<string, AnnotationItem[]>()
+  const result: AttachmentWithAnnotations[] = []
 
   for (const attachment of attachments) {
     const annotations = await zotRequest<ZotItem[]>(
@@ -167,11 +167,7 @@ export const getAnnotationsByItemKey = async (
       { itemType: 'annotation' },
     )
 
-    const filtered = annotations
-      .filter((a) => {
-        if (!since) return true
-        return new Date(a.data.dateAdded) > new Date(since)
-      })
+    const mapped = annotations
       .filter((a) => a.data.annotationText)
       .map((a) => ({
         annotationText: a.data.annotationText ?? '',
@@ -179,12 +175,19 @@ export const getAnnotationsByItemKey = async (
         annotationSortIndex: a.data.annotationSortIndex ?? '',
       }))
 
-    if (filtered.length > 0) {
-      annotationMap.set(attachment.data.key, filtered)
-    }
+    result.push({
+      key: attachment.data.key,
+      link: buildAttachmentLink({
+        linkMode: attachment.data.linkMode,
+        title: attachment.data.title,
+        url: attachment.data.url,
+        href: attachment.links.enclosure?.href,
+      }),
+      annotations: mapped,
+    })
   }
 
-  return annotationMap
+  return result
 }
 
 export const getZotCollections = async (): Promise<CollectionItem[]> => {
