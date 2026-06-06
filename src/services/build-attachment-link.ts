@@ -5,6 +5,7 @@ export const buildAttachmentLink = (att: {
   href?: string
 }): string => {
   const prefix = logseq.settings?.openAttachmentInline ? '!' : ''
-  const target = att.linkMode === 'linked_url' ? (att.url ?? '') : (att.href ?? '')
+  const target =
+    att.linkMode === 'linked_url' ? (att.url ?? '') : (att.href ?? '')
   return `${prefix}[${att.title}](${decodeURI(target)})`
 }

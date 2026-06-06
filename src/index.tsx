@@ -14,10 +14,20 @@ import { handleSettings } from './settings'
 import { ZotContainer } from './ZotContainer'
 
 const main = async () => {
-  await logseq.UI.showMsg(
+  logseq.UI.showMsg(
     `logseq-zoterolocal-plugin loaded. Please proceed to settings to continue setup.`,
     'warning',
   )
+
+  // Logseq DB check
+  const isDbGraph = logseq.App.checkCurrentIsDbGraph()
+  if (!isDbGraph) {
+    logseq.UI.showMsg(
+      'logseq-zoterolocal-plugin: Logseq DB is required for this plugin',
+      'error',
+    )
+    return
+  }
 
   registerAdminCommands()
   handlePopup()
