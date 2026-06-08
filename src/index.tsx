@@ -23,8 +23,8 @@ const main = async () => {
   const isDbGraph = logseq.App.checkCurrentIsDbGraph()
   if (!isDbGraph) {
     logseq.UI.showMsg(
-      'logseq-zoterolocal-plugin: Logseq DB is required for this plugin',
-      'error',
+      'logseq-zoterolocal-plugin: This plugin has been tested on the DB version only',
+      'warning',
     )
     return
   }
