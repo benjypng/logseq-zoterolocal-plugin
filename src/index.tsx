@@ -19,16 +19,6 @@ const main = async () => {
     'warning',
   )
 
-  // Logseq DB check
-  const isDbGraph = logseq.App.checkCurrentIsDbGraph()
-  if (!isDbGraph) {
-    logseq.UI.showMsg(
-      'logseq-zoterolocal-plugin: This plugin has been tested on the DB version only',
-      'warning',
-    )
-    return
-  }
-
   registerAdminCommands()
   handlePopup()
 

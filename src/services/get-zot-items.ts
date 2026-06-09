@@ -50,23 +50,37 @@ const zotRequest = async <T>(
     options,
   )
 
-  const res = (await new Promise<unknown>((resolve) => {
+  const res = await new Promise<unknown>((resolve) => {
     requestClient.once(`task_callback_${reqID}`, resolve)
-  })) as ZotResponse
+  })
 
-  if (!res || typeof res.status !== 'number') {
+  // exper_request returns different shapes across Logseq builds:
+  //  - DB (2.x): honors includeResponse -> { status, ok, body, ... }, body = JSON text
+  //  - markdown (0.10.x): ignores it -> the bare body (JSON text or already-parsed)
+  //  - dead IPC / Zotero down: null/undefined
+  if (res == null) {
     throw new Error('Could not connect to Zotero. Check if Zotero is running.')
   }
 
-  if (!res.ok) {
-    const error: ZotError = Object.assign(
-      new Error(res.statusText || `HTTP ${res.status}`),
-      { status: res.status, body: res.body },
-    )
-    throw error
+  // Wrapper shape (DB)
+  if (
+    typeof res === 'object' &&
+    typeof (res as ZotResponse).status === 'number'
+  ) {
+    const wrapped = res as ZotResponse
+    if (!wrapped.ok) {
+      const error: ZotError = Object.assign(
+        new Error(wrapped.statusText || `HTTP ${wrapped.status}`),
+        { status: wrapped.status, body: wrapped.body },
+      )
+      throw error
+    }
+    return JSON.parse(wrapped.body) as T
   }
 
-  return JSON.parse(res.body) as T
+  // Bare body shape (markdown): JSON string, or an already-parsed object/array
+  if (typeof res === 'string') return JSON.parse(res) as T
+  return res as T
 }
 
 export const testZotConnection = async (): Promise<{
