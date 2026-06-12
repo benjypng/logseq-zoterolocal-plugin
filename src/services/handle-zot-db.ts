@@ -3,6 +3,7 @@ import { format, parse, parseISO } from 'date-fns'
 
 import { PROP_PRESETS, ZOT_DATA_KEY_MAP } from '../constants'
 import { PropertyPreset, ZotData } from '../interfaces'
+import { buildAnnotationContent } from './build-annotation-content'
 import { isSchemaAdded } from './is-schema-added'
 import { parseHtml } from './parse-html'
 
@@ -237,7 +238,7 @@ export const handleZotInDb = async (zotItem: ZotData, pageName: string) => {
             if (!annotation.annotationText) continue
             const annotationBlock = await logseq.Editor.insertBlock(
               attachmentBlock.uuid,
-              annotation.annotationText,
+              buildAnnotationContent(annotation),
               { sibling: false },
             )
 

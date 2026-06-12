@@ -95,6 +95,9 @@ export const mapItems = async (
             annotationText: child.data.annotationText ?? '',
             annotationComment: child.data.annotationComment ?? '',
             annotationSortIndex: child.data.annotationSortIndex ?? '',
+            annotationPageLabel: child.data.annotationPageLabel ?? '',
+            key: child.data.key,
+            parentItem: child.data.parentItem ?? '',
           })
         }
       }

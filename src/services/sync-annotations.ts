@@ -1,6 +1,7 @@
 import { BlockEntity } from '@logseq/libs/dist/LSPlugin'
 
 import { ZOTERO_ATTACHMENT_KEY_PROP, ZOTERO_CODE_PROP } from '../constants'
+import { buildAnnotationContent } from './build-annotation-content'
 import { getAttachmentsWithAnnotations } from './get-zot-items'
 
 const blockText = (b: BlockEntity): string => {
@@ -99,7 +100,9 @@ export const syncAnnotations = async (pageName: string) => {
       if (!text) continue
       const comment = annotation.annotationComment.trim()
 
-      const existingBlock = existingByText.get(text)
+      const annotationContent = buildAnnotationContent(annotation)
+
+      const existingBlock = existingByText.get(annotationContent)
       if (existingBlock) {
         if (!comment) continue
         const fresh = await logseq.Editor.getBlock(existingBlock.uuid, {
@@ -121,12 +124,12 @@ export const syncAnnotations = async (pageName: string) => {
 
       const annotationBlock = await logseq.Editor.insertBlock(
         targetBlock.uuid,
-        annotation.annotationText,
+        annotationContent,
         { sibling: false },
       )
 
       if (annotationBlock) {
-        existingByText.set(text, annotationBlock as BlockEntity)
+        existingByText.set(annotationContent, annotationBlock as BlockEntity)
         if (comment) {
           await logseq.Editor.insertBlock(
             annotationBlock.uuid,

@@ -187,6 +187,9 @@ export const getAttachmentsWithAnnotations = async (
         annotationText: a.data.annotationText ?? '',
         annotationComment: a.data.annotationComment ?? '',
         annotationSortIndex: a.data.annotationSortIndex ?? '',
+        annotationPageLabel: a.data.annotationPageLabel ?? '',
+        key: a.data.key,
+        parentItem: a.data.parentItem ?? attachment.data.key,
       }))
 
     result.push({

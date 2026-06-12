@@ -273,6 +273,19 @@ export interface AnnotationItem {
   annotationText: string
   annotationComment: string
   annotationSortIndex: string
+  annotationPageLabel: string
+  key: string
+  parentItem: string
+  version?: number
+  itemType?: string
+  annotationType?: string
+  annotationAuthorName?: string
+  annotationColor?: string
+  annotationPosition?: string
+  tags?: { tag: string; type?: number }[]
+  relations?: Record<string, string | string[]>
+  dateAdded?: string
+  dateModified?: string
 }
 
 export interface AttachmentWithAnnotations {
