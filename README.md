@@ -8,7 +8,7 @@ Connect locally to Zotero 8 (and above) and pull your items into Logseq without 
 
 ## Features
 
-- Supports Logseq-DB only
+- Supports Logseq DB and Logseq MD
 - Direct connection to Zotero 7+ without needing to sync with Zotero Cloud
 - Customisable templates
 - Easy insertion of Zotero items into your graph
