@@ -4,6 +4,7 @@ import { format, parse, parseISO } from 'date-fns'
 import { PROP_PRESETS, ZOT_DATA_KEY_MAP } from '../constants'
 import { PropertyPreset, ZotData } from '../interfaces'
 import { buildAnnotationContent } from './build-annotation-content'
+import { isPageEmpty } from './is-page-empty'
 import { isSchemaAdded } from './is-schema-added'
 import { parseHtml } from './parse-html'
 
@@ -33,9 +34,14 @@ export const handleZotInDb = async (zotItem: ZotData, pageName: string) => {
   // Create page for Zotero item
   let existingPage = await logseq.Editor.getPage(pageName)
   if (existingPage) {
-    await logseq.UI.showMsg('Page already exists', 'warning')
-    logseq.App.pushState('page', { name: existingPage.name })
-    return
+    if (!(await isPageEmpty(pageName))) {
+      await logseq.UI.showMsg(
+        `Skipped: page "${pageName}" already exists and is not empty`,
+        'warning',
+      )
+      logseq.App.pushState('page', { name: existingPage.name })
+      return
+    }
   } else {
     //Create page
     existingPage = await logseq.Editor.createPage(
