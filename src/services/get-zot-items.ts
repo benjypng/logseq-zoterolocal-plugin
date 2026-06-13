@@ -1,16 +1,20 @@
+import {
+  HttpError,
+  ProxyUnavailableError,
+  proxy,
+} from '@benjypng/logseq-request'
+
 import { BASE_QUERY, ZOT_HEADERS, ZOT_URL } from '../constants'
 import {
   AttachmentWithAnnotations,
   CollectionItem,
-  ProxyRequestHost,
   ZotCollection,
-  ZotError,
   ZotItem,
-  ZotRequestOptions,
-  ZotResponse,
 } from '../interfaces'
 import { buildAttachmentLink } from './build-attachment-link'
 import { mapItems } from './map-items'
+
+const REQUEST_TIMEOUT_MS = 15_000
 
 const buildUrl = (
   path: string,
@@ -29,58 +33,26 @@ const buildUrl = (
   return qs ? `${url}?${qs}` : url
 }
 
-const zotRequest = async <T>(
+const zotRequest = <T>(
   path: string,
   query?: Record<string, string | number>,
-): Promise<T> => {
-  const options: ZotRequestOptions = {
-    url: buildUrl(path, query),
-    method: 'GET',
-    headers: ZOT_HEADERS,
-    returnType: 'text',
-    includeResponse: true,
+): Promise<T> =>
+  proxy(buildUrl(path, query))
+    .headers(ZOT_HEADERS)
+    .timeout(REQUEST_TIMEOUT_MS)
+    .get()
+    .json<T>()
+
+const zotErrorMessage = (error: unknown): string => {
+  if (error instanceof HttpError) {
+    return `❌ Connection error: ${error.message}
+Status: ${error.status}
+Response: ${error.body}`
   }
-
-  const host = logseq as unknown as ProxyRequestHost
-  const requestClient = host.Request
-
-  const reqID = await host._execCallableAPIAsync(
-    'exper_request',
-    host.baseInfo.id,
-    options,
-  )
-
-  const res = await new Promise<unknown>((resolve) => {
-    requestClient.once(`task_callback_${reqID}`, resolve)
-  })
-
-  // exper_request returns different shapes across Logseq builds:
-  //  - DB (2.x): honors includeResponse -> { status, ok, body, ... }, body = JSON text
-  //  - markdown (0.10.x): ignores it -> the bare body (JSON text or already-parsed)
-  //  - dead IPC / Zotero down: null/undefined
-  if (res == null) {
-    throw new Error('Could not connect to Zotero. Check if Zotero is running.')
+  if (error instanceof ProxyUnavailableError) {
+    return '❌ Could not connect to Zotero. Check if Zotero is running.'
   }
-
-  // Wrapper shape (DB)
-  if (
-    typeof res === 'object' &&
-    typeof (res as ZotResponse).status === 'number'
-  ) {
-    const wrapped = res as ZotResponse
-    if (!wrapped.ok) {
-      const error: ZotError = Object.assign(
-        new Error(wrapped.statusText || `HTTP ${wrapped.status}`),
-        { status: wrapped.status, body: wrapped.body },
-      )
-      throw error
-    }
-    return JSON.parse(wrapped.body) as T
-  }
-
-  // Bare body shape (markdown): JSON string, or an already-parsed object/array
-  if (typeof res === 'string') return JSON.parse(res) as T
-  return res as T
+  return `❌ An unexpected error occurred: ${(error as Error).message}. Check if Zotero is running.`
 }
 
 export const testZotConnection = async (): Promise<{
@@ -91,19 +63,9 @@ export const testZotConnection = async (): Promise<{
     await zotRequest('/items', { limit: 1 })
     return { code: 'success', msg: '✅ Connection to Zotero is working' }
   } catch (error) {
-    const zotError = error as ZotError
-    logseq.UI.showMsg(
-      `❌ logseq-zoteroloca-plugin: Connection error
-Status: ${zotError.status}
-Response: ${zotError.message}`,
-      'error',
-    )
-    return {
-      code: 'error',
-      msg: `❌ logseq-zoteroloca-plugin: Connection error
-Status: ${zotError.status}
-Response: ${zotError.message}`,
-    }
+    const msg = zotErrorMessage(error)
+    logseq.UI.showMsg(msg, 'error')
+    return { code: 'error', msg }
   }
 }
 
@@ -142,20 +104,7 @@ const getZotItems = async (queryString?: string) => {
 
     return zotDataArr
   } catch (error) {
-    const zotError = error as ZotError
-    if (typeof zotError.status === 'number') {
-      logseq.UI.showMsg(
-        `❌ Connection error: ${zotError.message}
-Status: ${zotError.status}
-Response: ${zotError.body ?? ''}`,
-        'error',
-      )
-    } else {
-      logseq.UI.showMsg(
-        `❌ An unexpected error occurred: ${zotError.message}. Check if Zotero is running.`,
-        'error',
-      )
-    }
+    logseq.UI.showMsg(zotErrorMessage(error), 'error')
     return []
   }
 }
@@ -216,20 +165,7 @@ export const getZotCollections = async (): Promise<CollectionItem[]> => {
       name: item.data.name,
     }))
   } catch (error) {
-    const zotError = error as ZotError
-    if (typeof zotError.status === 'number') {
-      logseq.UI.showMsg(
-        `❌ Connection error: ${zotError.message}
-Status: ${zotError.status}
-Response: ${zotError.body ?? ''}`,
-        'error',
-      )
-    } else {
-      logseq.UI.showMsg(
-        `❌ An unexpected error occurred: ${zotError.message}. Check if Zotero is running.`,
-        'error',
-      )
-    }
+    logseq.UI.showMsg(zotErrorMessage(error), 'error')
     return []
   }
 }
