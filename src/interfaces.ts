@@ -353,31 +353,3 @@ export interface PluginSettings {
   zotTemplate: string
   authorTemplate: string
 }
-
-export interface ZotRequestOptions {
-  url: string
-  method: 'GET'
-  headers: Record<string, string>
-  returnType: 'text'
-  includeResponse: true
-}
-
-export interface ZotResponse {
-  ok: boolean
-  status: number
-  statusText: string
-  url: string
-  headers: Record<string, string>
-  body: string
-}
-
-export type ZotError = Error & { status?: number; body?: string }
-
-export interface ProxyRequestHost {
-  baseInfo: { id: string }
-  Request: { once: (event: string, cb: (payload: unknown) => void) => unknown }
-  _execCallableAPIAsync: (
-    method: string,
-    ...args: unknown[]
-  ) => Promise<unknown>
-}
