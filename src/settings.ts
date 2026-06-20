@@ -51,11 +51,21 @@ export const handleSettings = ({ msg }: { msg: string }) => {
       enumChoices: filteredPropsArray,
     },
     {
+      key: 'attachmentImportMode',
+      type: 'enum',
+      title: 'Attachment Import Mode (DB version)',
+      description:
+        'Choose how attachments are added to each Zotero page. "Asset" imports each attachment as a Logseq asset block that opens within Logseq. "Markdown link" leaves it as a plain markdown link that opens in your default system app.',
+      default: 'Markdown link',
+      enumPicker: 'select',
+      enumChoices: ['Asset', 'Markdown link'],
+    },
+    {
       key: 'openAttachmentInline',
       type: 'boolean',
       title: 'Open Attachment in Logseq (DB version)',
       description:
-        'If disabled, attachments will open in the default system app. If enabled, attachments will open in Logseq.',
+        'Only applies when Attachment Import Mode is "Markdown link". If enabled, attachments are embedded inline so they open within Logseq. If disabled, they are a plain link that opens in the default system app.',
       default: true,
     },
     {

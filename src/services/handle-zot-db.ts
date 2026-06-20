@@ -4,6 +4,7 @@ import { format, parse, parseISO } from 'date-fns'
 import { PROP_PRESETS, ZOT_DATA_KEY_MAP } from '../constants'
 import { PropertyPreset, ZotData } from '../interfaces'
 import { buildAnnotationContent } from './build-annotation-content'
+import { insertAttachmentBlock } from './insert-attachment-block'
 import { isPageEmpty } from './is-page-empty'
 import { isSchemaAdded } from './is-schema-added'
 import { parseHtml } from './parse-html'
@@ -217,25 +218,12 @@ export const handleZotInDb = async (zotItem: ZotData, pageName: string) => {
 
     if (headerBlock) {
       for (const attachment of zotItem.attachments) {
-        const link =
-          attachment.linkMode === 'linked_url'
-            ? `${logseq.settings?.openAttachmentInline ? '!' : ''}[${attachment.title}](${decodeURI(attachment.url)})`
-            : `${logseq.settings?.openAttachmentInline ? '!' : ''}[${attachment.title}](${decodeURI(attachment.href)})`
-
-        const attachmentBlock = await logseq.Editor.insertBlock(
+        const attachmentBlock = await insertAttachmentBlock(
           headerBlock.uuid,
-          link,
-          { sibling: false },
+          attachment,
         )
 
         if (attachmentBlock) {
-          // Store the Zotero attachment key for sync matching
-          await logseq.Editor.upsertBlockProperty(
-            attachmentBlock.uuid,
-            'zotero-attachment-key',
-            attachment.key,
-          )
-
           // Insert annotations sorted by document position
           const sortedAnnotations = [...attachment.annotations].sort((a, b) =>
             a.annotationSortIndex.localeCompare(b.annotationSortIndex),

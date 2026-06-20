@@ -6,12 +6,12 @@ import {
 
 import { BASE_QUERY, ZOT_HEADERS, ZOT_URL } from '../constants'
 import {
-  AttachmentWithAnnotations,
+  AnnotationItem,
+  AttachmentItem,
   CollectionItem,
   ZotCollection,
   ZotItem,
 } from '../interfaces'
-import { buildAttachmentLink } from './build-attachment-link'
 import { mapItems } from './map-items'
 
 const REQUEST_TIMEOUT_MS = 15_000
@@ -116,13 +116,13 @@ export const getZotItemsWithoutQueryString = () => getZotItems()
 
 export const getAttachmentsWithAnnotations = async (
   itemKey: string,
-): Promise<AttachmentWithAnnotations[]> => {
+): Promise<AttachmentItem[]> => {
   const attachments = await zotRequest<ZotItem[]>(
     `/items/${itemKey}/children`,
     { itemType: 'attachment' },
   )
 
-  const result: AttachmentWithAnnotations[] = []
+  const result: AttachmentItem[] = []
 
   for (const attachment of attachments) {
     const annotations = await zotRequest<ZotItem[]>(
@@ -130,7 +130,7 @@ export const getAttachmentsWithAnnotations = async (
       { itemType: 'annotation' },
     )
 
-    const mapped = annotations
+    const mapped: AnnotationItem[] = annotations
       .filter((a) => a.data.annotationText)
       .map((a) => ({
         annotationText: a.data.annotationText ?? '',
@@ -141,16 +141,28 @@ export const getAttachmentsWithAnnotations = async (
         parentItem: a.data.parentItem ?? attachment.data.key,
       }))
 
-    result.push({
-      key: attachment.data.key,
-      link: buildAttachmentLink({
-        linkMode: attachment.data.linkMode,
+    if (
+      attachment.data.linkMode === 'imported_file' &&
+      attachment.links.enclosure
+    ) {
+      result.push({
+        linkMode: 'imported_file',
+        key: attachment.data.key,
+        annotations: mapped,
+        ...attachment.links.enclosure,
+      })
+    } else if (
+      attachment.data.linkMode === 'linked_url' &&
+      attachment.data.url
+    ) {
+      result.push({
+        linkMode: 'linked_url',
+        key: attachment.data.key,
+        annotations: mapped,
         title: attachment.data.title,
         url: attachment.data.url,
-        href: attachment.links.enclosure?.href,
-      }),
-      annotations: mapped,
-    })
+      })
+    }
   }
 
   return result

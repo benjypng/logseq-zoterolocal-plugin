@@ -288,12 +288,6 @@ export interface AnnotationItem {
   dateModified?: string
 }
 
-export interface AttachmentWithAnnotations {
-  key: string
-  link: string
-  annotations: AnnotationItem[]
-}
-
 export interface NoteItem {
   note: string
 }
@@ -346,6 +340,7 @@ export interface PluginSettings {
   propertyPreset: string
   pageProps: ZotItem['data']
   agreementClause: boolean
+  attachmentImportMode: 'Asset' | 'Markdown link'
   openAttachmentInline: boolean
   pagenameTemplate: string
   citekeyTemplate: string

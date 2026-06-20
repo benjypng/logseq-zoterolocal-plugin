@@ -3,6 +3,7 @@ import { BlockEntity } from '@logseq/libs/dist/LSPlugin'
 import { ZOTERO_ATTACHMENT_KEY_PROP, ZOTERO_CODE_PROP } from '../constants'
 import { buildAnnotationContent } from './build-annotation-content'
 import { getAttachmentsWithAnnotations } from './get-zot-items'
+import { insertAttachmentBlock } from './insert-attachment-block'
 
 const blockText = (b: BlockEntity): string => {
   const e = b as unknown as { content?: string; title?: string }
@@ -65,23 +66,14 @@ export const syncAnnotations = async (pageName: string) => {
 
     if (!targetBlock) {
       const section = await ensureSection()
-      const created = await logseq.Editor.insertBlock(
-        section.uuid,
-        attachment.link,
-        { sibling: false },
-      )
+      const created = await insertAttachmentBlock(section.uuid, attachment)
       if (!created) {
         console.log(
           `logseq-zoterolocal-plugin: Failed to create attachment block for key ${attachment.key}, skipping`,
         )
         continue
       }
-      await logseq.Editor.upsertBlockProperty(
-        created.uuid,
-        'zotero-attachment-key',
-        attachment.key,
-      )
-      targetBlock = created as BlockEntity
+      targetBlock = created
       createdAttachments++
     }
 
