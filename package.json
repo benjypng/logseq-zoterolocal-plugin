@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@benjypng/logseq-request": "^1.0.0",
-    "@logseq/libs": "^0.3.3",
+    "@logseq/libs": "^0.3.4",
     "@tanstack/react-table": "^8.21.3",
     "date-fns": "^4.1.0",
     "fuse.js": "^7.1.0",
