@@ -32,6 +32,14 @@ export const handleSettings = ({ msg }: { msg: string }) => {
       default: '',
     },
     {
+      key: 'zotUrl',
+      type: 'string',
+      title: 'Zotero API URL',
+      description:
+        'The base URL of your local Zotero API. Change this only if Zotero runs on a non-default port or host.',
+      default: 'http://127.0.0.1:23119/api/users/0',
+    },
+    {
       key: 'propertyPreset',
       type: 'enum',
       title: 'Property Preset (DB version)',

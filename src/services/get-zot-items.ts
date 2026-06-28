@@ -20,7 +20,9 @@ const buildUrl = (
   path: string,
   query?: Record<string, string | number>,
 ): string => {
-  const url = `${ZOT_URL}${path}`
+  const baseUrl =
+    (logseq.settings?.zotUrl as string)?.trim().replace(/\/$/, '') || ZOT_URL
+  const url = `${baseUrl}${path}`
   if (!query) return url
 
   const qs = Object.entries(query)
