@@ -5,7 +5,7 @@
     "": {
       "name": "logseq-zoterolocal-plugin",
       "dependencies": {
-        "@benjypng/logseq-request": "^1.0.1",
+        "@benjypng/logseq-request": "^1.0.2",
         "@logseq/libs": "^0.3.4",
         "@tanstack/react-table": "^8.21.3",
         "date-fns": "^4.1.0",
@@ -32,7 +32,7 @@
     },
   },
   "packages": {
-    "@benjypng/logseq-request": ["@benjypng/logseq-request@1.0.1", "", {}, "sha512-OprbbPZwgLxpk5zZpw98yqDJSdJrA/3Ific4agZ9ymXsBZHFxFlgwDvMkBPVASA8NXXi9ZQoUwV5Ik70lDfY6w=="],
+    "@benjypng/logseq-request": ["@benjypng/logseq-request@1.0.2", "", {}, "sha512-6oUJ3FDYePJ/7l04Us6m+EEVF8n9zWPgqzouMhWpQ5RI8pLqXIHQNsbhTxIXC2yZo9LsJyNhcRfOKwlRpEk+Yw=="],
 
     "@biomejs/biome": ["@biomejs/biome@2.4.8", "", { "optionalDependencies": { "@biomejs/cli-darwin-arm64": "2.4.8", "@biomejs/cli-darwin-x64": "2.4.8", "@biomejs/cli-linux-arm64": "2.4.8", "@biomejs/cli-linux-arm64-musl": "2.4.8", "@biomejs/cli-linux-x64": "2.4.8", "@biomejs/cli-linux-x64-musl": "2.4.8", "@biomejs/cli-win32-arm64": "2.4.8", "@biomejs/cli-win32-x64": "2.4.8" }, "bin": { "biome": "bin/biome" } }, "sha512-ponn0oKOky1oRXBV+rlSaUlixUxf1aZvWC19Z41zBfUOUesthrQqL3OtiAlSB1EjFjyWpn98Q64DHelhA6jNlA=="],
 
