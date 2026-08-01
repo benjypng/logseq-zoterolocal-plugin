@@ -36,7 +36,7 @@ export const handleSettings = ({ msg }: { msg: string }) => {
       type: 'string',
       title: 'Zotero API URL',
       description:
-        'The base URL of your local Zotero API. Change this only if Zotero runs on a non-default port or host.',
+        'The base URL of your local Zotero API. Change this only if Zotero runs on a non-default port or host. Default should be: http://127.0.0.1:23119/api/users/0',
       default: 'http://127.0.0.1:23119/api/users/0',
     },
     {
